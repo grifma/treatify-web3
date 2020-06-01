@@ -39,3 +39,39 @@ const treatyIndex = (state) => {
   return get(state, "contract.treatyIndex", null);
 };
 export const treatyIndexSelector = createSelector(treatyIndex, (a) => a);
+
+//TREATIES
+export const getTreaties = (state) => get(state, "treaties.data");
+export const getTreatiesLoading = (state) => get(state, "treaties.isLoading");
+
+export const getDraftTreaties = createSelector(getTreaties, (treaties) =>
+  treaties == undefined
+    ? []
+    : treaties.filter((treaty) => treaty.status == "Draft")
+);
+
+export const getActiveTreaties = createSelector(getTreaties, (treaties) =>
+  treaties == undefined
+    ? []
+    : treaties.filter((treaty) => treaty.status == "Active")
+);
+
+export const getBindingTreaties = createSelector(getTreaties, (treaties) =>
+  treaties == undefined
+    ? []
+    : treaties.filter((treaty) => treaty.status == "Binding")
+);
+
+export const getMutuallyWithdrawnTreaties = createSelector(
+  getTreaties,
+  (treaties) =>
+    treaties == undefined
+      ? []
+      : treaties.filter((treaty) => treaty.status == "MutuallyWithdrawn")
+);
+
+export const getBrokenTreaties = createSelector(getTreaties, (treaties) =>
+  treaties == undefined
+    ? []
+    : treaties.filter((treaty) => treaty.status == "Broken")
+);

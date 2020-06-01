@@ -3,13 +3,11 @@ import { createLogger } from "redux-logger";
 import rootReducer from "./reducers";
 // import { persistReducer } from "redux-persist";
 // import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
-// import thunk from "redux-thunk";
+import thunk from "redux-thunk";
 // import storage from "redux-persist/lib/storage";
 
 const loggerMiddleware = createLogger();
-const middleware = [
-  // thunk
-];
+const middleware = [thunk];
 
 // const persistConfig = {
 //   key: "root",

@@ -9,6 +9,7 @@ import {
   loadTreatyIndex,
   loadTreatyIndexContract,
   loadTreatyContract,
+  loadTreaties,
 } from "./redux/interactions";
 import {
   contractSelector,
@@ -19,8 +20,11 @@ import {
   treatyContractSelector,
   treatyContractsSelector,
   treatyIndex,
+  web3Selector,
 } from "./redux/selectors";
 import { subscribeToAccountsChanging } from "./redux/subscriptions";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import TreatyList from "./components/TreatyList";
 
 class App extends Component {
   render() {
@@ -32,6 +36,7 @@ class App extends Component {
       treatyIndex,
       treatyIndexContract,
       onRefreshTreatiesPressed,
+      web3,
     } = this.props;
 
     const connectBlockchain = async (e) => {
@@ -63,70 +68,106 @@ class App extends Component {
     console.log(treatyIndexContract);
 
     return (
-      <div className="container py-2">
-        <button
-          className="btn btn-success"
-          onClick={() => {
-            // onRefreshTreatiesPressed(treatyIndexContract);'
-            loadTreatyIndex(dispatch, treatyIndexContract);
-          }}
-        >
-          Refresh treaties
-        </button>
-        <div>
-          Treaty Index Address:{" "}
-          {treatyIndexContract && treatyIndexContract._address}
-        </div>
-        <table className="table table-dark">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Contract Address</th>
-            </tr>
-          </thead>
-          {treatyIndex &&
-            treatyIndex.map((treatyAddress, i) => (
+      <Router>
+        <div className="container py-2">
+          <button
+            className="btn btn-success"
+            onClick={() => {
+              // onRefreshTreatiesPressed(treatyIndexContract);'
+              loadTreatyIndex(dispatch, treatyIndexContract);
+            }}
+          >
+            Refresh treaties
+          </button>
+          <button
+            className="btn btn-success"
+            onClick={() => {
+              // onRefreshTreatiesPressed(treatyIndexContract);'
+              loadTreaties(dispatch, web3, treatyIndex);
+            }}
+          >
+            Load treaties
+          </button>
+          <div>
+            Treaty Index Address:{" "}
+            {treatyIndexContract && treatyIndexContract._address}
+          </div>
+          <table className="table table-dark">
+            <thead>
               <tr>
-                <td>{i}</td>
-                <td>{treatyAddress}</td>
+                <th scope="col">#</th>
+                <th scope="col">Contract Address</th>
               </tr>
-            ))}
-        </table>
-        <div className="row justify-content-center">
-          <div className="col-4">
-            <form onSubmit={connectBlockchain}>
-              <div className="form-group row">
-                <div className="col-12">
-                  <button
-                    type="submit"
-                    className={`w-100 btn text-truncate ${
-                      contract !== null ? "disabled btn-success" : "btn-danger"
-                    }`}
-                  >
-                    {contract !== null
-                      ? "Blockchain Connected"
-                      : "Connect Blockchain"}
-                  </button>
+            </thead>
+            {treatyIndex &&
+              treatyIndex.map((treatyAddress, i) => (
+                <tr>
+                  <td>{i}</td>
+                  <td>{treatyAddress}</td>
+                </tr>
+              ))}
+          </table>
+          <div className="row justify-content-center">
+            <div className="col-4">
+              <form onSubmit={connectBlockchain}>
+                <div className="form-group row">
+                  <div className="col-12">
+                    <button
+                      type="submit"
+                      className={`w-100 btn text-truncate ${
+                        contract !== null
+                          ? "disabled btn-success"
+                          : "btn-danger"
+                      }`}
+                    >
+                      {contract !== null
+                        ? "Blockchain Connected"
+                        : "Connect Blockchain"}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
+          </div>
+          <div className="row justify-content-center">
+            <div className="col-4">
+              <label>Account: {account}</label>
+              <p>
+                Changing accounts in Metamask should refresh this account
+                address
+              </p>
+            </div>
+          </div>
+          <div className="row justify-content-center">
+            <div className="col-4">
+              <label>Contract Value: </label>
+              <label>{value}</label>
+            </div>
           </div>
         </div>
-        <div className="row justify-content-center">
-          <div className="col-4">
-            <label>Account: {account}</label>
-            <p>
-              Changing accounts in Metamask should refresh this account address
-            </p>
-          </div>
-        </div>
-        <div className="row justify-content-center">
-          <div className="col-4">
-            <label>Contract Value: </label>
-            <label>{value}</label>
-          </div>
-        </div>
-      </div>
+        <Switch>
+          <Route
+            exact
+            path="/treatify"
+            render={(props) => {
+              //  let x = "whatever"
+              return <TreatyList props={props} />;
+            }}
+          />
+
+          <Route
+            exact
+            path="/hello"
+            render={(props) => {
+              return (
+                <div>
+                  <h1>Hello</h1>
+                </div>
+              );
+            }}
+          />
+        </Switch>
+      </Router>
     );
   }
 }
@@ -146,6 +187,7 @@ function mapStateToProps(state) {
     value: valueSelector(state),
     treatyIndex: treatyIndexSelector(state),
     treatyIndexContract: treatyIndexContractSelector(state),
+    web3: web3Selector(state),
   };
 }
 
