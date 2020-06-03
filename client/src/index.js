@@ -6,12 +6,13 @@ import "./index.css";
 import App from "./App";
 import configureStore from "./redux/configure";
 import * as serviceWorker from "./serviceWorker";
+import AppHotContainer from "./AppHotContainer";
 
 const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <AppHotContainer />
   </Provider>,
   document.getElementById("root")
 );

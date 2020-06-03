@@ -5,6 +5,7 @@ import rootReducer from "./reducers";
 // import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 import thunk from "redux-thunk";
 // import storage from "redux-persist/lib/storage";
+// import { composeWithDevTools } from "redux-devtools-extension";
 
 const loggerMiddleware = createLogger();
 const middleware = [thunk];
@@ -19,6 +20,9 @@ const middleware = [thunk];
 
 //connects redux browser to app
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// const composedDevToolsAndMiddleware = composeWithDevTools(
+//   applyMiddleware(...middlewear, loggerMiddleware)
+// );
 
 export default function configureStore(preLoadedState) {
   return createStore(
@@ -26,5 +30,6 @@ export default function configureStore(preLoadedState) {
     // persistedReducer,
     preLoadedState,
     composeEnhancers(applyMiddleware(...middleware, loggerMiddleware))
+    // composedDevToolsAndMiddleware
   );
 }

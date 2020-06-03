@@ -1,0 +1,9 @@
+"rules": {
+    "extends": "airbnb",
+    "indent": "off",
+    "react/jsx-indent": "off",
+    "react/jsx-indent-props": "off",
+    "plugins": ["react"],
+    "ecmaFeatures": {"jsx": true},
+    "parserOptions": { "ecmaVersion": 6 }
+}
