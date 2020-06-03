@@ -1,6 +1,6 @@
 import React, { Component, useEffect } from "react";
 import { connect } from "react-redux";
-import "./App.css";
+import "./TreatyWeb3.css";
 import {
   loadWeb3DirectDispatch,
   loadAccountDirectDispatch,
@@ -112,71 +112,34 @@ const TreatyWeb3 = ({
   const content = (
     //router <Router>
     <div className="container py-2">
-      <button
-        className="btn btn-success"
-        onClick={() => {
-          startLoadWeb3();
-        }}
-      >
-        #1 Load Web 3 with Dispatch prop
-      </button>
-      <button
-        className="btn btn-danger"
-        onClick={() => {
-          startLoadTreatyIndexContract(web3);
-        }}
-      >
-        #3 Load treaty index contract with Dispatch prop
-      </button>
-      <button
-        className="btn btn-info"
-        onClick={() => {
-          startLoadTreatyIndex(treatyIndexContract);
-        }}
-      >
-        #4 Load treaty index with Dispatch prop
-      </button>
-      <button
-        className="btn btn-info"
-        onClick={() => {
-          startLoadAccount(web3);
-        }}
-      >
-        #2 Load account with Dispatch prop
-      </button>
-
-      <button
-        className="btn btn-warning"
-        onClick={() => {
-          // onRefreshTreatiesPressed(treatyIndexContract);'
-          loadTreaties(dispatch, web3, treatyIndex);
-        }}
-      >
-        Load treaties
-      </button>
-      <div>
-        Treaty Index Address:{" "}
-        {treatyIndexContract && treatyIndexContract._address}
-      </div>
-      <table className="table table-dark">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Contract Address</th>
-          </tr>
-        </thead>
-        <tbody>
-          {treatyIndex &&
-            treatyIndex.map((treatyAddress, i) => (
-              <tr key={i}>
-                <td>{i}</td>
-                <td>{treatyAddress}</td>
+      <div className="flexbox">
+        <div>
+          <div>
+            Treaty Index Address:{" "}
+            {treatyIndexContract && treatyIndexContract._address}
+          </div>
+          <table className="table table-dark">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Contract Address</th>
               </tr>
-            ))}
-        </tbody>
-      </table>
-      <div className="row justify-content-center">
-        <div className="col-4">
+            </thead>
+            <tbody>
+              {treatyIndex &&
+                treatyIndex.map((treatyAddress, i) => (
+                  <tr key={i}>
+                    <td>{i}</td>
+                    <td>{treatyAddress}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <TreatyList />
+      <div className="row">
+        <div className="col-6">
           <form onSubmit={connectBlockchain}>
             <div className="form-group row">
               <div className="col-12">
@@ -195,21 +158,11 @@ const TreatyWeb3 = ({
           </form>
         </div>
       </div>
-      <div className="row justify-content-center">
+      <div className="row">
         <div className="col-4">
           <label>Account: {account}</label>
-          <p>
-            Changing accounts in Metamask should refresh this account address
-          </p>
         </div>
       </div>
-      <div className="row justify-content-center">
-        <div className="col-4">
-          <label>Contract Value: </label>
-          <label>{value}</label>
-        </div>
-      </div>
-      <TreatyList />
     </div>
     //router<Switch>
     //router<Route

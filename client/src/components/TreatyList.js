@@ -22,17 +22,17 @@ import {
 } from "../redux/selectors";
 import styled from "styled-components";
 
-const BigRedText = styled.div`
-  font-size: 48px;
-  color: #ddb142;
-`;
-
 const ListWrapper = styled.div`
   max-width: 700px;
   margin: 50px;
   padding: 30px;
-  background: darkgray;
+  background: 343a40;
   border-radius: 16px;
+  margin-bottom: 50px;
+`;
+const StatusHeader = styled.div`
+  margin-top: 50px;
+  color: white;
 `;
 
 const TreatyList = ({
@@ -58,9 +58,10 @@ const TreatyList = ({
   const loadingMessage = <div>Loading treaties</div>;
   const content = (
     <ListWrapper>
-      <BigRedText>Welcome to Treatify</BigRedText>
       <NewTreatyForm />
-      <h3>Draft Treaties:</h3>
+      <h3 id="draft" className="h3">
+        <StatusHeader>Draft Treaties:</StatusHeader>
+      </h3>
       {draftTreaties.map((treaty) => (
         <DraftTreatyListItem
           key={treaty.id}
@@ -70,7 +71,9 @@ const TreatyList = ({
           onSignPressed={onSignPressed}
         />
       ))}
-      <h3>Active Treaties:</h3>
+      <h3 id="active">
+        <StatusHeader>Active Treaties:</StatusHeader>
+      </h3>
       {activeTreaties.map((treaty) => (
         <ActiveTreatyListItem
           key={treaty.id}

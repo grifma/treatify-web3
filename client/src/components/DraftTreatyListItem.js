@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
 
 const TreatyItemContainer = styled.div`
   background: #fff;
@@ -8,19 +8,16 @@ const TreatyItemContainer = styled.div`
   padding: 16px;
   position: relative;
   box-shadow: 0 4px 8px grey;
-  background: lightpink;
+  background: white;
+  color: black;
 `;
 
 const TreatyItemContainerWithWarning = styled(TreatyItemContainer)`
-  border-bottom: ${
-    props => (
-      new Date(props.createdAt) > new Date(Date.now() - 8640000 * 5)
-    ?
-    'none'
-    :
-    '2px solid red'
-  )};
-`
+  border-bottom: ${(props) =>
+    new Date(props.createdAt) > new Date(Date.now() - 8640000 * 5)
+      ? "none"
+      : "2px solid gray"};
+`;
 
 const Button = styled.button`
   font-size: 16px;
@@ -29,7 +26,7 @@ const Button = styled.button`
   border-radius: 8px;
   outline: none;
   cursor: pointer;
-`
+`;
 
 const ActiveButton = styled(Button)`
   display: inline-block;
@@ -54,29 +51,31 @@ const AddTextButton = styled(Button)`
   margin-left: 8px;
 `;
 
-const DraftTreatyListItem = ({ treaty, onRemovePressed, onMarkActivePressed }) => {
-    const  Container = treaty.isActive ? TreatyItemContainer : TreatyItemContainerWithWarning
-    return (
-      <Container createdAt={treaty.createdAt}>
-          <h3>{treaty.text}</h3>
-          <p>
-            Created at:&nbsp;
-            {(new Date(treaty.createdAt)).toLocaleDateString()}
-          </p>
-          <div className="buttons-container">
-              <ActiveButton
-                      onClick={() => onMarkActivePressed(treaty)}
-                      >
-                      Make Active
-              </ActiveButton>
-              <RemoveButton
-                onClick={() => onRemovePressed(treaty)}
-                >
-                Remove
-              </RemoveButton>
-          </div>
-      </Container>
-);
-}
+const DraftTreatyListItem = ({
+  treaty,
+  onRemovePressed,
+  onMarkActivePressed,
+}) => {
+  const Container = treaty.isActive
+    ? TreatyItemContainer
+    : TreatyItemContainerWithWarning;
+  return (
+    <Container createdAt={treaty.createdAt}>
+      <h3>{treaty.text}</h3>
+      <p>
+        Created at:&nbsp;
+        {new Date(treaty.createdAt).toLocaleDateString()}
+      </p>
+      <div className="buttons-container">
+        <ActiveButton onClick={() => onMarkActivePressed(treaty)}>
+          Make Active
+        </ActiveButton>
+        <RemoveButton onClick={() => onRemovePressed(treaty)}>
+          Remove
+        </RemoveButton>
+      </div>
+    </Container>
+  );
+};
 
 export default DraftTreatyListItem;

@@ -9,7 +9,8 @@ const TreatyItemContainer = styled.div`
   padding: 16px;
   position: relative;
   box-shadow: 0 4px 8px grey;
-  background: lightblue;
+  background: white;
+  color: black;
 `;
 
 const ActiveTreatyInput = styled.input`
@@ -76,22 +77,13 @@ const UnsignedText = styled.div`
   border: 1px solid black;
   flex: 0 1 50%;
   padding: 20px;
-  background: lightyellow;
-  font: 200 20px "Berkshire Swash", Helvetica, sans-serif;
-  color: #233a8b;
-  font-style: italic;
-  font-size: 16;
+  background: white;
 `;
 const SignedText = styled.div`
   border: 1px solid black;
   flex: 0 1 50%;
   padding: 20px;
-  background: lightyellow;
-  font: 400 20px/1.3 serif;
-  background: rgba(#ccc978, 0.91);
-  font-style: bold;
-  font-size: 16;
-  text-shadow: 1px 1px 0px #ededed, 4px 4px 0px rgba(0, 0, 0, 0.15);
+  background: white;
 `;
 
 const ItemHeader = styled.div`
@@ -124,7 +116,7 @@ const ActiveTreatyListItem = ({
     : TreatyItemContainerWithWarning;
   return (
     <Container createdAt={treaty.createdAt}>
-      <IH name={treaty.text} date={treaty.date} />
+      {/* <IH name={treaty.text} date={treaty.date} /> */}
       <h3>{treaty.text}</h3>
       <p>
         Created at:&nbsp;

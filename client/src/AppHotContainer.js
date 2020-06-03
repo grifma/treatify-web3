@@ -6,17 +6,21 @@ import styled from "styled-components";
 import TreatyList from "./components/TreatyList";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
+import DarkContainer from "./components/DarkContainer";
+import Nav from "./components/Nav";
 
 const AppContainer = styled.div`
   margin: 1rem;
   font-family: Arial, Helvetica, sans-serif;
-  color: #222222;
+  background: #222222;
   width: 100vw;
   height: 100vh;
 `;
 
 const AppHotContainer = () => (
   <Router>
+    <Nav />
+    {/* <DarkContainer> */}
     <AppContainer>
       <TreatyWeb3 />
       {/* <ErrorBoundary> */}
@@ -43,6 +47,7 @@ const AppHotContainer = () => (
         />
       </Switch>
     </AppContainer>
+    {/* </DarkContainer> */}
   </Router>
 );
 

@@ -11,11 +11,15 @@ const TreatyItemContainer = styled.div`
 `;
 
 const TreatyItemContainerWithWarning = styled(TreatyItemContainer)`
-  border-bottom: ${(props) =>
-    new Date(props.createdAt) > new Date(Date.now() - 8640000 * 5)
-      ? "none"
-      : "2px solid red"};
-`;
+  border-bottom: ${
+    props => (
+      new Date(props.createdAt) > new Date(Date.now() - 8640000 * 5)
+    ?
+    'none'
+    :
+    '2px solid red'
+  )};
+`
 
 const Button = styled.button`
   font-size: 16px;
@@ -49,28 +53,40 @@ const AddTextButton = styled(Button)`
   margin-left: 8px;
 `;
 
-const WithdrawnTreatyListItem = ({
-  treaty,
-  onRemovePressed,
-  onMarkActivePressed,
-}) => {
-  const Container = treaty.isActive
-    ? TreatyItemContainer
-    : TreatyItemContainerWithWarning;
-  return (
-    <Container createdAt={treaty.createdAt}>
-      <h3>{treaty.text}</h3>
-      <p>
-        Created at:&nbsp;
-        {new Date(treaty.createdAt).toLocaleDateString()}
-      </p>
-      <div className="buttons-container">
-        <RemoveButton onClick={() => onRemovePressed(treaty)}>
-          Remove
-        </RemoveButton>
-      </div>
-    </Container>
-  );
-};
+const WithdrawnTreatyListItem = ({ treaty, onRemovePressed, onMarkActivePressed }) => {
+    const  Container = treaty.isActive ? TreatyItemContainer : TreatyItemContainerWithWarning
+    return (
+      <Container createdAt={treaty.createdAt}>
+          <h3>{treaty.text}</h3>
+          <p>
+            Created at:&nbsp;
+            {(new Date(treaty.createdAt)).toLocaleDateString()}
+          </p>
+          <div className="buttons-container">
+              {treaty.status == 'Draft'
+                ? <ActiveButton
+                      onClick={() => onMarkActivePressed(treaty)}
+                      >
+                      Mark As Active
+                  </ActiveButton>
+                : null
+              }
+              {treaty.status == 'Active'
+                ? <SignButton
+                      onClick={() => onSignPressed(treaty)}
+                      >
+                      Sign
+                  </SignButton>
+                : null
+              }
+              <RemoveButton
+                onClick={() => onRemovePressed(treaty)}
+                >
+                Remove
+              </RemoveButton>
+          </div>
+      </Container>
+);
+}
 
 export default WithdrawnTreatyListItem;

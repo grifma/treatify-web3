@@ -10,7 +10,9 @@ const FormContainer = styled.div`
   padding: 16px;
   text-align: center;
   box-shadow: 0 4px 8px grey;
-  background: rgba(152, 111, 218, 0.7);
+  background: white;
+  margin-bottom: 50px;
+  //   background: rgba(152, 111, 218, 0.7);
 `;
 
 const NewTreatyInput = styled.input`
@@ -34,32 +36,40 @@ const NewTreatyButton = styled.button`
   width: 20%;
   background-color: #9c65cc;
 `;
+const StatusHeader = styled.div`
+  color: white;
+`;
 
 const NewTreatyForm = ({ treaties, onCreatePressed }) => {
   const [inputValue, setInputValue] = useState("");
 
   return (
-    <FormContainer>
-      <NewTreatyInput
-        type="text"
-        placeholder="Type your new treaty here"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-      />
-      <NewTreatyButton
-        onClick={() => {
-          const isDuplicateText = treaties.some(
-            (treaty) => treaty.text === inputValue
-          );
-          if (!isDuplicateText) {
-            onCreatePressed(inputValue);
-            setInputValue("");
-          }
-        }}
-      >
-        Create Treaty
-      </NewTreatyButton>
-    </FormContainer>
+    <div>
+      <h3>
+        <StatusHeader>Add New Treaty</StatusHeader>
+      </h3>
+      <FormContainer>
+        <NewTreatyInput
+          type="text"
+          placeholder="Type your new treaty here"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <NewTreatyButton
+          onClick={() => {
+            const isDuplicateText = treaties.some(
+              (treaty) => treaty.text === inputValue
+            );
+            if (!isDuplicateText) {
+              onCreatePressed(inputValue);
+              setInputValue("");
+            }
+          }}
+        >
+          Create Treaty
+        </NewTreatyButton>
+      </FormContainer>
+    </div>
   );
 };
 
