@@ -148,8 +148,20 @@ export const loadStoredData = (contract) => async (dispatch) => {
 //take the list of treaty address from treaty index, and then
 // load the treaty smart contract at each of those addresses
 //nb: consider replacing with just one smart contract to save gas.
-export const loadTreatiesWeb3 = (web3, treatyIndex) => async (dispatch) => {
+//todo better to get web3, treatyindex from getState
+export const loadTreatiesWeb3 = (web3, treatyIndex) => async (
+  dispatch,
+  getState
+) => {
   try {
+    if (web3 == null && treatyIndex == null) {
+      console.log("-----------web3, treatyIndex-------------");
+      const { web3 } = getState("web3");
+      console.log(web3);
+      const { treatyIndex } = getState("contract");
+      console.log(treatyIndex);
+      console.log("-----------web3, treatyIndex-------------");
+    }
     console.log("load treaties web3!!");
     dispatch(loadTreatiesInProgress());
     const networkId = await web3.eth.net.getId();
@@ -177,6 +189,8 @@ export const loadTreatiesWeb3 = (web3, treatyIndex) => async (dispatch) => {
 
     const treaties = await Promise.all(
       treatyInstances.map(async (treatyInstance) => {
+        console.log("treatyInstance");
+        console.log(treatyInstance);
         return {
           id: await treatyInstance.methods.id().call(),
           text: await treatyInstance.methods.name().call(),
@@ -187,6 +201,8 @@ export const loadTreatiesWeb3 = (web3, treatyIndex) => async (dispatch) => {
           ),
           unsignedTreatyText: ["UNSIGNED TEXT"], //treatyInstance.methods.unsignedTreatyText.call(),
           signedTreatyText: ["SIGNED TEXT"], //treatyInstance.methods.signedTreatyText.call(),
+          address: await treatyInstance._address,
+          contractInstance: treatyInstance,
         };
       })
     );
@@ -239,18 +255,56 @@ export const displayAlert = (text) => () => {
   alert(text);
 };
 
-export const markActiveRequest = (dispatch, id) => async (dispatch) => {
+export const markActiveRequest = (treaty, web3, treaties) => async (
+  dispatch,
+  getState
+) => {
+  const { id, address, contractInstance } = treaty;
   try {
-    const response = await fetch(`${treatyServer}/treaties/${id}/active`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "post",
-      body: "",
-    });
-    const activeTreaty = await response.json();
-    console.log("active treaty is " + activeTreaty);
-    dispatch(markActive(activeTreaty));
+    console.log("markActiveRequest");
+    console.log("we have id:");
+    console.log(id);
+    console.log("we have address:");
+    console.log(address);
+    console.log("we have web3:");
+    console.log(web3);
+    console.log("we have treaties:");
+    console.log(treaties);
+    console.log("and we have el getState");
+    console.log(getState("contract"));
+    // const tx = await web3.
+
+    const activeAccount = getState("web3").web3.account;
+    console.log("activeAccount");
+    console.log(activeAccount);
+
+    const treaties = getState("treaties.data");
+    console.log("treaties");
+    console.log(treaties);
+
+    // const myAddress = web3.account;
+    //todo: better to retreive this instance from the state
+    console.log(contractInstance.methods.makeActive);
+    const tx = await contractInstance.methods
+      .makeActive()
+      .send({ from: activeAccount });
+    console.log("tx");
+    console.log(tx);
+
+    activeTreaty = [];
+    dispatch(loadTreatiesWeb3(null, null));
+    // dispatch(markActive(activeTreaty));
+
+    // const response = await fetch(`${treatyServer}/treaties/${id}/active`, {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   method: "post",
+    //   body: "",
+    // });
+    // const activeTreaty = await response.json();
+    // console.log("active treaty is " + activeTreaty);
+    // dispatch(markActive(activeTreaty));
   } catch (e) {
     dispatch(displayAlert(e));
   } finally {

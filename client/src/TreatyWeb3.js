@@ -137,7 +137,7 @@ const TreatyWeb3 = ({
           </table>
         </div>
       </div>
-      <TreatyList />
+      <TreatyList web3={web3} />
       <div className="row">
         <div className="col-6">
           <form onSubmit={connectBlockchain}>

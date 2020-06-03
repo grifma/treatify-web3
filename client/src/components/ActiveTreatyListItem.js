@@ -120,7 +120,11 @@ const ActiveTreatyListItem = ({
       <h3>{treaty.text}</h3>
       <p>
         Created at:&nbsp;
-        {new Date(treaty.createdAt).toLocaleDateString()}
+        {new Date(treaty.createdAt * 1000).toLocaleDateString()}
+      </p>
+      <p>
+        Lives at:&nbsp;
+        {treaty.address}
       </p>
       <TreatyTextContainer>
         <UnsignedText>

@@ -47,6 +47,8 @@ const TreatyList = ({
   startLoadingTreaties,
   onAddTreatyTextPressed,
   onSignPressed,
+  web3,
+  // propTreaties,
 }) => {
   useEffect(() => {
     // startLoadingTreaties();
@@ -98,7 +100,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   startLoadingTreaties: () => dispatch(loadTreaties()),
   onRemovePressed: (treaty) => dispatch(removeTreatyRequest(treaty.id)),
-  onMarkActivePressed: (treaty) => dispatch(markActiveRequest(treaty.id)),
+  onMarkActivePressed: (treaty) =>
+    dispatch(markActiveRequest(treaty, web3, null)),
   onDisplayAlertClicked: (id) => dispatch(displayAlert(id)),
   // onAddTreatyTextPressed: (id, text) => dispatch(addTreatyTextRequest(id, text)),
   onSignPressed: (id) => dispatch(signTreatyRequest(id)),

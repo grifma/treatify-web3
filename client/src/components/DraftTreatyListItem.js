@@ -33,6 +33,12 @@ const ActiveButton = styled(Button)`
   background-color: #57a657;
 `;
 
+const JoinButton = styled(Button)`
+  display: inline-block;
+  background-color: #57a657;
+  margin-left: 8px;
+`;
+
 const RemoveButton = styled(Button)`
   display: inline-block;
   background-color: #c75757;
@@ -64,12 +70,19 @@ const DraftTreatyListItem = ({
       <h3>{treaty.text}</h3>
       <p>
         Created at:&nbsp;
-        {new Date(treaty.createdAt).toLocaleDateString()}
+        {new Date(treaty.createdAt * 1000).toLocaleDateString()}
+      </p>
+      <p>
+        Lives at:&nbsp;
+        {treaty.address}
       </p>
       <div className="buttons-container">
         <ActiveButton onClick={() => onMarkActivePressed(treaty)}>
           Make Active
         </ActiveButton>
+        <JoinButton onClick={() => onMarkActivePressed(treaty)}>
+          Join
+        </JoinButton>
         <RemoveButton onClick={() => onRemovePressed(treaty)}>
           Remove
         </RemoveButton>
