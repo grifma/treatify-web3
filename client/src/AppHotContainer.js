@@ -1,6 +1,7 @@
 import React from "react";
 import { hot } from "react-hot-loader";
-import App from "./App";
+// import App from "./App";
+import TreatyWeb3 from "./TreatyWeb3";
 import styled from "styled-components";
 import TreatyList from "./components/TreatyList";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
@@ -17,7 +18,7 @@ const AppContainer = styled.div`
 const AppHotContainer = () => (
   <Router>
     <AppContainer>
-      <App />
+      <TreatyWeb3 />
       <ErrorBoundary>{null /* <TreatyList /> */}</ErrorBoundary>
       <Switch>
         <Route

@@ -132,7 +132,7 @@ export const loadTreatyIndexDirectDispatch = (contract) => async (dispatch) => {
   return treatyIndex;
 };
 
-export const loadStoredData = async (dispatch, contract) => {
+export const loadStoredData = (contract) => async (dispatch) => {
   const value = await contract.methods.get().call();
   dispatch(valueLoaded(value));
   return value;
