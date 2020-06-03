@@ -14,7 +14,7 @@ import {
   loadTreatyIndex,
   loadTreatyIndexContract,
   loadTreatyContract,
-  loadTreaties,
+  loadTreatiesWeb3,
 } from "./redux/interactions";
 import {
   contractSelector,
@@ -26,10 +26,11 @@ import {
   treatyContractsSelector,
   treatyIndex,
   web3Selector,
+  getState,
 } from "./redux/selectors";
 import { subscribeToAccountsChanging } from "./redux/subscriptions";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-// import TreatyList from "./components/TreatyList";
+import TreatyList from "./components/TreatyList";
 
 const TreatyWeb3 = ({
   dispatch,
@@ -47,6 +48,7 @@ const TreatyWeb3 = ({
   startLoadTreatyIndexContract,
   startSubscribeToAccountsChanging,
   startLoadStoredData,
+  startLoadTreatiesWeb3,
   initiated,
 }) => {
   useEffect(() => {
@@ -54,13 +56,14 @@ const TreatyWeb3 = ({
       const myWeb3 = await startLoadWeb3();
       await startLoadAccount(myWeb3);
       const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
-      await startLoadTreatyIndex(treatyIndexContract);
+      const treatyIndex = await startLoadTreatyIndex(treatyIndexContract);
 
       const simpleStorageContract = await startLoadContract(myWeb3);
       console.log("simpleStorageContract");
       console.log(simpleStorageContract);
       await startLoadStoredData(simpleStorageContract);
       subscribeToAccountsChanging(myWeb3);
+      const treaties = await startLoadTreatiesWeb3(myWeb3, treatyIndex);
       console.log("effect done");
     }
     initiate();
@@ -89,8 +92,8 @@ const TreatyWeb3 = ({
     const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
     console.log(treatyIndexContract);
     await startLoadTreatyIndex(treatyIndexContract);
-    await loadStoredData(dispatch, simpleStorageContract);
-    subscribeToAccountsChanging(dispatch, myWeb3);
+    await loadStoredData(simpleStorageContract);
+    subscribeToAccountsChanging(myWeb3);
   };
 
   console.log("contract");
@@ -206,6 +209,7 @@ const TreatyWeb3 = ({
           <label>{value}</label>
         </div>
       </div>
+      <TreatyList />
     </div>
     //router<Switch>
     //router<Route
@@ -268,6 +272,8 @@ function mapDispatchToProps(dispatch) {
     startSubscribeToAccountsChanging: () =>
       dispatch(subscribeToAccountsChanging()),
     startLoadStoredData: (contract) => dispatch(loadStoredData(contract)),
+    startLoadTreatiesWeb3: (web3, treatyIndex) =>
+      dispatch(loadTreatiesWeb3(web3, treatyIndex)),
   };
 }
 

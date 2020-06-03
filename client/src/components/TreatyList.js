@@ -49,8 +49,11 @@ const TreatyList = ({
   onSignPressed,
 }) => {
   useEffect(() => {
-    startLoadingTreaties();
+    // startLoadingTreaties();
   }, []);
+
+  // if (draftTreaties == undefined) draftTreaties = [];
+  // if (activeTreaties == undefined) activeTreaties = [];
 
   const loadingMessage = <div>Loading treaties</div>;
   const content = (
@@ -97,5 +100,24 @@ const mapDispatchToProps = (dispatch) => ({
   // onAddTreatyTextPressed: (id, text) => dispatch(addTreatyTextRequest(id, text)),
   onSignPressed: (id) => dispatch(signTreatyRequest(id)),
 });
+
+// function mapStateToProps(state) {
+//   return {
+//     isLoading: getTreatiesLoading(state),
+//     activeTreaties: getActiveTreaties(state),
+//     draftTreaties: getDraftTreaties(state),
+//   };
+// }
+
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     startLoadingTreaties: () => dispatch(loadTreaties()),
+//     onRemovePressed: (treaty) => dispatch(removeTreatyRequest(treaty.id)),
+//     onMarkActivePressed: (treaty) => dispatch(markActiveRequest(treaty.id)),
+//     onDisplayAlertClicked: (id) => dispatch(displayAlert(id)),
+//     // onAddTreatyTextPressed: (id, text) => dispatch(addTreatyTextRequest(id, text)),
+//     onSignPressed: (id) => dispatch(signTreatyRequest(id)),
+//   };
+// }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TreatyList);

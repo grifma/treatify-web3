@@ -19,7 +19,9 @@ const AppHotContainer = () => (
   <Router>
     <AppContainer>
       <TreatyWeb3 />
-      <ErrorBoundary>{null /* <TreatyList /> */}</ErrorBoundary>
+      {/* <ErrorBoundary> */}
+      {/* <TreatyList /> */}
+      {/* </ErrorBoundary> */}
       <Switch>
         <Route
           exact

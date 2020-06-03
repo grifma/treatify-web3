@@ -4,6 +4,11 @@ import {
   LOAD_TREATIES_IN_PROGRESS,
   LOAD_TREATIES_SUCCESS,
   LOAD_TREATIES_FAILURE,
+  CREATE_TREATY,
+  REMOVE_TREATY,
+  MARK_ACTIVE,
+  SIGN_TREATY,
+  ADD_TEXT_TO_TREATY,
 } from "../redux/actions";
 
 function web3(state = {}, action) {
@@ -45,64 +50,70 @@ export const treaties = (state = [], action) => {
   const { type, payload } = action;
 
   switch (type) {
-    // case CREATE_TREATY: {
-    //   const { treaty } = payload;
-    //   return {
-    //     ...state,
-    //     data: state.data.concat(treaty),
-    //   };
-    // }
-    // case REMOVE_TREATY: {
-    //   const { treaty: treatyToRemove } = payload;
-    //   return {
-    //     ...state,
-    //     data: state.data.filter((treaty) => treaty.id !== treatyToRemove.id),
-    //   };
-    // }
-    // case MARK_ACTIVE: {
-    //   console.log("detected mark_active event");
-    //   const { treaty: activeTreaty } = payload;
-    //   console.log("payload is " + payload);
-    //   console.log("deconstructed payload is " + activeTreaty);
-    //   return {
-    //     ...state,
-    //     data: state.data.map((treaty) => {
-    //       if (treaty.id === activeTreaty.id) {
-    //         // return { ...treaty, isActive: true, treaty. }
-    //         return Object.assign(activeTreaty, { status: "Active" });
-    //       }
-    //       return treaty;
-    //     }),
-    //   };
-    // }
-    // case SIGN_TREATY: {
-    //   const { treaty: signedTreaty } = payload;
-    //   return {
-    //     ...state,
-    //     data: state.data.map((treaty) => {
-    //       if (treaty.id === signedTreaty.id) {
-    //         return signedTreaty;
-    //       } else {
-    //         return treaty;
-    //       }
-    //     }),
-    //   };
-    // }
-    // case ADD_TEXT_TO_TREATY: {
-    //   const { treaty: updatedTreaty } = payload;
-    //   return {
-    //     ...state,
-    //     data: state.data.map((treaty) => {
-    //       if (treaty.id === updatedTreaty.id) {
-    //         return updatedTreaty;
-    //       }
-    //       return treaty;
-    //     }),
-    //   };
-    // }
+    case CREATE_TREATY: {
+      const { treaty } = payload;
+      return {
+        ...state,
+        data: state.data.concat(treaty),
+      };
+    }
+    case REMOVE_TREATY: {
+      const { treaty: treatyToRemove } = payload;
+      return {
+        ...state,
+        data: state.data.filter((treaty) => treaty.id !== treatyToRemove.id),
+      };
+    }
+    case MARK_ACTIVE: {
+      console.log("detected mark_active event");
+      const { treaty: activeTreaty } = payload;
+      console.log("payload is " + payload);
+      console.log("deconstructed payload is " + activeTreaty);
+      return {
+        ...state,
+        data: state.data.map((treaty) => {
+          if (treaty.id === activeTreaty.id) {
+            // return { ...treaty, isActive: true, treaty. }
+            return Object.assign(activeTreaty, { status: "Active" });
+          }
+          return treaty;
+        }),
+      };
+    }
+    case SIGN_TREATY: {
+      const { treaty: signedTreaty } = payload;
+      return {
+        ...state,
+        data: state.data.map((treaty) => {
+          if (treaty.id === signedTreaty.id) {
+            return signedTreaty;
+          } else {
+            return treaty;
+          }
+        }),
+      };
+    }
+    case ADD_TEXT_TO_TREATY: {
+      const { treaty: updatedTreaty } = payload;
+      return {
+        ...state,
+        data: state.data.map((treaty) => {
+          if (treaty.id === updatedTreaty.id) {
+            return updatedTreaty;
+          }
+          return treaty;
+        }),
+      };
+    }
 
     case LOAD_TREATIES_SUCCESS: {
+      console.log("success loading treaties");
+      console.log(
+        "we need to push to list of treaties. currently only one treaty is saved"
+      );
+
       const { treaties } = payload;
+      console.log(treaties);
       return {
         ...state,
         isLoading: false,
@@ -122,6 +133,10 @@ export const treaties = (state = [], action) => {
       };
     }
     default:
+      if (type != "@@INIT") {
+        console.log("NO MATCH IN REDUCER !!!");
+        console.log(action);
+      }
       return state;
   }
 };
@@ -129,6 +144,7 @@ export const treaties = (state = [], action) => {
 const rootReducer = new combineReducers({
   web3,
   contract,
+  treaties,
 });
 
 export default rootReducer;

@@ -16,6 +16,11 @@ import {
   addTextToTreaty,
   signTreaty,
 } from "../redux/actions";
+import {
+  humanReadableTreatyStatus,
+  humanReadableSignatureStatus,
+  humanReadableTreatyType,
+} from "../utility/enumMappings";
 import SimpleStorageContract from "../contracts/SimpleStorage.json";
 import TreatyIndexContract from "../contracts/TreatyIndex.json";
 import TreatyContract from "../contracts/Treaty.json";
@@ -140,9 +145,12 @@ export const loadStoredData = (contract) => async (dispatch) => {
 
 // export const refreshTreaties = async (dispatch, contract) => {
 //   const
-
-export const loadTreaties = async (dispatch, web3, treatyIndex) => {
+//take the list of treaty address from treaty index, and then
+// load the treaty smart contract at each of those addresses
+//nb: consider replacing with just one smart contract to save gas.
+export const loadTreatiesWeb3 = (web3, treatyIndex) => async (dispatch) => {
   try {
+    console.log("load treaties web3!!");
     dispatch(loadTreatiesInProgress());
     const networkId = await web3.eth.net.getId();
     const deployedNetwork = TreatyContract.networks[networkId];
@@ -174,7 +182,9 @@ export const loadTreaties = async (dispatch, web3, treatyIndex) => {
           text: await treatyInstance.methods.name().call(),
           isCompleted: (await treatyInstance.methods.treatyState().call()) == 1,
           createdAt: await treatyInstance.methods.creationTime().call(),
-          status: await treatyInstance.methods.treatyState().call(),
+          status: humanReadableTreatyStatus(
+            await treatyInstance.methods.treatyState().call()
+          ),
           unsignedTreatyText: ["UNSIGNED TEXT"], //treatyInstance.methods.unsignedTreatyText.call(),
           signedTreatyText: ["SIGNED TEXT"], //treatyInstance.methods.signedTreatyText.call(),
         };
@@ -213,103 +223,115 @@ export const loadTreaties = async (dispatch, web3, treatyIndex) => {
   }
 };
 
+export const loadTreaties = () => async (dispatch, getState) => {
+  try {
+    dispatch(loadTreatiesInProgress());
+    const response = await fetch(`${treatyServer}/treaties`);
+    const treaties = await response.json();
+    dispatch(loadTreatiesSuccess(treaties));
+  } catch (e) {
+    dispatch(loadTreatiesFailure());
+    dispatch(displayAlert(e));
+  }
+};
+
 export const displayAlert = (text) => () => {
   alert(text);
 };
 
-// export const markActiveRequest = (dispatch, id) => async (dispatch) => {
-//   try {
-//     const response = await fetch(`${treatyServer}/treaties/${id}/active`, {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       method: "post",
-//       body: "",
-//     });
-//     const activeTreaty = await response.json();
-//     console.log("active treaty is " + activeTreaty);
-//     dispatch(markActive(activeTreaty));
-//   } catch (e) {
-//     dispatch(displayAlert(e));
-//   } finally {
-//   }
-// };
+export const markActiveRequest = (dispatch, id) => async (dispatch) => {
+  try {
+    const response = await fetch(`${treatyServer}/treaties/${id}/active`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "post",
+      body: "",
+    });
+    const activeTreaty = await response.json();
+    console.log("active treaty is " + activeTreaty);
+    dispatch(markActive(activeTreaty));
+  } catch (e) {
+    dispatch(displayAlert(e));
+  } finally {
+  }
+};
 
-// export const addTreatyRequest = (dispatch, text) => async (dispatch) => {
-//   const body = JSON.stringify({ text });
-//   console.log("body:");
-//   console.log(body);
-//   try {
-//     const response = await fetch(`${treatyServer}/treaties`, {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       method: "post",
-//       body: body,
-//     });
-//     const addedTreaty = await response.json();
-//     console.log("response.json");
-//     console.log(addedTreaty);
-//     dispatch(createTreaty(addedTreaty));
-//   } catch (e) {
-//     dispatch(displayAlert(e));
-//   } finally {
-//   }
-// };
+export const addTreatyRequest = (dispatch, text) => async (dispatch) => {
+  const body = JSON.stringify({ text });
+  console.log("body:");
+  console.log(body);
+  try {
+    const response = await fetch(`${treatyServer}/treaties`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "post",
+      body: body,
+    });
+    const addedTreaty = await response.json();
+    console.log("response.json");
+    console.log(addedTreaty);
+    dispatch(createTreaty(addedTreaty));
+  } catch (e) {
+    dispatch(displayAlert(e));
+  } finally {
+  }
+};
 
-// export const addTreatyTextRequest = (dispatch, id, text) => async (
-//   dispatch
-// ) => {
-//   console.log(`add treaty text with id ${id}, text ${text}`);
-//   try {
-//     const response = await fetch(`${treatyServer}/treaties/${id}/text`, {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ text }),
-//       method: "post",
-//     });
-//     const updatedTreaty = await response.json();
-//     console.log(updatedTreaty);
-//     dispatch(addTextToTreaty(updatedTreaty));
-//   } catch (e) {
-//     dispatch(displayAlert(e));
-//   }
-// };
+export const addTreatyTextRequest = (dispatch, id, text) => async (
+  dispatch
+) => {
+  console.log(`add treaty text with id ${id}, text ${text}`);
+  try {
+    const response = await fetch(`${treatyServer}/treaties/${id}/text`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text }),
+      method: "post",
+    });
+    const updatedTreaty = await response.json();
+    console.log(updatedTreaty);
+    dispatch(addTextToTreaty(updatedTreaty));
+  } catch (e) {
+    dispatch(displayAlert(e));
+  }
+};
 
-// export const removeTreatyRequest = (dispatch, id) => async (dispatch) => {
-//   try {
-//     console.log("remove treaty request");
-//     console.log(id);
-//     const response = await fetch(`http://localhost:8081/treaties/${id}`, {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: "",
-//       method: "delete",
-//     });
-//     const removedTreaty = await response.json();
-//     console.log(removedTreaty);
-//     dispatch(removeTreaty(removedTreaty));
-//   } catch (e) {
-//     dispatch(displayAlert(e));
-//   } finally {
-//   }
-// };
+export const removeTreatyRequest = (dispatch, id) => async (dispatch) => {
+  try {
+    console.log("remove treaty request");
+    console.log(id);
+    const response = await fetch(`http://localhost:8081/treaties/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: "",
+      method: "delete",
+    });
+    const removedTreaty = await response.json();
+    console.log(removedTreaty);
+    dispatch(removeTreaty(removedTreaty));
+  } catch (e) {
+    dispatch(displayAlert(e));
+  } finally {
+  }
+};
 
-// export const signTreatyRequest = (dispatch, id) => async (dispatch) => {
-//   try {
-//     const response = await fetch(`${treatyServer}/treaties/${id}/sign`, {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: "",
-//       method: "post",
-//     });
-//     const signedTreaty = await response.json();
-//     dispatch(signTreaty(signedTreaty));
-//   } catch (e) {
-//     dispatch(displayAlert(e));
-//   } finally {
-//   }
-// };
+export const signTreatyRequest = (dispatch, id) => async (dispatch) => {
+  try {
+    const response = await fetch(`${treatyServer}/treaties/${id}/sign`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: "",
+      method: "post",
+    });
+    const signedTreaty = await response.json();
+    dispatch(signTreaty(signedTreaty));
+  } catch (e) {
+    dispatch(displayAlert(e));
+  } finally {
+  }
+};
