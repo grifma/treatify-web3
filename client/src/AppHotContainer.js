@@ -12,7 +12,7 @@ import Nav from "./components/Nav";
 const AppContainer = styled.div`
   margin: 1rem;
   font-family: Arial, Helvetica, sans-serif;
-  background: #222222;
+  background: #343a40;
   width: 100vw;
   height: 100vh;
 `;

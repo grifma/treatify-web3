@@ -9,6 +9,7 @@ import {
   removeTreatyRequest,
   markActiveRequest,
   signTreatyRequest,
+  joinTreatyRequest,
 } from "../redux/interactions";
 import { connect } from "react-redux";
 import { removeTreaty, markActive } from "../redux/actions";
@@ -20,20 +21,7 @@ import {
   getBindingTreaties,
   getWithdrawnTreaties,
 } from "../redux/selectors";
-import styled from "styled-components";
-
-const ListWrapper = styled.div`
-  max-width: 700px;
-  margin: 50px;
-  padding: 30px;
-  background: 343a40;
-  border-radius: 16px;
-  margin-bottom: 50px;
-`;
-const StatusHeader = styled.div`
-  margin-top: 50px;
-  color: white;
-`;
+import { ListWrapper, StatusHeader } from "./treatifyStyled";
 
 const TreatyList = ({
   activeTreaties,
@@ -48,6 +36,7 @@ const TreatyList = ({
   onAddTreatyTextPressed,
   onSignPressed,
   web3,
+  onJoinPressed,
   // propTreaties,
 }) => {
   useEffect(() => {
@@ -71,6 +60,7 @@ const TreatyList = ({
           onRemovePressed={onRemovePressed}
           onMarkActivePressed={onMarkActivePressed}
           onSignPressed={onSignPressed}
+          onJoinPressed={onJoinPressed}
         />
       ))}
       <h3 id="active">
@@ -100,11 +90,11 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   startLoadingTreaties: () => dispatch(loadTreaties()),
   onRemovePressed: (treaty) => dispatch(removeTreatyRequest(treaty.id)),
-  onMarkActivePressed: (treaty) =>
-    dispatch(markActiveRequest(treaty, web3, null)),
+  onMarkActivePressed: (treaty) => dispatch(markActiveRequest(treaty)),
   onDisplayAlertClicked: (id) => dispatch(displayAlert(id)),
   // onAddTreatyTextPressed: (id, text) => dispatch(addTreatyTextRequest(id, text)),
-  onSignPressed: (id) => dispatch(signTreatyRequest(id)),
+  onSignPressed: (treaty) => dispatch(signTreatyRequest(treaty)),
+  onJoinPressed: (treaty) => dispatch(joinTreatyRequest(treaty)),
 });
 
 // function mapStateToProps(state) {

@@ -1,66 +1,18 @@
 import React from "react";
-import styled from "styled-components";
-
-const TreatyItemContainer = styled.div`
-  background: #fff;
-  border-radius: 8px;
-  margin-top: 8px;
-  padding: 16px;
-  position: relative;
-  box-shadow: 0 4px 8px grey;
-  background: white;
-  color: black;
-`;
-
-const TreatyItemContainerWithWarning = styled(TreatyItemContainer)`
-  border-bottom: ${(props) =>
-    new Date(props.createdAt) > new Date(Date.now() - 8640000 * 5)
-      ? "none"
-      : "2px solid gray"};
-`;
-
-const Button = styled.button`
-  font-size: 16px;
-  padding: 8px;
-  border: none;
-  border-radius: 8px;
-  outline: none;
-  cursor: pointer;
-`;
-
-const ActiveButton = styled(Button)`
-  display: inline-block;
-  background-color: #57a657;
-`;
-
-const JoinButton = styled(Button)`
-  display: inline-block;
-  background-color: #57a657;
-  margin-left: 8px;
-`;
-
-const RemoveButton = styled(Button)`
-  display: inline-block;
-  background-color: #c75757;
-  margin-left: 8px;
-`;
-
-const SignButton = styled(Button)`
-  display: inline-block;
-  background-color: #b9c967;
-  margin-left: 8px;
-`;
-
-const AddTextButton = styled(Button)`
-  display: inline-block;
-  background-color: #3cb8d9;
-  margin-left: 8px;
-`;
+import {
+  TreatyItemContainer,
+  TreatyItemContainerWithWarning,
+  ActiveButton,
+  SignButton,
+  RemoveButton,
+  JoinButton,
+} from "./treatifyStyled";
 
 const DraftTreatyListItem = ({
   treaty,
   onRemovePressed,
   onMarkActivePressed,
+  onJoinPressed,
 }) => {
   const Container = treaty.isActive
     ? TreatyItemContainer
@@ -80,9 +32,7 @@ const DraftTreatyListItem = ({
         <ActiveButton onClick={() => onMarkActivePressed(treaty)}>
           Make Active
         </ActiveButton>
-        <JoinButton onClick={() => onMarkActivePressed(treaty)}>
-          Join
-        </JoinButton>
+        <JoinButton onClick={() => onJoinPressed(treaty)}>Join</JoinButton>
         <RemoveButton onClick={() => onRemovePressed(treaty)}>
           Remove
         </RemoveButton>

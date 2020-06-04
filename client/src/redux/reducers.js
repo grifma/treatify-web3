@@ -35,7 +35,7 @@ function contract(state = {}, action) {
     case "TREATY_CONTRACT_LOADED":
       return {
         ...state,
-        treatyContracts: action.treatyContracts,
+        treatyContracts: state.treatyContracts.concat(action.treatyContract),
       };
     case "VALUE_LOADED":
       return { ...state, value: action.value };
@@ -109,7 +109,7 @@ export const treaties = (state = [], action) => {
     case LOAD_TREATIES_SUCCESS: {
       console.log("success loading treaties");
       console.log(
-        "we need to push to list of treaties. currently only one treaty is saved"
+        "we need to push to list of treaties. currently all treaties must be sent through in one go."
       );
 
       const { treaties } = payload;

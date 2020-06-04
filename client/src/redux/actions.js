@@ -43,7 +43,7 @@ export function treatyIndexContractLoaded(treatyIndexContract) {
 export function treatyContractLoaded(contract) {
   return {
     type: "TREATY_CONTRACT_LOADED",
-    contract,
+    treatyContract,
   };
 }
 
@@ -122,8 +122,20 @@ export const signTreaty = (treaty) => ({
   payload: { treaty },
 });
 
+export const JOIN_TREATY = "JOIN_TREATY";
+export const joinTreaty = (treaty) => ({
+  type: JOIN_TREATY,
+  payload: { treaty },
+});
+
 export const ADD_TEXT_TO_TREATY = "ADD_TEXT_TO_TREATY";
 export const addTextToTreaty = (treaty) => ({
   type: ADD_TEXT_TO_TREATY,
+  payload: { treaty },
+});
+
+export const ADD_TO_TREATY_INDEX = "ADD_TO_TREATY_INDEX";
+export const addToTreatyIndex = (treaty) => ({
+  type: ADD_TO_TREATY_INDEX,
   payload: { treaty },
 });
