@@ -72,6 +72,7 @@ export const loadContractDirectDispatch = (web3) => async (dispatch) => {
 };
 
 export const loadWeb3 = async (dispatch) => {
+  alert("using deprecated function.");
   console.log(dispatch);
   const web3 = await getWeb3();
   dispatch(web3Loaded(web3));
@@ -79,6 +80,7 @@ export const loadWeb3 = async (dispatch) => {
 };
 
 export const loadAccount = async (web3) => {
+  alert("using deprecated function.");
   const accounts = await web3.eth.getAccounts();
   const account = accounts[0];
   dispatch(accountLoaded(account));
@@ -86,6 +88,8 @@ export const loadAccount = async (web3) => {
 };
 
 export const loadContract = async (web3) => {
+  alert("using deprecated function.");
+  alert("using deprecated function.");
   const networkId = await web3.eth.net.getId();
   const deployedNetwork = SimpleStorageContract.networks[networkId];
   const instance = new web3.eth.Contract(
@@ -170,29 +174,45 @@ function getFor(numSigned, lookupFunction) {
 // load the treaty smart contract at each of those addresses
 //nb: consider replacing with just one smart contract to save gas.
 //todo better to get web3, treatyindex from getState
-export const loadTreatiesWeb3 = (web3, treatyIndex) => async (
+export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
   dispatch,
   getState
 ) => {
   //todo remove parameters and always get from state
   try {
-    if (web3 == null) {
-    }
-    console.log("-----------web3, -------------");
-    const { web3 } = getState("web3");
-    console.log(web3);
+    //   if (web3 == null) {
+    //   }
+    //   console.log("-----------web3, -------------");
+    //   const { web3 } = getState("web3");
+    //   console.log(web3);
 
-    if (treatyIndex == null) {
-      console.log("-----------treatyIndex-------------");
-      const { treatyIndex } = getState("contract");
-      console.log(treatyIndex);
-    }
+    //   if (treatyIndex == null) {
+    //     console.log("-----------treatyIndex-------------");
+    //     const { treatyIndex } = getState("contract");
+    //     console.log(treatyIndex);
+    //   }
+    //   console.log("-----------web3, -------------");
+    //   console.log(web3);
+
+    //   console.log("-----------treatyIndex-------------");
+    //   console.log(treatyIndex);
+
+    //   if (web3 == null || treatyIndex == null) {
+    //     alert("This should not happen.");
+    //   }
+
+    // }
+    console.log("start loadTreatiesWeb3");
     console.log("-----------web3, -------------");
+    const web3 = getState().web3.connection;
     console.log(web3);
 
     console.log("-----------treatyIndex-------------");
+    const treatyIndex = getState().contract.treatyIndex;
     console.log(treatyIndex);
 
+    console.log("STATE");
+    console.log(getState());
     if (web3 == null || treatyIndex == null) {
       alert("This should not happen.");
     }
@@ -487,6 +507,7 @@ export const addToTreatyIndexRequest = (treaty, address) => async (
     });
     console.log("tx");
     console.log(tx);
+    dispatch(loadTreatiesWeb3());
     dispatch(addToTreatyIndex(treaty));
   } catch (e) {
     console.log("[addToTreatyIndexRequest] ERROR");

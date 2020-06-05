@@ -63,7 +63,8 @@ const TreatyWeb3 = ({
       console.log(simpleStorageContract);
       await startLoadStoredData(simpleStorageContract);
       subscribeToAccountsChanging(myWeb3);
-      const treaties = await startLoadTreatiesWeb3(myWeb3, treatyIndex);
+      const treaties = await startLoadTreatiesWeb3();
+      // const treaties = await startLoadTreatiesWeb3(myWeb3, treatyIndex);
       console.log("effect done");
     }
     initiate();
@@ -225,8 +226,9 @@ function mapDispatchToProps(dispatch) {
     startSubscribeToAccountsChanging: () =>
       dispatch(subscribeToAccountsChanging()),
     startLoadStoredData: (contract) => dispatch(loadStoredData(contract)),
-    startLoadTreatiesWeb3: (web3, treatyIndex) =>
-      dispatch(loadTreatiesWeb3(web3, treatyIndex)),
+    startLoadTreatiesWeb3: (web3, treatyIndex) => dispatch(loadTreatiesWeb3()),
+    // startLoadTreatiesWeb3: (web3, treatyIndex) =>
+    //   dispatch(loadTreatiesWeb3(web3, treatyIndex)),
   };
 }
 
