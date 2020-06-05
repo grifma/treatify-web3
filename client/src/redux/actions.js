@@ -129,9 +129,9 @@ export const joinTreaty = (treaty) => ({
 });
 
 export const ADD_TEXT_TO_TREATY = "ADD_TEXT_TO_TREATY";
-export const addTextToTreaty = (treaty) => ({
+export const addTextToTreaty = (treaty, text) => ({
   type: ADD_TEXT_TO_TREATY,
-  payload: { treaty },
+  payload: { treaty: treaty, text: text },
 });
 
 export const ADD_TO_TREATY_INDEX = "ADD_TO_TREATY_INDEX";

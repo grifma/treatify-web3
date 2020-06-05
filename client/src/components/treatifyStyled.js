@@ -109,3 +109,33 @@ export const StatusHeader = styled.div`
   margin-top: 50px;
   color: white;
 `;
+
+export const AddTreatyTextFormContainer = styled.div`
+  border-radius: 8px;
+  padding: 4px;
+  text-align: center;
+  box-shadow: 0 1px 1px grey;
+  margin: 10px;
+`;
+
+export const AddTreatyInput = styled.input`
+  font-size: 16px;
+  padding: 8px;
+  border: none;
+  border-bottom: 2px solid #ddd;
+  border-radius: 8px;
+  width: 70%;
+  outline: none;
+`;
+
+export const AddTreatyTextButton = styled.button`
+  font-size: 16px;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  margin-left: 8px;
+  width: 20%;
+  background-color: #9c65cc;
+`;

@@ -584,19 +584,35 @@ export const addToTreatyIndexRequest = (treaty, address) => async (
   }
 };
 
-export const addTreatyTextRequest = (id, text) => async (dispatch) => {
-  console.log(`add treaty text with id ${id}, text ${text}`);
+export const addTreatyTextRequest = (treaty, text) => async (
+  dispatch,
+  getState
+) => {
+  console.log(`add treaty text with id ${treaty.id}, text ${text}`);
   try {
-    const response = await fetch(`${treatyServer}/treaties/${id}/text`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text }),
-      method: "post",
-    });
-    const updatedTreaty = await response.json();
-    console.log(updatedTreaty);
-    dispatch(addTextToTreaty(updatedTreaty));
+    console.log("treaty", treaty);
+    const { contractInstance } = treaty;
+    const currentAccount = getState().web3.account;
+
+    const tx = await contractInstance.methods
+      .writeToTreaty(text)
+      .send({ from: currentAccount });
+    console.log("tx", tx);
+
+    dispatch(addTextToTreaty(treaty, text)); //TODO. Consider whether we want to update the reduce without requiring a complete refresh
+
+    //for now just do a complete refresh
+    dispatch(loadTreatiesWeb3());
+    // const response = await fetch(`${treatyServer}/treaties/${id}/text`, {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ text }),
+    //   method: "post",
+    // });
+    // const updatedTreaty = await response.json();
+    // console.log(updatedTreaty);
+    // dispatch(addTextToTreaty(updatedTreaty));
   } catch (e) {
     dispatch(displayAlert(e));
   }
