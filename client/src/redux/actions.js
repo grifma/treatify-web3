@@ -43,9 +43,48 @@ export function treatyIndexContractLoaded(treatyIndexContract) {
 export function treatyContractLoaded(contract) {
   return {
     type: "TREATY_CONTRACT_LOADED",
-    contract,
+    treatyContract,
   };
 }
+
+export const LOAD_TREATIES_IN_PROGRESS = "LOAD_TREATIES_IN_PROGRESS";
+export function loadTreatiesInProgress() {
+  return {
+    type: LOAD_TREATIES_IN_PROGRESS,
+  };
+}
+
+export const LOAD_TREATIES_SUCCESS = "LOAD_TREATIES_SUCCESS";
+export function loadTreatiesSuccess(treaties) {
+  return {
+    type: LOAD_TREATIES_SUCCESS,
+    payload: { treaties },
+  };
+}
+
+export const LOAD_TREATIES_FAILURE = "LOAD_TREATIES_FAILURE";
+export function loadTreatiesFailure() {
+  return {
+    type: LOAD_TREATIES_FAILURE,
+  };
+}
+
+//these will not work because: Unhandled Rejection (Error): Actions must be plain objects. Use custom middleware for async actions.
+// export const LOAD_TREATIES_IN_PROGRESS = "LOAD_TREATIES_IN_PROGRESS";
+// export const loadTreatiesInProgress = () => ({
+//   type: LOAD_TREATIES_IN_PROGRESS,
+// });
+
+// export const LOAD_TREATIES_SUCCESS = "LOAD_TREATIES_SUCCESS";
+// export const loadTreatiesSuccess = (treaties) => ({
+//   type: LOAD_TREATIES_SUCCESS,
+//   payload: { treaties },
+// });
+
+// export const LOAD_TREATIES_FAILURE = "LOAD_TREATIES_FAILURE";
+// export const loadTreatiesFailure = () => ({
+//   type: LOAD_TREATIES_FAILURE,
+// });
 
 // export const loadTreaties = () => async (dispatch, getState) => {
 //   try {
@@ -59,4 +98,44 @@ export function treatyContractLoaded(contract) {
 //   }
 // };
 
-// export function
+export const CREATE_TREATY = "CREATE_TREATY";
+export const createTreaty = (treaty) => ({
+  type: CREATE_TREATY,
+  payload: { treaty },
+});
+
+export const REMOVE_TREATY = "REMOVE_TREATY";
+export const removeTreaty = (treaty) => ({
+  type: REMOVE_TREATY,
+  payload: { treaty },
+});
+
+export const MARK_ACTIVE = "MARK_ACTIVE";
+export const markActive = (treaty) => ({
+  type: MARK_ACTIVE,
+  payload: { treaty },
+});
+
+export const SIGN_TREATY = "SIGN_TREATY";
+export const signTreaty = (treaty) => ({
+  type: SIGN_TREATY,
+  payload: { treaty },
+});
+
+export const JOIN_TREATY = "JOIN_TREATY";
+export const joinTreaty = (treaty) => ({
+  type: JOIN_TREATY,
+  payload: { treaty },
+});
+
+export const ADD_TEXT_TO_TREATY = "ADD_TEXT_TO_TREATY";
+export const addTextToTreaty = (treaty, text) => ({
+  type: ADD_TEXT_TO_TREATY,
+  payload: { treaty: treaty, text: text },
+});
+
+export const ADD_TO_TREATY_INDEX = "ADD_TO_TREATY_INDEX";
+export const addToTreatyIndex = (treaty) => ({
+  type: ADD_TO_TREATY_INDEX,
+  payload: { treaty },
+});

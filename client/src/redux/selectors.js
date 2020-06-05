@@ -1,6 +1,9 @@
 import { get } from "lodash";
 import { createSelector } from "reselect";
 
+//ALL STATE
+//export const getState = (state) => get(state);
+
 // WEB3
 const web3 = (state) => get(state, "web3.connection", null);
 export const web3Selector = createSelector(web3, (w) => w);
@@ -39,3 +42,39 @@ const treatyIndex = (state) => {
   return get(state, "contract.treatyIndex", null);
 };
 export const treatyIndexSelector = createSelector(treatyIndex, (a) => a);
+
+//TREATIES
+export const getTreaties = (state) => get(state, "treaties.data");
+export const getTreatiesLoading = (state) => get(state, "treaties.isLoading");
+
+export const getDraftTreaties = createSelector(getTreaties, (treaties) =>
+  treaties == undefined
+    ? []
+    : treaties.filter((treaty) => treaty.status == "Draft")
+);
+
+export const getActiveTreaties = createSelector(getTreaties, (treaties) =>
+  treaties == undefined
+    ? []
+    : treaties.filter((treaty) => treaty.status == "Active")
+);
+
+export const getBindingTreaties = createSelector(getTreaties, (treaties) =>
+  treaties == undefined
+    ? []
+    : treaties.filter((treaty) => treaty.status == "Binding")
+);
+
+export const getMutuallyWithdrawnTreaties = createSelector(
+  getTreaties,
+  (treaties) =>
+    treaties == undefined
+      ? []
+      : treaties.filter((treaty) => treaty.status == "MutuallyWithdrawn")
+);
+
+export const getBrokenTreaties = createSelector(getTreaties, (treaties) =>
+  treaties == undefined
+    ? []
+    : treaties.filter((treaty) => treaty.status == "Broken")
+);
