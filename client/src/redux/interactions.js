@@ -153,19 +153,54 @@ export const loadStoredData = (contract) => async (dispatch) => {
   return value;
 };
 
-async function getUnsignedText(i) {
-  await treatyInstance.methods.unsignedTreatyText(i).call();
+// function getUnsignedText(treatyInstance, i) {
+//   treatyInstance.methods
+//     .unsignedTreatyText(i)
+//     .call()
+//     .then((err, result) => {
+//       if (err) throw err;
+//       alert(result);
+//       console.log("getUnsignedText");
+//       console.log(result);
+//       return result;
+//     });
+// }
+
+// function getSignedText(treatyInstance, i) {
+//   treatyInstance.methods
+//     .signedTreatyText(i)
+//     .call()
+//     .then((err, result) => {
+//       if (err) throw err;
+//       return result;
+//     });
+// }
+async function getUnsignedText(treatyInstance, i) {
+  const lineOfUnsignedText = await treatyInstance.methods
+    .unsignedTreatyText(i)
+    .call();
+  console.log("lineOfUnsignedText");
+  console.log(lineOfUnsignedText);
+  console.log(`lineOfUnsignedText: ${lineOfUnsignedText}`);
+  return lineOfUnsignedText;
 }
 
-async function getSignedText(i) {
-  await treatyInstance.methods.signedTreatyText(i).call();
+async function getSignedText(treatyInstance, i) {
+  const lineOfSignedText = await treatyInstance.methods
+    .signedTreatyText(i)
+    .call();
+  console.log("lineOfSignedText");
+  console.log(lineOfSignedText);
+  return lineOfSignedText;
 }
 
-function getFor(numSigned, lookupFunction) {
+async function getFor(n, lookupFunction, treatyInstance) {
+  console.log("getFor caled");
   var result = [];
-  for (let i = 0; i < numSigned; i++) {
-    result.push(lookupFunction(i));
+  for (let i = 0; i < n; i++) {
+    result.push(await lookupFunction(treatyInstance, i));
   }
+  console.log("getFor returning: ", result);
   return result;
 }
 // export const refreshTreaties = async (contract) => {
@@ -214,7 +249,28 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
     console.log("STATE");
     console.log(getState());
     if (web3 == null || treatyIndex == null) {
+      console.log("STATE", getState());
       alert("This should not happen.");
+
+      function resolveAfter2Seconds(x) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(x);
+          }, 3000);
+        });
+      }
+
+      await resolveAfter2Seconds(0);
+      console.log("STATE", getState());
+      const web3 = getState().web3.connection;
+      console.log(web3);
+
+      console.log("-----------treatyIndex-------------");
+      const treatyIndex = getState().contract.treatyIndex;
+      console.log(treatyIndex);
+      if (web3 == null || treatyIndex == null) {
+        alert("This should REALLY happen.");
+      }
     }
 
     console.log("load treaties web3!!");
@@ -246,8 +302,13 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
       treatyInstances.map(async (treatyInstance) => {
         console.log("treatyInstance");
         console.log(treatyInstance);
-        const numUnsigned = treatyInstance.methods.getNumUnsigned.call();
-        const numSigned = treatyInstance.methods.getNumSigned.call();
+        const numUnsigned = await treatyInstance.methods
+          .getNumUnsigned()
+          .call();
+        const numSigned = await treatyInstance.methods.getNumSigned().call();
+        console.log(
+          `there are ${numSigned} signed, and ${numUnsigned} unsigned`
+        );
         return {
           id: await treatyInstance.methods.id().call(),
           text: await treatyInstance.methods.name().call(),
@@ -256,9 +317,16 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
           status: humanReadableTreatyStatus(
             await treatyInstance.methods.treatyState().call()
           ),
-
-          unsignedTreatyText: getFor(numUnsigned, getUnsignedText),
-          signedTreatyText: getFor(numSigned, getSignedText),
+          unsignedTreatyText: await getFor(
+            numUnsigned,
+            getUnsignedText,
+            treatyInstance
+          ),
+          signedTreatyText: await getFor(
+            numSigned,
+            getSignedText,
+            treatyInstance
+          ),
           address: await treatyInstance._address,
           contractInstance: treatyInstance,
         };
@@ -566,7 +634,7 @@ export const signTreatyRequest = (treaty) => async (dispatch, getState) => {
     console.log("tx");
     console.log(tx);
 
-    dispatch(signTreaty(signedTreaty));
+    dispatch(signTreaty(treaty));
     dispatch(loadTreatiesWeb3(null, null));
   } catch (e) {
     dispatch(displayAlert(e));
