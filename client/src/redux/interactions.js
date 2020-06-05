@@ -194,6 +194,12 @@ async function getSignedText(treatyInstance, i) {
   return lineOfSignedText;
 }
 
+async function getSigner(treatyInstance, i) {
+  const signer = await treatyInstance.methods.signatureList(i).call();
+  console.log("signer", signer);
+  return signer;
+}
+getSigner;
 async function getFor(n, lookupFunction, treatyInstance) {
   console.log("getFor caled");
   var result = [];
@@ -213,67 +219,17 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
   dispatch,
   getState
 ) => {
-  //todo remove parameters and always get from state
   try {
-    //   if (web3 == null) {
-    //   }
-    //   console.log("-----------web3, -------------");
-    //   const { web3 } = getState("web3");
-    //   console.log(web3);
-
-    //   if (treatyIndex == null) {
-    //     console.log("-----------treatyIndex-------------");
-    //     const { treatyIndex } = getState("contract");
-    //     console.log(treatyIndex);
-    //   }
-    //   console.log("-----------web3, -------------");
-    //   console.log(web3);
-
-    //   console.log("-----------treatyIndex-------------");
-    //   console.log(treatyIndex);
-
-    //   if (web3 == null || treatyIndex == null) {
-    //     alert("This should not happen.");
-    //   }
-
-    // }
     console.log("start loadTreatiesWeb3");
-    console.log("-----------web3, -------------");
     const web3 = getState().web3.connection;
-    console.log(web3);
+    console.log("web3", web3);
 
-    console.log("-----------treatyIndex-------------");
     const treatyIndex = getState().contract.treatyIndex;
-    console.log(treatyIndex);
+    console.log("treatyIndex", treatyIndex);
 
     console.log("STATE");
     console.log(getState());
-    if (web3 == null || treatyIndex == null) {
-      console.log("STATE", getState());
-      alert("This should not happen.");
 
-      function resolveAfter2Seconds(x) {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(x);
-          }, 3000);
-        });
-      }
-
-      await resolveAfter2Seconds(0);
-      console.log("STATE", getState());
-      const web3 = getState().web3.connection;
-      console.log(web3);
-
-      console.log("-----------treatyIndex-------------");
-      const treatyIndex = getState().contract.treatyIndex;
-      console.log(treatyIndex);
-      if (web3 == null || treatyIndex == null) {
-        alert("This should REALLY happen.");
-      }
-    }
-
-    console.log("load treaties web3!!");
     dispatch(loadTreatiesInProgress());
     const networkId = await web3.eth.net.getId();
     const deployedNetwork = TreatyContract.networks[networkId];
@@ -281,22 +237,6 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
     const treatyInstances = treatyIndex.map((treatyAddress) => {
       return new web3.eth.Contract(TreatyContract.abi, treatyAddress);
     });
-
-    console.log("treatyInstances");
-    console.log(treatyInstances);
-    console.log(
-      "next step is to translate this to the same as what web2 treatify is expecting"
-    );
-    // const treaties = treatyInstances;
-
-    console.log("===++===");
-    console.log(treatyInstances[0]);
-    console.log(await treatyInstances[0]);
-    console.log(await treatyInstances[0].methods.name().call());
-
-    //how to do when there is array?
-    console.log("array---");
-    console.log(treatyInstances[0].methods.signedTreatyText);
 
     const treaties = await Promise.all(
       treatyInstances.map(async (treatyInstance) => {
@@ -306,6 +246,9 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
           .getNumUnsigned()
           .call();
         const numSigned = await treatyInstance.methods.getNumSigned().call();
+        const numSigners = await treatyInstance.methods
+          .getNumSignatures()
+          .call();
         console.log(
           `there are ${numSigned} signed, and ${numUnsigned} unsigned`
         );
@@ -314,6 +257,7 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
           text: await treatyInstance.methods.name().call(),
           isCompleted: (await treatyInstance.methods.treatyState().call()) == 1,
           createdAt: await treatyInstance.methods.creationTime().call(),
+          signers: await getFor(numSigners, getSigner, treatyInstance),
           status: humanReadableTreatyStatus(
             await treatyInstance.methods.treatyState().call()
           ),

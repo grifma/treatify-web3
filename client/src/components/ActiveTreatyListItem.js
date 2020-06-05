@@ -34,6 +34,12 @@ const ActiveTreatyListItem = ({
         Lives at:&nbsp;
         {treaty.address}
       </p>
+      <p>
+        Signers:&nbsp;
+        {treaty.signers.map((signer) => (
+          <div>{signer}</div>
+        ))}
+      </p>
       <TreatyTextContainer>
         <UnsignedText>
           {console.log(treaty.unsignedTreatyText)}

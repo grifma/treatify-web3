@@ -28,6 +28,12 @@ const DraftTreatyListItem = ({
         Lives at:&nbsp;
         {treaty.address}
       </p>
+      <p>
+        Signers:&nbsp;
+        {treaty.signers.map((signer) => (
+          <div>{signer}</div>
+        ))}
+      </p>
       <div className="buttons-container">
         <ActiveButton onClick={() => onMarkActivePressed(treaty)}>
           Make Active
