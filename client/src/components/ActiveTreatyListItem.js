@@ -11,6 +11,7 @@ import {
   UnsignedText,
 } from "./treatifyStyled";
 import AddTreatyTextForm from "./AddTreatyTextForm";
+import Blockies from "react-blockies";
 
 const ActiveTreatyListItem = ({
   treaty,
@@ -37,7 +38,9 @@ const ActiveTreatyListItem = ({
       <p>
         Signers:&nbsp;
         {treaty.signers.map((signer) => (
-          <div>{signer}</div>
+          <div>
+            <Blockies seed={signer.toLowerCase()} size={10} scale={10} />
+          </div>
         ))}
       </p>
       <TreatyTextContainer>

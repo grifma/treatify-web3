@@ -22,7 +22,7 @@ contract TreatyIndex is AccessRestriction {
         name = _name;
     }
 
-    function addTreaty(address _treatyAddress) public onlyBy(owner) {
+    function addTreaty(address _treatyAddress) public {
         treatyIndex.push(_treatyAddress);
         emit AddTreaty(_treatyAddress);
     }

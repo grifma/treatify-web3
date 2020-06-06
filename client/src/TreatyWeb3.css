@@ -9,3 +9,7 @@ p {
 .flexbox {
   display: flex;
 }
+
+.onDark {
+  color: white;
+}

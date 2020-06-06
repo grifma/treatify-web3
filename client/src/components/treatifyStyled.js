@@ -99,8 +99,8 @@ export const ItemHeader = styled.div`
 
 export const ListWrapper = styled.div`
   max-width: 700px;
-  margin: 50px;
-  padding: 30px;
+  margin: 10px;
+  padding: 20px;
   background: 343a40;
   border-radius: 16px;
   margin-bottom: 50px;
@@ -116,6 +116,8 @@ export const AddTreatyTextFormContainer = styled.div`
   text-align: center;
   box-shadow: 0 1px 1px grey;
   margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 export const AddTreatyInput = styled.input`
@@ -126,6 +128,7 @@ export const AddTreatyInput = styled.input`
   border-radius: 8px;
   width: 70%;
   outline: none;
+  flex: 1 1 auto;
 `;
 
 export const AddTreatyTextButton = styled.button`
@@ -138,4 +141,66 @@ export const AddTreatyTextButton = styled.button`
   margin-left: 8px;
   width: 20%;
   background-color: #9c65cc;
+  flex: 1 0 60px;
+`;
+
+export const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+
+  @media only screen and (min-width: 769px) {
+    grid-template-rows: 104px 400px 40px;
+  }
+  @media only screen and (max-width: 768px) {
+  }
+`;
+
+export const GridItem = styled.div`
+  color: white;
+`;
+
+export const Header = styled(GridItem)`
+  @media only screen and (min-width: 769px) {
+    grid-column: span 12;
+  }
+  @media only screen and (max-width: 768px) {
+    order: 1;
+    grid-column: span 12;
+  }
+`;
+
+export const LSide = styled(GridItem)`
+  @media only screen and (min-width: 769px) {
+    grid-column: span 2;
+    overflow: hidden;
+  }
+  @media only screen and (max-width: 768px) {
+    grid-column: span 12;
+    order: 3;
+  }
+`;
+
+export const Main = styled(GridItem)`
+  @media only screen and (min-width: 769px) {
+    grid-column: span 8;
+  }
+  @media only screen and (max-width: 768px) {
+    grid-column: span 12;
+    order: 2;
+  }
+`;
+
+export const RSide = styled(GridItem)`
+  @media only screen and (min-width: 769px) {
+    grid-column: span 2;
+  }
+  @media only screen and (max-width: 768px) {
+    grid-column: span 12;
+    order: 4;
+  }
+`;
+
+export const Footer = styled(GridItem)`
+  grid-column: span 12;
+  order: 5;
 `;

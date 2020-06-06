@@ -13,6 +13,8 @@ const FormContainer = styled.div`
   background: white;
   margin-bottom: 50px;
   //   background: rgba(152, 111, 218, 0.7);
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 const NewTreatyInput = styled.input`
@@ -23,6 +25,7 @@ const NewTreatyInput = styled.input`
   border-radius: 8px;
   width: 70%;
   outline: none;
+  flex: 1 1 auto;
 `;
 
 const NewTreatyButton = styled.button`
@@ -35,6 +38,7 @@ const NewTreatyButton = styled.button`
   margin-left: 8px;
   width: 20%;
   background-color: #9c65cc;
+  flex: 1 0 63px;
 `;
 const StatusHeader = styled.div`
   color: white;

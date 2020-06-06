@@ -5,13 +5,13 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
 import configureStore from "./redux/configure";
 import * as serviceWorker from "./serviceWorker";
-import AppHotContainer from "./AppHotContainer";
+import App from "./App";
 
 const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <AppHotContainer />
+    <App />
   </Provider>,
   document.getElementById("root")
 );

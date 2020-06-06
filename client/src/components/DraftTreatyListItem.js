@@ -7,6 +7,7 @@ import {
   RemoveButton,
   JoinButton,
 } from "./treatifyStyled";
+import Blockies from "react-blockies";
 
 const DraftTreatyListItem = ({
   treaty,
@@ -31,7 +32,9 @@ const DraftTreatyListItem = ({
       <p>
         Signers:&nbsp;
         {treaty.signers.map((signer) => (
-          <div>{signer}</div>
+          <div>
+            <Blockies seed={signer.toLowerCase()} size={10} scale={10} />
+          </div>
         ))}
       </p>
       <div className="buttons-container">
