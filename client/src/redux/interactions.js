@@ -40,6 +40,7 @@ export const loadWeb3DirectDispatch = () => async (dispatch) => {
 };
 
 export const loadAccountDirectDispatch = (web3) => async (dispatch) => {
+  console.log("web3", web3);
   const accounts = await web3.eth.getAccounts();
   const account = accounts[0];
   dispatch(accountLoaded(account));
@@ -67,6 +68,8 @@ export const loadWeb3 = async (dispatch) => {
 
 export const loadAccount = async (web3) => {
   alert("using deprecated function.");
+  console.log("web3", web3);
+  // console.log("web3.eth.getAccounts()", web3.eth.getAccounts);
   const accounts = await web3.eth.getAccounts();
   const account = accounts[0];
   dispatch(accountLoaded(account));
@@ -74,7 +77,6 @@ export const loadAccount = async (web3) => {
 };
 
 export const loadContract = async (web3) => {
-  alert("using deprecated function.");
   alert("using deprecated function.");
   const networkId = await web3.eth.net.getId();
   const deployedNetwork = SimpleStorageContract.networks[networkId];
