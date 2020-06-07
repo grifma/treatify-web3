@@ -10,6 +10,8 @@ export const TreatyItemContainer = styled.div`
   box-shadow: 0 4px 8px grey;
   background: white;
   color: black;
+  overflow: hidden;
+  padding: 10px;
 `;
 
 export const TreatyItemContainerWithWarning = styled(TreatyItemContainer)`
@@ -76,19 +78,20 @@ export const FormContainer = styled.div`
 
 export const TreatyTextContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `;
 
 export const UnsignedText = styled.div`
   border: 1px solid black;
-  flex: 0 1 50%;
-  padding: 20px;
+  flex: 1 0 150px;
+  padding: 10px;
   background: white;
   color: black;
 `;
 export const SignedText = styled.div`
   border: 1px solid black;
-  flex: 0 1 50%;
-  padding: 20px;
+  flex: 1 0 150px;
+  padding: 10px;
   background: white;
   color: black;
 `;

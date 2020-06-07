@@ -14,6 +14,7 @@ const DraftTreatyListItem = ({
   onRemovePressed,
   onMarkActivePressed,
   onJoinPressed,
+  key1,
 }) => {
   const Container = treaty.isActive
     ? TreatyItemContainer
@@ -21,22 +22,22 @@ const DraftTreatyListItem = ({
   return (
     <Container createdAt={treaty.createdAt}>
       <h3>{treaty.text}</h3>
-      <p>
+      <div>
         Created at:&nbsp;
         {new Date(treaty.createdAt * 1000).toLocaleDateString()}
-      </p>
-      <p>
+      </div>
+      <div>
         Lives at:&nbsp;
         {treaty.address}
-      </p>
-      <p>
+      </div>
+      <div>
         Signers:&nbsp;
         {treaty.signers.map((signer) => (
           <div>
             <Blockies seed={signer.toLowerCase()} size={10} scale={10} />
           </div>
         ))}
-      </p>
+      </div>
       <div className="buttons-container">
         <ActiveButton onClick={() => onMarkActivePressed(treaty)}>
           Make Active
