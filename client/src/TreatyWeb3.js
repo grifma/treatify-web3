@@ -28,7 +28,12 @@ import {
   web3Selector,
   getState,
 } from "./redux/selectors";
-import { subscribeToAccountsChanging } from "./redux/subscriptions";
+import {
+  subscribeToAccountsChanging,
+  subscribeToNewSignatures,
+  subscribeToNewTreaties,
+  subscribeToAllLogs,
+} from "./redux/subscriptions";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import TreatyList from "./components/TreatyList";
 import Blockies from "react-blockies";
@@ -60,6 +65,9 @@ const TreatyWeb3 = ({
   startSubscribeToAccountsChanging,
   startLoadStoredData,
   startLoadTreatiesWeb3,
+  startSubscribeToAllLogs,
+  startSubscribeToNewTreaties,
+  startSubscribeToNewSignatures,
   initiated,
 }) => {
   useEffect(() => {
@@ -75,20 +83,24 @@ const TreatyWeb3 = ({
       await startLoadStoredData(simpleStorageContract);
       startSubscribeToAccountsChanging(myWeb3);
       const treaties = await startLoadTreatiesWeb3();
+      startSubscribeToAllLogs(web3);
+      startSubscribeToNewTreaties();
+      startSubscribeToNewSignatures();
       console.log("effect done");
     }
     initiate();
   }, []);
 
   const connectBlockchain = async (e) => {
+    console.log("Deprecated - code removed");
     e.preventDefault();
-    const myWeb3 = await startLoadWeb3();
-    await startLoadAccount(myWeb3);
-    const simpleStorageContract = await startLoadContract(myWeb3);
-    const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
-    await startLoadTreatyIndex(treatyIndexContract);
-    await loadStoredData(simpleStorageContract);
-    subscribeToAccountsChanging(myWeb3);
+    // const myWeb3 = await startLoadWeb3();
+    // await startLoadAccount(myWeb3);
+    // const simpleStorageContract = await startLoadContract(myWeb3);
+    // const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
+    // await startLoadTreatyIndex(treatyIndexContract);
+    // await loadStoredData(simpleStorageContract);
+    // subscribeToAccountsChanging(myWeb3);
   };
 
   const emptyComponent = () => <div>EMPTY</div>;
@@ -220,6 +232,9 @@ function mapDispatchToProps(dispatch) {
       dispatch(subscribeToAccountsChanging(web3)),
     startLoadStoredData: (contract) => dispatch(loadStoredData(contract)),
     startLoadTreatiesWeb3: (web3, treatyIndex) => dispatch(loadTreatiesWeb3()),
+    startSubscribeToNewTreaties: () => dispatch(subscribeToNewTreaties()),
+    startSubscribeToNewSignatures: () => dispatch(subscribeToNewSignatures()),
+    startSubscribeToAllLogs: (web3) => dispatch(subscribeToAllLogs(web3)),
   };
 }
 

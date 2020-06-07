@@ -139,3 +139,9 @@ export const addToTreatyIndex = (treaty) => ({
   type: ADD_TO_TREATY_INDEX,
   payload: { treaty },
 });
+
+export const LOAD_ONE_TREATY = "LOAD_ONE_TREATY";
+export const loadOneTreaty = (treaty) => ({
+  type: LOAD_ONE_TREATY,
+  payload: { treaty },
+});

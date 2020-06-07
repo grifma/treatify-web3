@@ -9,6 +9,7 @@ import {
   MARK_ACTIVE,
   SIGN_TREATY,
   ADD_TEXT_TO_TREATY,
+  LOAD_ONE_TREATY,
 } from "../redux/actions";
 
 function web3(state = {}, action) {
@@ -130,6 +131,19 @@ export const treaties = (state = [], action) => {
       return {
         ...state,
         isLoading: false,
+      };
+    }
+    case LOAD_ONE_TREATY: {
+      const { treaty: loadedTreaty } = payload;
+      return {
+        ...state,
+        data: state.data.map((treaty) => {
+          if (treaty.id == loadedTreaty.id) {
+            return loadedTreaty;
+          } else {
+            return treaty;
+          }
+        }),
       };
     }
     default:
