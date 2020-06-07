@@ -368,7 +368,7 @@ export const addTreatyRequest = (text) => async (dispatch, getState) => {
 
     const currentAccount = getState("web3").web3.account;
     const contractCode = "0x" + TreatyBin.bin;
-    const id = Math.floor(Math.random() * 10 ** 3);
+    const id = Math.floor(Math.random() * 10 ** 6);
     const name = text;
     const initialText = text;
 
@@ -520,18 +520,19 @@ export const addTreatyTextRequest = (treaty, text) => async (
 
 export const removeTreatyRequest = (id) => async (dispatch) => {
   try {
-    console.log("remove treaty request");
-    console.log(id);
-    const response = await fetch(`http://localhost:8081/treaties/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: "",
-      method: "delete",
-    });
-    const removedTreaty = await response.json();
-    console.log(removedTreaty);
-    dispatch(removeTreaty(removedTreaty));
+    alert(`Not implemented: Remove treaty with id ${id}`);
+    // console.log("remove treaty request");
+    // console.log(id);
+    // const response = await fetch(`http://localhost:8081/treaties/${id}`, {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: "",
+    //   method: "delete",
+    // });
+    // const removedTreaty = await response.json();
+    // console.log(removedTreaty);
+    // dispatch(removeTreaty(removedTreaty));
   } catch (e) {
     dispatch(displayAlert(e));
   } finally {

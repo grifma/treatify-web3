@@ -204,3 +204,12 @@ export const Footer = styled(GridItem)`
   grid-column: span 12;
   order: 5;
 `;
+
+export const SignerBlockieSetContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const SignerBlockieContainer = styled.div`
+  padding: 2px;
+`;

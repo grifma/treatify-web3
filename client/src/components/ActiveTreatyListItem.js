@@ -9,9 +9,11 @@ import {
   TreatyTextContainer,
   SignedText,
   UnsignedText,
+  SignerBlockieSetContainer,
 } from "./treatifyStyled";
 import AddTreatyTextForm from "./AddTreatyTextForm";
 import Blockies from "react-blockies";
+import SignerBlockie from "./SignerBlockie";
 
 const ActiveTreatyListItem = ({
   treaty,
@@ -35,14 +37,14 @@ const ActiveTreatyListItem = ({
         Lives at:&nbsp;
         {treaty.address}
       </p>
-      <p>
+      <SignerBlockieSetContainer>
         Signers:&nbsp;
         {treaty.signers.map((signer) => (
           <div>
-            <Blockies seed={signer.toLowerCase()} size={10} scale={10} />
+            <SignerBlockie seed={signer.toLowerCase()} />
           </div>
         ))}
-      </p>
+      </SignerBlockieSetContainer>
       <TreatyTextContainer>
         <UnsignedText>
           {console.log(treaty.unsignedTreatyText)}
