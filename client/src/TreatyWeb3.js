@@ -15,6 +15,7 @@ import {
   loadTreatyIndexContract,
   loadTreatyContract,
   loadTreatiesWeb3,
+  load3boxRequest,
 } from "./redux/interactions";
 import {
   contractSelector,
@@ -46,6 +47,7 @@ import {
   Grid,
 } from "./components/treatifyStyled";
 import Nav from "./components/Nav";
+// import Chatbox from "./components/Chatbox";
 import { Button, Popover, OverlayTrigger } from "react-bootstrap";
 
 const TreatyWeb3 = ({
@@ -68,15 +70,15 @@ const TreatyWeb3 = ({
   startSubscribeToAllLogs,
   startSubscribeToNewTreaties,
   startSubscribeToNewSignatures,
+  startLoad3box,
   initiated,
 }) => {
   useEffect(() => {
     async function initiate() {
       const myWeb3 = await startLoadWeb3();
-      await startLoadAccount(myWeb3);
+      const myAccount = await startLoadAccount(myWeb3);
       const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
       const treatyIndex = await startLoadTreatyIndex(treatyIndexContract);
-
       const simpleStorageContract = await startLoadContract(myWeb3);
       console.log("simpleStorageContract");
       console.log(simpleStorageContract);
@@ -86,6 +88,9 @@ const TreatyWeb3 = ({
       startSubscribeToAllLogs(web3);
       startSubscribeToNewTreaties();
       startSubscribeToNewSignatures();
+
+      //3box
+      // startLoad3box(myAccount, window.ethereum);
       console.log("effect done");
     }
     initiate();
@@ -139,8 +144,8 @@ const TreatyWeb3 = ({
 
   const TreatyIndexComponent = () => (
     <OverlayTrigger
-      trigger="hover focus"
-      placement="left"
+      trigger="hover"
+      placement="right"
       overlay={treatyIndexPopover}
     >
       <div class="onDark">Treaty Index</div>
@@ -179,16 +184,7 @@ const TreatyWeb3 = ({
       <Header>
         <Nav />
       </Header>
-      <LSide></LSide>
-      <Main>
-        {treatyIndex == null ? (
-          <div>Treaty index has not been loaded</div>
-        ) : (
-          <TreatyList web3={web3} />
-        )}
-      </Main>
-      <RSide>
-        <ConnectForm />
+      <LSide>
         {account == null ? (
           <div>Account has not been loaded</div>
         ) : (
@@ -199,6 +195,18 @@ const TreatyWeb3 = ({
         ) : (
           <TreatyIndexComponent />
         )}
+        <p></p>
+        {/* <Chatbox /> */}
+      </LSide>
+      <Main>
+        {treatyIndex == null ? (
+          <div>Treaty index has not been loaded</div>
+        ) : (
+          <TreatyList web3={web3} />
+        )}
+      </Main>
+      <RSide>
+        <ConnectForm />
       </RSide>
       <Footer></Footer>
     </Grid>
@@ -235,6 +243,8 @@ function mapDispatchToProps(dispatch) {
     startSubscribeToNewTreaties: () => dispatch(subscribeToNewTreaties()),
     startSubscribeToNewSignatures: () => dispatch(subscribeToNewSignatures()),
     startSubscribeToAllLogs: (web3) => dispatch(subscribeToAllLogs(web3)),
+    startLoad3box: (address, provider) =>
+      dispatch(load3boxRequest(address, provider)),
   };
 }
 

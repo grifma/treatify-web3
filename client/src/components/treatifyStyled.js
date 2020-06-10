@@ -173,6 +173,7 @@ export const Header = styled(GridItem)`
 `;
 
 export const LSide = styled(GridItem)`
+  padding: 10px;
   @media only screen and (min-width: 769px) {
     grid-column: span 2;
     overflow: hidden;
@@ -194,6 +195,7 @@ export const Main = styled(GridItem)`
 `;
 
 export const RSide = styled(GridItem)`
+  padding: 10px;
   @media only screen and (min-width: 769px) {
     grid-column: span 2;
   }
