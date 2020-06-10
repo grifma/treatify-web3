@@ -2,6 +2,7 @@
 
 Fully onchain version of Treatify, running on Ethereum.
 
+
 ## Installation
 
 1. Run the development console.
@@ -9,13 +10,13 @@ Fully onchain version of Treatify, running on Ethereum.
     truffle develop
     ```
 
-2. Compile and migrate the smart contracts. Note inside the development console we don't preface commands with `truffle`.
+2. Compile and migrate the smart contracts. 
     ```javascript
     compile
     migrate
     ```
 
-3. In the `client` directory, we run the React app. Smart contract changes must be manually recompiled and migrated.
+3. In the `client` directory, run the React app. Smart contract changes must be manually recompiled and migrated.
     ```javascript
     // in another terminal (i.e. not in the truffle develop prompt)
     cd client
@@ -37,4 +38,3 @@ Fully onchain version of Treatify, running on Ethereum.
     npm run build
     ```
 
-## FAQ
