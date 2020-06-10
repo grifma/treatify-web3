@@ -6,15 +6,15 @@ import {
   SignButton,
   RemoveButton,
   JoinButton,
+  SignerBlockieSetContainer,
 } from "./treatifyStyled";
-import Blockies from "react-blockies";
+import SignerBlockie from "./SignerBlockie";
 
 const DraftTreatyListItem = ({
   treaty,
   onRemovePressed,
   onMarkActivePressed,
   onJoinPressed,
-  key1,
 }) => {
   const Container = treaty.isActive
     ? TreatyItemContainer
@@ -30,14 +30,14 @@ const DraftTreatyListItem = ({
         Lives at:&nbsp;
         {treaty.address}
       </div>
-      <div>
+      <SignerBlockieSetContainer>
         Signers:&nbsp;
         {treaty.signers.map((signer) => (
           <div>
-            <Blockies seed={signer.toLowerCase()} size={10} scale={10} />
+            <SignerBlockie seed={signer.toLowerCase()} />
           </div>
         ))}
-      </div>
+      </SignerBlockieSetContainer>
       <div className="buttons-container">
         <ActiveButton onClick={() => onMarkActivePressed(treaty)}>
           Make Active

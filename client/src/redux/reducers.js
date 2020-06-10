@@ -10,6 +10,8 @@ import {
   SIGN_TREATY,
   ADD_TEXT_TO_TREATY,
   LOAD_ONE_TREATY,
+  LOAD_3BOX,
+  OPEN_SPACE,
 } from "../redux/actions";
 
 function web3(state = {}, action) {
@@ -134,6 +136,7 @@ export const treaties = (state = [], action) => {
       };
     }
     case LOAD_ONE_TREATY: {
+      console.log("in reducer for load_one_treaty with payload ", payload);
       const { treaty: loadedTreaty } = payload;
       return {
         ...state,
@@ -147,10 +150,29 @@ export const treaties = (state = [], action) => {
       };
     }
     default:
-      if (type != "@@INIT") {
-        console.log("NO MATCH IN REDUCER !!!");
-        console.log(action);
-      }
+      return state;
+  }
+};
+
+export const threebox = (state = [], action) => {
+  const { type, payload } = action;
+  console.log("payload", payload);
+  switch (type) {
+    case LOAD_3BOX: {
+      const { box } = payload;
+      return {
+        ...state,
+        threebox: threebox,
+      };
+    }
+    case OPEN_SPACE: {
+      const { space } = payload;
+      return {
+        ...state,
+        spaces: state.spaces == null ? [space] : state.spaces.concat(space),
+      };
+    }
+    default:
       return state;
   }
 };
@@ -159,6 +181,7 @@ const rootReducer = new combineReducers({
   web3,
   contract,
   treaties,
+  threebox,
 });
 
 export default rootReducer;

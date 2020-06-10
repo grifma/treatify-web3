@@ -145,3 +145,15 @@ export const loadOneTreaty = (treaty) => ({
   type: LOAD_ONE_TREATY,
   payload: { treaty },
 });
+
+export const LOAD_3BOX = "LOAD_3BOX";
+export const load3box = (box) => ({
+  type: LOAD_3BOX,
+  payload: { box },
+});
+
+export const OPEN_SPACE = "OPEN_SPACE";
+export const openSpace = (space) => ({
+  type: OPEN_SPACE,
+  payload: { space },
+});

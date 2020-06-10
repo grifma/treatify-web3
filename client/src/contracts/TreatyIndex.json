@@ -2867,12 +2867,32 @@
         }
       },
       "links": {},
-      "address": "0xd294642529038f9749475C309cfFEd24e98BE7BF",
-      "transactionHash": "0x1586ac5ec9de8706a70d207c137d1e49d91c1cb5ce10cdc62c190bf6577c4b5f"
+      "address": "0x00fEc565143140a826A6f97a42bbBB60244CC408",
+      "transactionHash": "0x74588989adaf2686cf1ae5df715382b4b0a917ec0420cf00582499484b85f25b"
+    },
+    "1591732848654": {
+      "events": {
+        "0x3d161e346251d835e0a657f8873cd7a7d010932c2a3f43a4ee721b9bd8ffa01c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_treatyAddress",
+              "type": "address"
+            }
+          ],
+          "name": "AddTreaty",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x259d0701504a933BFC62A63D18c90d79f904C825",
+      "transactionHash": "0x4f1f9c22e3b505e7411920c2ae3de3755c4796a39531d40b231ce6dd22bcec11"
     }
   },
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-06-06T23:35:58.202Z",
+  "updatedAt": "2020-06-10T11:11:02.547Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}
