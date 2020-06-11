@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { cycle } from "cycle";
 import {
   LOAD_TREATIES_IN_PROGRESS,
   LOAD_TREATIES_SUCCESS,
@@ -110,11 +109,6 @@ export const treaties = (state = [], action) => {
     }
 
     case LOAD_TREATIES_SUCCESS: {
-      console.log("success loading treaties");
-      console.log(
-        "we need to push to list of treaties. currently all treaties must be sent through in one go."
-      );
-
       const { treaties } = payload;
       console.log(treaties);
       return {
@@ -136,7 +130,6 @@ export const treaties = (state = [], action) => {
       };
     }
     case LOAD_ONE_TREATY: {
-      console.log("in reducer for load_one_treaty with payload ", payload);
       const { treaty: loadedTreaty } = payload;
       return {
         ...state,
@@ -156,7 +149,7 @@ export const treaties = (state = [], action) => {
 
 export const threebox = (state = [], action) => {
   const { type, payload } = action;
-  console.log("payload", payload);
+  console.log("[threebox reducer] payload", payload);
   switch (type) {
     case LOAD_3BOX: {
       const { box } = payload;
@@ -169,7 +162,9 @@ export const threebox = (state = [], action) => {
       const { space } = payload;
       return {
         ...state,
-        spaces: state.spaces == null ? [space] : state.spaces.concat(space),
+        openSpace: space,
+        // openSpace: state.openSpace == null ? [space] : state.openSpace.concat(space),
+        //todo: load the treaty text once the space is open
       };
     }
     default:

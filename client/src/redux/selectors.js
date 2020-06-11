@@ -78,3 +78,24 @@ export const getBrokenTreaties = createSelector(getTreaties, (treaties) =>
     ? []
     : treaties.filter((treaty) => treaty.status == "Broken")
 );
+
+//3box
+
+const threebox = (state) => {
+  console.log("threebox");
+  console.log("state");
+  console.log(state);
+  return get(state, "threebox.threebox", null);
+};
+export const threeboxSelector = createSelector(threebox, (a) => a);
+
+const openSpace = (state) => {
+  console.log("openSpace");
+  console.log("state");
+  console.log(state);
+  return get(state, "threebox.openSpace", null);
+};
+export const openSpaceSelector = createSelector(openSpace, (a) => a);
+
+// export getThreebox = (state) => get(state, "threebox.threebox");
+// export getopenSpace = (state) => get(state, "threebox.openSpace");

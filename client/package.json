@@ -27,6 +27,7 @@
     "bootstrap": "^4.4.1",
     "chai": "^4.2.0",
     "cycle": "^1.0.3",
+    "debug": "^4.1.1",
     "eslint-plugin-react": "^7.20.0",
     "jquery": "^3.5.1",
     "lodash": "^4.17.15",

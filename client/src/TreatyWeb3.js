@@ -47,7 +47,7 @@ import {
   Grid,
 } from "./components/treatifyStyled";
 import Nav from "./components/Nav";
-// import Chatbox from "./components/Chatbox";
+import Chatbox from "./components/Chatbox";
 import { Button, Popover, OverlayTrigger } from "react-bootstrap";
 
 const TreatyWeb3 = ({
@@ -98,6 +98,21 @@ const TreatyWeb3 = ({
 
   const connectBlockchain = async (e) => {
     console.log("Deprecated - code removed");
+    console.log("web3, treatyIndex", web3, treatyIndex);
+    startLoadTreatiesWeb3(web3, treatyIndex);
+
+    // startLoadWeb3: () => dispatch(loadWeb3DirectDispatch()),
+    //   startLoadAccount: (myWeb3) => dispatch(loadAccountDirectDispatch(myWeb3)),
+    //     startLoadContract: (myWeb3) => dispatch(loadContractDirectDispatch(myWeb3)),
+    //       startLoadTreatyIndex: (treatyIndexContract) =>
+    //         dispatch(loadTreatyIndexDirectDispatch(treatyIndexContract)),
+    //         startLoadTreatyIndexContract: (myWeb3) =>
+    //           dispatch(loadTreatyIndexContractDirectDispatch(myWeb3)),
+    //           startSubscribeToAccountsChanging: (web3) =>
+    //             dispatch(subscribeToAccountsChanging(web3)),
+    //             startLoadStoredData: (contract) => dispatch(loadStoredData(contract)),
+    //               startLoadTreatiesWeb3: (web3, treatyIndex)
+    // startLoadWeb3();
     e.preventDefault();
     // const myWeb3 = await startLoadWeb3();
     // await startLoadAccount(myWeb3);
@@ -177,6 +192,18 @@ const TreatyWeb3 = ({
     </form>
   );
 
+  const RefreshForm = () => (
+    <form onSubmit={refresh}>
+      <div className="form-group row">
+        <div className="col-12">
+          <button type="submit" className="w-100 btn">
+            Refresh
+          </button>
+        </div>
+      </div>
+    </form>
+  );
+
   const loadingMessage = <div>Loading treaties</div>;
   const isLoading = false;
   const content = (
@@ -196,7 +223,12 @@ const TreatyWeb3 = ({
           <TreatyIndexComponent />
         )}
         <p></p>
-        {/* <Chatbox /> */}
+        {/* <Chatbox box={box} title={"Chatbox"} space={space} /> */}
+        <Chatbox
+          title={"Chatbox"}
+          account={account}
+          provider={window.ethereum}
+        />
       </LSide>
       <Main>
         {treatyIndex == null ? (
@@ -243,8 +275,8 @@ function mapDispatchToProps(dispatch) {
     startSubscribeToNewTreaties: () => dispatch(subscribeToNewTreaties()),
     startSubscribeToNewSignatures: () => dispatch(subscribeToNewSignatures()),
     startSubscribeToAllLogs: (web3) => dispatch(subscribeToAllLogs(web3)),
-    startLoad3box: (address, provider) =>
-      dispatch(load3boxRequest(address, provider)),
+    // startLoad3box: (address, provider) =>
+    //   dispatch(load3boxRequest(address, provider)),
   };
 }
 

@@ -49,15 +49,13 @@ const ActiveTreatyListItem = ({
         <UnsignedText>
           {console.log(treaty.unsignedTreatyText)}
           {treaty.unsignedTreatyText.length === 0 ? null : <h3>Unsigned</h3>}
-          {treaty.unsignedTreatyText.map((text) => (
-            <p>{text}</p>
-          ))}
+          {treaty.unsignedTreatyText.length > 0 &&
+            treaty.unsignedTreatyText.map((text) => <p>{text}</p>)}
         </UnsignedText>
         <SignedText>
           {treaty.signedTreatyText.length === 0 ? null : <h3>Signed</h3>}
-          {treaty.signedTreatyText.map((text) => (
-            <p>{text}</p>
-          ))}
+          {treaty.signedTreatyText.length > 0 &&
+            treaty.signedTreatyText.map((text) => <p>{text}</p>)}
         </SignedText>
       </TreatyTextContainer>
       <AddTreatyTextForm
