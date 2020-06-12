@@ -34,9 +34,7 @@ import TreatyBin from "../contracts/TreatyBin.json";
 import Web3 from "web3";
 import { batch } from "react-redux";
 import Box from "3box";
-const debug = require("debug");
-const debugParseTreaty = require("debug")("parseTreaty");
-const debugLoadTreatiesWeb3 = require("debug")("loadTreatiesWeb3");
+require("events").EventEmitter.defaultMaxListeners = 25;
 
 ////////////////////////////////////
 //Configuration
@@ -50,6 +48,7 @@ const TREATY_TEXT_PERSIST_MODE = PersistMode.THREEBOX;
 const TREATY_PERSIST_MODE = PersistMode.ONCHAIN;
 const TREATY_SIGNATURE_PERSIST_MODE = PersistMode.ONCHAIN;
 const TREATY_STATUS_PERSIST_MODE = PersistMode.ONCHAIN;
+const THREEBOX_POST_LIMIT = 20;
 //
 ///////////////////////////////////
 
@@ -60,7 +59,6 @@ export const loadWeb3DirectDispatch = () => async (dispatch) => {
 };
 
 export const loadAccountDirectDispatch = (web3) => async (dispatch) => {
-  //console.log("web3", web3);
   const accounts = await web3.eth.getAccounts();
   const account = accounts[0];
   dispatch(accountLoaded(account));
@@ -68,36 +66,6 @@ export const loadAccountDirectDispatch = (web3) => async (dispatch) => {
 };
 
 export const loadContractDirectDispatch = (web3) => async (dispatch) => {
-  const networkId = await web3.eth.net.getId();
-  const deployedNetwork = SimpleStorageContract.networks[networkId];
-  const instance = new web3.eth.Contract(
-    SimpleStorageContract.abi,
-    deployedNetwork && deployedNetwork.address
-  );
-  dispatch(contractLoaded(instance));
-  return instance;
-};
-
-export const loadWeb3 = async (dispatch) => {
-  alert("using deprecated function.");
-  //console.log(dispatch);
-  const web3 = await getWeb3();
-  dispatch(web3Loaded(web3));
-  return web3;
-};
-
-export const loadAccount = async (web3) => {
-  alert("using deprecated function.");
-  //console.log("web3", web3);
-  // //console.log("web3.eth.getAccounts()", web3.eth.getAccounts);
-  const accounts = await web3.eth.getAccounts();
-  const account = accounts[0];
-  dispatch(accountLoaded(account));
-  return account;
-};
-
-export const loadContract = async (web3) => {
-  alert("using deprecated function.");
   const networkId = await web3.eth.net.getId();
   const deployedNetwork = SimpleStorageContract.networks[networkId];
   const instance = new web3.eth.Contract(
@@ -203,7 +171,7 @@ async function getFor(n, lookupFunction, treatyInstance) {
 //   const signedTreatyTextThread = await openSpace.joinThread(
 //     `signed-treaty-text-${treaty.id}`
 //   );
-//   const signedTreatyText = await signedTreatyTextThread.getPosts({ limit: 50 });
+//   const signedTreatyText = await signedTreatyTextThread.getPosts({ limit: THREEBOX_POST_LIMIT });
 //   //console.log("signedTreatyText is ", signedTreatyText);
 //   if (signedTreatyText == null) {
 //     return [];
@@ -212,12 +180,6 @@ async function getFor(n, lookupFunction, treatyInstance) {
 // };
 
 async function get3boxUnsignedTreatyText(threebox, openSpace, treatyId) {
-  //console.log("[get3boxUnsignedTreatyText]");
-  // const threebox = getState().threebox.threebox;
-  // const openSpace = getState().threebox.openSpace;
-  //console.log("threebox", threebox);
-  //console.log("openSpace", openSpace);
-
   if (openSpace == null) {
     return ["LOADING FROM 3BOX..."];
   }
@@ -231,13 +193,14 @@ async function get3boxUnsignedTreatyText(threebox, openSpace, treatyId) {
   // `unsigned-treaty-text-${treatyId}`
   // );
   const unsignedTreatyText = await unsignedTreatyTextThread.getPosts({
-    limit: 20,
+    limit: THREEBOX_POST_LIMIT,
   });
   //console.log("unsignedTreatyText is ");
   //console.log(unsignedTreatyText);
 
   return unsignedTreatyText.map((postObject) => {
     return postObject.message;
+    a;
   });
 }
 
@@ -257,7 +220,7 @@ async function get3boxSignedTreatyText(threebox, openSpace, treatyId) {
     `signed-treaty-text-${treatyId}`
   );
   const signedTreatyText = await signedTreatyTextThread.getPosts({
-    limit: 50,
+    limit: THREEBOX_POST_LIMIT,
   });
   //console.log("signedTreatyText is ");
   //console.log(signedTreatyText);
@@ -283,7 +246,7 @@ async function get3boxSignedTreatyText(threebox, openSpace, treatyId) {
 //   );
 //   await unsignedTreatyTextThread.post("hello");
 //   const unsignedTreatyText = await unsignedTreatyTextThread.getPosts({
-//     limit: 50,
+//     limit: THREEBOX_POST_LIMIT,
 //   });
 //   //console.log("unsignedTreatyText is ");
 //   //console.log(unsignedTreatyText);
@@ -295,8 +258,7 @@ async function get3boxSignedTreatyText(threebox, openSpace, treatyId) {
 // };
 
 async function parseTreaty(treatyInstance, threebox, openSpace) {
-  //console.log("called parseTreaty with ", treatyInstance, threebox, openSpace);
-  debugParseTreaty("parseTreaty", treatyInstance);
+  console.log("called parseTreaty with ", treatyInstance, threebox, openSpace);
 
   const numUnsigned = await treatyInstance.methods.getNumUnsigned().call();
   const numSigned = await treatyInstance.methods.getNumSigned().call();
@@ -337,8 +299,6 @@ async function parseTreaty(treatyInstance, threebox, openSpace) {
     address: await treatyInstance._address,
     contractInstance: treatyInstance,
   };
-  debugParseTreaty("[parsedTreaty] treaty is ", treaty);
-  //console.log("[parsedTreaty] treaty is ", treaty);
   return treaty;
 }
 
@@ -353,13 +313,13 @@ async function getUnsignedTreatyText(
 ) {
   switch (TREATY_TEXT_PERSIST_MODE) {
     case PersistMode.THREEBOX:
-      //console.log("Case: THREEBOX. about to look up treaty text from 3box");
+      console.log("Case: THREEBOX");
       return await get3boxUnsignedTreatyText(threebox, openSpace, treatyId);
       break;
     case PersistMode.ONCHAIN:
-    //console.log("Case: ONCHAN");
+      console.log("Case: ONCHAIN");
     default:
-      //console.log("Case: DEFAULT");
+      console.log("Case: DEFAULT");
       return await getFor(numUnsigned, getUnsignedText, treatyInstance);
   }
 }
@@ -375,13 +335,13 @@ async function getSignedTreatyText(
 ) {
   switch (TREATY_TEXT_PERSIST_MODE) {
     case PersistMode.THREEBOX:
-      //console.log("Case: THREEBOX. about to look up treaty text from 3box");
+      console.log("Case: THREEBOX");
       return await get3boxSignedTreatyText(threebox, openSpace, treatyId);
       break;
     case PersistMode.ONCHAIN:
-    //console.log("Case: ONCHAIN");
+      console.log("Case: ONCHAIN");
     default:
-      //console.log("Case: DEFAULT");
+      console.log("Case: DEFAULT");
       return await getFor(numSigned, getSignedText, treatyInstance);
   }
 }
@@ -395,24 +355,6 @@ export const loadOneTreatyRequest = (treatyInstance) => async (
   const openSpace = getState().threebox.openSpace;
   const treaty = await parseTreaty(treatyInstance, threebox, openSpace);
 
-  // if (TREATY_TEXT_PERSIST_MODE == PersistMode.THREEBOX) {
-  //   //console.log("about to look up treaty text from 3box");
-  //   treaty.unsignedTreatyText = await get3boxUnsignedTreatyText(
-  //     threebox,
-  //     openSpace,
-  //     treaty
-  //   );
-  //   treaty.signedTreatyText = await get3boxSignedTreatyText(
-  //     threebox,
-  //     openSpace,
-  //     treaty
-  //   );
-  // treaty.unsignedTreatyText = dispatch(get3boxUnsignedTreatyText(treaty));
-  // treaty.signedTreatyText = dispatch(get3boxSignedTreatyText(treaty));
-  //console.log("unsignedTreatyText", treaty.unsignedTreatyText);
-  //console.log("signedTreatyText", treaty.signedTreatyText);
-  // }
-
   logTimeInMs("[about to dispatch action with treaty: ] ", treaty);
   dispatch(loadOneTreaty(treaty));
 };
@@ -422,17 +364,11 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
   getState
 ) => {
   try {
-    //console.log("start loadTreatiesWeb3");
     const web3 = getState().web3.connection;
     const threebox = getState().threebox.threebox;
     const openSpace = getState().threebox.openSpace;
-    //console.log("web3", web3);
 
     const treatyIndex = getState().contract.treatyIndex;
-    //console.log("treatyIndex", treatyIndex);
-
-    //console.log("STATE");
-    //console.log(getState());
 
     dispatch(loadTreatiesInProgress());
     const networkId = await web3.eth.net.getId();
@@ -444,8 +380,6 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
 
     const treaties = await Promise.all(
       treatyInstances.map(async (treatyInstance) => {
-        //console.log("treatyInstance");
-        //console.log(treatyInstance);
         const numUnsigned = await treatyInstance.methods
           .getNumUnsigned()
           .call();
@@ -453,42 +387,13 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
         const numSigners = await treatyInstance.methods
           .getNumSignatures()
           .call();
-        // console.log(
-        // `there are ${numSigned} signed, and ${numUnsigned} unsigned`
-        // );
-        //console.log("state", getState(), threebox, openSpace);
-
         const treaty = await parseTreaty(treatyInstance, threebox, openSpace);
-
-        // //console.log("after parsetreaty: ", treaty);
-        // if (TREATY_TEXT_PERSIST_MODE == PersistMode.THREEBOX) {
-        //   //console.log(
-        //     "[loadTreatiesWeb3] about to look up treaty text from 3box"
-        //   );
-        //   treaty.unsignedTreatyText = await get3boxUnsignedTreatyText(
-        //     threebox,
-        //     openSpace,
-        //     treaty.id
-        //   );
-        //   treaty.signedTreatyText = await get3boxSignedTreatyText(
-        //     threebox,
-        //     openSpace,
-        //     treaty.id
-        //   );
-        //   //console.log("treaty after inline mutation", treaty);
-        // } else {
-        //   //console.log("threebox mode not enabled");
-        // }
-        //console.log("treaty returned by inner map", treaty);
         return treaty;
       })
     );
-    //console.log("treaties returned by loadTreatiesWeb3", treaties);
     dispatch(loadTreatiesSuccess(treaties));
     dispatch(enrichTreatyWith3boxData(threebox, openSpace, treaties));
   } catch (e) {
-    //console.log("Exception in loadTreatiesWeb3");
-    //console.log(e);
     dispatch(loadTreatiesFailure());
     dispatch(displayAlert(e));
   }
@@ -554,7 +459,7 @@ export const joinTreatyRequest = (treaty) => async (dispatch, getState) => {
       .send({ from: currentAccount });
 
     dispatch(joinTreaty(treaty));
-    dispatch(loadOneTreatyRequest(web3, contractInstance));
+    dispatch(loadOneTreatyRequest(contractInstance));
     // const response = await fetch(`${treatyServer}/treaties/${id}/active`, {
     //   headers: {
     //     "Content-Type": "application/json",
@@ -766,7 +671,7 @@ export const addTreatyTextRequest = (treaty, text) => async (
 
         //get posts with:
         const unsignedTreatyText = await unsignedTreatyTextThread.getPosts({
-          limit: 20,
+          limit: THREEBOX_POST_LIMIT,
         });
         //console.log("thread says: ", unsignedTreatyText);
 
@@ -873,13 +778,13 @@ export const signTreatyRequest = (treaty) => async (dispatch, getState) => {
         `unsigned-treaty-text-${treatyId}`
       );
       const unsignedTreatyText = await unsignedTreatyTextThread.getPosts({
-        limit: 20,
+        limit: THREEBOX_POST_LIMIT,
       });
       const signedTreatyTextThread = await openSpace.joinThread(
         `signed-treaty-text-${treatyId}`
       );
       const existingSignedTreatyText = await signedTreatyTextThread.getPosts({
-        limit: 50,
+        limit: THREEBOX_POST_LIMIT,
       });
 
       console.log("unsignedTreatyText:", unsignedTreatyText);

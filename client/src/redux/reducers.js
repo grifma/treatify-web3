@@ -25,10 +25,6 @@ function web3(state = {}, action) {
 }
 
 function contract(state = {}, action) {
-  //console.log("[contract reducer] state:");
-  //console.log(state);
-  //console.log("action type: " + action.type);
-  // //console.log(JSON.decycle(action));
   switch (action.type) {
     case "CONTRACT_LOADED":
       return { ...state, contract: action.contract };
@@ -110,7 +106,6 @@ export const treaties = (state = [], action) => {
 
     case LOAD_TREATIES_SUCCESS: {
       const { treaties } = payload;
-      //console.log(treaties);
       return {
         ...state,
         isLoading: false,
@@ -149,7 +144,6 @@ export const treaties = (state = [], action) => {
 
 export const threebox = (state = [], action) => {
   const { type, payload } = action;
-  //console.log("[threebox reducer] payload", payload);
   switch (type) {
     case LOAD_3BOX: {
       const { box } = payload;
@@ -163,8 +157,6 @@ export const threebox = (state = [], action) => {
       return {
         ...state,
         openSpace: space,
-        // openSpace: state.openSpace == null ? [space] : state.openSpace.concat(space),
-        //todo: load the treaty text once the space is open
       };
     }
     default:
@@ -180,7 +172,3 @@ const rootReducer = new combineReducers({
 });
 
 export default rootReducer;
-
-// treatyContracts == undefined
-//   ? action.treatyContracts
-//   : treatyContracts.push(action.treatyContracts),
