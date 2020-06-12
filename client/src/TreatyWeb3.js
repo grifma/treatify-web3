@@ -47,7 +47,7 @@ import {
   Grid,
 } from "./components/treatifyStyled";
 import Nav from "./components/Nav";
-import Chatbox from "./components/Chatbox";
+// import Chatbox from "./components/Chatbox";
 import { Button, Popover, OverlayTrigger } from "react-bootstrap";
 
 const TreatyWeb3 = ({
@@ -80,8 +80,8 @@ const TreatyWeb3 = ({
       const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
       const treatyIndex = await startLoadTreatyIndex(treatyIndexContract);
       const simpleStorageContract = await startLoadContract(myWeb3);
-      console.log("simpleStorageContract");
-      console.log(simpleStorageContract);
+      //console.log("simpleStorageContract");
+      //console.log(simpleStorageContract);
       await startLoadStoredData(simpleStorageContract);
       startSubscribeToAccountsChanging(myWeb3);
       const treaties = await startLoadTreatiesWeb3();
@@ -90,17 +90,48 @@ const TreatyWeb3 = ({
       startSubscribeToNewSignatures();
 
       //3box
-      // startLoad3box(myAccount, window.ethereum);
-      console.log("effect done");
+      startLoad3box(myAccount, window.ethereum);
+      //console.log("effect done");
     }
     initiate();
   }, []);
 
   const connectBlockchain = async (e) => {
-    console.log("Deprecated - code removed");
-    console.log("web3, treatyIndex", web3, treatyIndex);
-    startLoadTreatiesWeb3(web3, treatyIndex);
+    //console.log("Deprecated - code removed");
+    //console.log("web3, treatyIndex", web3, treatyIndex);
+    const myWeb3 = await startLoadWeb3();
+    const myAccount = await startLoadAccount(myWeb3);
+    await startLoadTreatiesWeb3(myWeb3, treatyIndex);
 
+    //3box
+    startLoad3box(myAccount, window.ethereum);
+
+    // startLoadWeb3: () => dispatch(loadWeb3DirectDispatch()),
+    //   startLoadAccount: (myWeb3) => dispatch(loadAccountDirectDispatch(myWeb3)),
+    //     startLoadContract: (myWeb3) => dispatch(loadContractDirectDispatch(myWeb3)),
+    //       startLoadTreatyIndex: (treatyIndexContract) =>
+    //         dispatch(loadTreatyIndexDirectDispatch(treatyIndexContract)),
+    //         startLoadTreatyIndexContract: (myWeb3) =>
+    //           dispatch(loadTreatyIndexContractDirectDispatch(myWeb3)),
+    //           startSubscribeToAccountsChanging: (web3) =>
+    //             dispatch(subscribeToAccountsChanging(web3)),
+    //             startLoadStoredData: (contract) => dispatch(loadStoredData(contract)),
+    //               startLoadTreatiesWeb3: (web3, treatyIndex)
+    // startLoadWeb3();
+    e.preventDefault();
+    // const myWeb3 = await startLoadWeb3();
+    // await startLoadAccount(myWeb3);
+    // const simpleStorageContract = await startLoadContract(myWeb3);
+    // const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
+    // await startLoadTreatyIndex(treatyIndexContract);
+    // await loadStoredData(simpleStorageContract);
+    // subscribeToAccountsChanging(myWeb3);
+  };
+
+  const refresh = async (e) => {
+    //console.log("Refresh");
+    startLoadTreatiesWeb3(web3, treatyIndex);
+    // loadOneTreatyRequest
     // startLoadWeb3: () => dispatch(loadWeb3DirectDispatch()),
     //   startLoadAccount: (myWeb3) => dispatch(loadAccountDirectDispatch(myWeb3)),
     //     startLoadContract: (myWeb3) => dispatch(loadContractDirectDispatch(myWeb3)),
@@ -224,11 +255,11 @@ const TreatyWeb3 = ({
         )}
         <p></p>
         {/* <Chatbox box={box} title={"Chatbox"} space={space} /> */}
-        <Chatbox
+        {/* <Chatbox
           title={"Chatbox"}
           account={account}
           provider={window.ethereum}
-        />
+        /> */}
       </LSide>
       <Main>
         {treatyIndex == null ? (
@@ -275,8 +306,8 @@ function mapDispatchToProps(dispatch) {
     startSubscribeToNewTreaties: () => dispatch(subscribeToNewTreaties()),
     startSubscribeToNewSignatures: () => dispatch(subscribeToNewSignatures()),
     startSubscribeToAllLogs: (web3) => dispatch(subscribeToAllLogs(web3)),
-    // startLoad3box: (address, provider) =>
-    //   dispatch(load3boxRequest(address, provider)),
+    startLoad3box: (address, provider) =>
+      dispatch(load3boxRequest(address, provider)),
   };
 }
 

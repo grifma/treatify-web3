@@ -47,7 +47,6 @@ const ActiveTreatyListItem = ({
       </SignerBlockieSetContainer>
       <TreatyTextContainer>
         <UnsignedText>
-          {console.log(treaty.unsignedTreatyText)}
           {treaty.unsignedTreatyText.length === 0 ? null : <h3>Unsigned</h3>}
           {treaty.unsignedTreatyText.length > 0 &&
             treaty.unsignedTreatyText.map((text) => <p>{text}</p>)}

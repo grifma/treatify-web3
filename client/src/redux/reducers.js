@@ -25,10 +25,10 @@ function web3(state = {}, action) {
 }
 
 function contract(state = {}, action) {
-  console.log("[contract reducer] state:");
-  console.log(state);
-  console.log("action type: " + action.type);
-  // console.log(JSON.decycle(action));
+  //console.log("[contract reducer] state:");
+  //console.log(state);
+  //console.log("action type: " + action.type);
+  // //console.log(JSON.decycle(action));
   switch (action.type) {
     case "CONTRACT_LOADED":
       return { ...state, contract: action.contract };
@@ -67,10 +67,10 @@ export const treaties = (state = [], action) => {
       };
     }
     case MARK_ACTIVE: {
-      console.log("detected mark_active event");
+      //console.log("detected mark_active event");
       const { treaty: activeTreaty } = payload;
-      console.log("payload is " + payload);
-      console.log("deconstructed payload is " + activeTreaty);
+      //console.log("payload is " + payload);
+      //console.log("deconstructed payload is " + activeTreaty);
       return {
         ...state,
         data: state.data.map((treaty) => {
@@ -110,7 +110,7 @@ export const treaties = (state = [], action) => {
 
     case LOAD_TREATIES_SUCCESS: {
       const { treaties } = payload;
-      console.log(treaties);
+      //console.log(treaties);
       return {
         ...state,
         isLoading: false,
@@ -149,7 +149,7 @@ export const treaties = (state = [], action) => {
 
 export const threebox = (state = [], action) => {
   const { type, payload } = action;
-  console.log("[threebox reducer] payload", payload);
+  //console.log("[threebox reducer] payload", payload);
   switch (type) {
     case LOAD_3BOX: {
       const { box } = payload;

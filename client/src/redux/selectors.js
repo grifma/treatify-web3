@@ -36,9 +36,9 @@ export const treatyContractsSelector = createSelector(
 );
 
 const treatyIndex = (state) => {
-  console.log("treatyindexselector");
-  console.log("state");
-  console.log(state);
+  //console.log("treatyindexselector");
+  //console.log("state");
+  //console.log(state);
   return get(state, "contract.treatyIndex", null);
 };
 export const treatyIndexSelector = createSelector(treatyIndex, (a) => a);
@@ -82,17 +82,17 @@ export const getBrokenTreaties = createSelector(getTreaties, (treaties) =>
 //3box
 
 const threebox = (state) => {
-  console.log("threebox");
-  console.log("state");
-  console.log(state);
+  //console.log("threebox");
+  //console.log("state");
+  //console.log(state);
   return get(state, "threebox.threebox", null);
 };
 export const threeboxSelector = createSelector(threebox, (a) => a);
 
 const openSpace = (state) => {
-  console.log("openSpace");
-  console.log("state");
-  console.log(state);
+  //console.log("openSpace");
+  //console.log("state");
+  //console.log(state);
   return get(state, "threebox.openSpace", null);
 };
 export const openSpaceSelector = createSelector(openSpace, (a) => a);
