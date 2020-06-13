@@ -726,9 +726,40 @@ export const addTreatyTextRequest = (treaty, text) => async (
   }
 };
 
-export const removeTreatyRequest = (id) => async (dispatch) => {
+export const removeTreatyRequest = (treaty) => async (dispatch, getState) => {
   try {
-    alert(`Not implemented: Remove treaty with id ${id}`);
+    // alert(`Not implemented: Remove treaty with id ${treaty.id}`);
+    console.log(`Remove treaty with id ${treaty.id}`);
+    const openSpace = getState().threebox.openSpace;
+
+    const treatyId = treaty.id;
+    const signedTreatyTextThread = await openSpace.joinThread(
+      `signed-treaty-text-${treatyId}`
+    );
+    const unsignedTreatyTextThread = await openSpace.joinThread(
+      `unsigned-treaty-text-${treatyId}`
+    );
+
+    const existingSignedTreatyText = await signedTreatyTextThread.getPosts({
+      limit: THREEBOX_POST_LIMIT,
+    });
+    const existingUnsignedTreatyText = await unsignedTreatyTextThread.getPosts({
+      limit: THREEBOX_POST_LIMIT,
+    });
+    for (const i in existingUnsignedTreatyText) {
+      const deleteResult = await unsignedTreatyTextThread.deletePost(
+        existingUnsignedTreatyText[i].postId
+      );
+      logTimeInMs("Deleted unsigned: ", deleteResult);
+    }
+    for (const i in existingSignedTreatyText) {
+      const deleteResult = await signedTreatyTextThread.deletePost(
+        existingSignedTreatyText[i].postId
+      );
+      logTimeInMs("Deleted signed: ", deleteResult);
+    }
+    alert("Deleted treaty text successfully");
+
     // //console.log("remove treaty request");
     // //console.log(id);
     // const response = await fetch(`http://localhost:8081/treaties/${id}`, {
@@ -773,36 +804,10 @@ export const signTreatyRequest = (treaty) => async (dispatch, getState) => {
         `Signed by all. Signature: ${tx.events.SignedByAll.signature}`
       );
 
-      const treatyId = treaty.id;
-      const unsignedTreatyTextThread = await openSpace.joinThread(
-        `unsigned-treaty-text-${treatyId}`
-      );
-      const unsignedTreatyText = await unsignedTreatyTextThread.getPosts({
-        limit: THREEBOX_POST_LIMIT,
-      });
-      const signedTreatyTextThread = await openSpace.joinThread(
-        `signed-treaty-text-${treatyId}`
-      );
-      const existingSignedTreatyText = await signedTreatyTextThread.getPosts({
-        limit: THREEBOX_POST_LIMIT,
-      });
-
-      console.log("unsignedTreatyText:", unsignedTreatyText);
-
-      console.log("For each loop");
-      for (const i in unsignedTreatyText) {
-        console.log("lineOfText:", unsignedTreatyText[i]);
-        const postResult = await signedTreatyTextThread.post(
-          unsignedTreatyText[i].message
-        );
-        console.log("about to try to delete: ", unsignedTreatyText[i].postId);
-        const deleteResult = await unsignedTreatyTextThread.deletePost(
-          unsignedTreatyText[i].postId
-        );
-        console.log("postResult", postResult);
-        console.log("deleteResult", deleteResult);
-      }
-      console.log("End of for loop");
+      const {
+        signedTreatyTextThread,
+        unsignedTreatyTextThread,
+      } = await sign3boxTreatyText(treaty, openSpace);
 
       // unsignedTreatyText.forEach(async (lineOfText) => {
       //   console.log("lineOfText:", lineOfText);
@@ -858,6 +863,36 @@ export const signTreatyRequest = (treaty) => async (dispatch, getState) => {
   } finally {
   }
 };
+
+async function sign3boxTreatyText(treaty, openSpace) {
+  const treatyId = treaty.id;
+  const unsignedTreatyTextThread = await openSpace.joinThread(
+    `unsigned-treaty-text-${treatyId}`
+  );
+  const unsignedTreatyText = await unsignedTreatyTextThread.getPosts({
+    limit: THREEBOX_POST_LIMIT,
+  });
+  const signedTreatyTextThread = await openSpace.joinThread(
+    `signed-treaty-text-${treatyId}`
+  );
+  const existingSignedTreatyText = await signedTreatyTextThread.getPosts({
+    limit: THREEBOX_POST_LIMIT,
+  });
+  console.log("unsignedTreatyText:", unsignedTreatyText);
+  for (const i in unsignedTreatyText) {
+    console.log("lineOfText:", unsignedTreatyText[i]);
+    const postResult = await signedTreatyTextThread.post(
+      unsignedTreatyText[i].message
+    );
+    console.log("about to try to delete: ", unsignedTreatyText[i].postId);
+    const deleteResult = await unsignedTreatyTextThread.deletePost(
+      unsignedTreatyText[i].postId
+    );
+    console.log("postResult", postResult);
+    console.log("deleteResult", deleteResult);
+  }
+  return { signedTreatyTextThread, unsignedTreatyTextThread };
+}
 
 // 3box
 export const load3boxRequest = (address, provider) => async (

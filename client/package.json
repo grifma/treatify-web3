@@ -55,6 +55,7 @@
   "scripts": {
     "dev": "npx webpack-dev-server --mode development",
     "build": "npx webpack --mode development",
+    "production": "npx webpack --mode production",
     "test": "mocha \"src/**/*.test.js\" --require @babel/register --recursive"
   },
   "eslintConfig": {

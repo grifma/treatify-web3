@@ -89,7 +89,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   startLoadingTreaties: () => dispatch(loadTreaties()),
-  onRemovePressed: (treaty) => dispatch(removeTreatyRequest(treaty.id)),
+  onRemovePressed: (treaty) => dispatch(removeTreatyRequest(treaty)),
   onMarkActivePressed: (treaty) => dispatch(markActiveRequest(treaty)),
   onDisplayAlertClicked: (id) => dispatch(displayAlert(id)),
   // onAddTreatyTextPressed: (id, text) => dispatch(addTreatyTextRequest(id, text)),
