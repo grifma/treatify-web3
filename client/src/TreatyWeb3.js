@@ -49,6 +49,7 @@ import {
 import Nav from "./components/Nav";
 // import Chatbox from "./components/Chatbox";
 import { Button, Popover, OverlayTrigger } from "react-bootstrap";
+import styled from "styled-components";
 
 const TreatyWeb3 = ({
   dispatch,
@@ -176,25 +177,52 @@ const TreatyWeb3 = ({
     </table>
   );
 
+  const StyledPopover = styled(Popover)`
+    min-width: 450px;
+    background: #343a40;
+    color: white;
+    padding: 16px;
+  `;
+
+  const StyledPopoverTitle = styled(Popover.Title)`
+    min-width: 450px;
+    background: #343a40;
+    color: white;
+    padding: 16px;
+  `;
+
   const treatyIndexPopover = (
-    <Popover id="treaty-index-popover">
-      <Popover.Title as="h3">
+    <StyledPopover id="treaty-index-popover">
+      <StyledPopoverTitle as="h3">
         Treaty Index Address:{" "}
         {treatyIndexContract && treatyIndexContract._address}
-      </Popover.Title>
-      <Popover.Content>
+      </StyledPopoverTitle>
+      <StyledPopover.Content>
         <TreatyIndexTable />
-      </Popover.Content>
-    </Popover>
+      </StyledPopover.Content>
+    </StyledPopover>
   );
+
+  function renderTreatyIndexPopover(props) {
+    <StyledPopover id="treaty-index-popover" {...props}>
+      <StyledPopoverTitle as="h3">
+        Treaty Index Address:{" "}
+        {treatyIndexContract && treatyIndexContract._address}
+      </StyledPopoverTitle>
+      <StyledPopover.Content>
+        <TreatyIndexTable />
+      </StyledPopover.Content>
+    </StyledPopover>;
+  }
 
   const TreatyIndexComponent = () => (
     <OverlayTrigger
       trigger="hover"
       placement="right"
+      delay={{ show: 250, hide: 700 }}
       overlay={treatyIndexPopover}
     >
-      <div class="onDark">Treaty Index</div>
+      <a href="#">Show Treaty Index</a>
     </OverlayTrigger>
   );
 
