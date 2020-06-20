@@ -35,6 +35,7 @@
     "popper.js": "^1.16.1",
     "postcss-loader": "^3.0.0",
     "precss": "^4.0.0",
+    "profile-hover": "^1.1.2",
     "react": "16.11.0",
     "react-blockies": "^1.4.1",
     "react-bootstrap": "^1.0.0",
@@ -55,7 +56,7 @@
   "scripts": {
     "dev": "npx webpack-dev-server --mode development",
     "build": "npx webpack --mode development",
-    "production": "npx webpack --mode production",
+    "production": "npx webpack -p",
     "test": "mocha \"src/**/*.test.js\" --require @babel/register --recursive"
   },
   "eslintConfig": {

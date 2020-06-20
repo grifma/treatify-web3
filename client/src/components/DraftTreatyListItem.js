@@ -34,7 +34,7 @@ const DraftTreatyListItem = ({
         Signers:&nbsp;
         {treaty.signers.map((signer) => (
           <div>
-            <SignerBlockie seed={signer.toLowerCase()} />
+            <SignerBlockie address={signer} />
           </div>
         ))}
       </SignerBlockieSetContainer>

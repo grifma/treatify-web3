@@ -37,7 +37,6 @@ import {
 } from "./redux/subscriptions";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import TreatyList from "./components/TreatyList";
-import Blockies from "react-blockies";
 import {
   Main,
   LSide,
@@ -50,6 +49,7 @@ import Nav from "./components/Nav";
 // import Chatbox from "./components/Chatbox";
 import { Button, Popover, OverlayTrigger } from "react-bootstrap";
 import styled from "styled-components";
+import ProfileHover from "profile-hover";
 
 const TreatyWeb3 = ({
   dispatch,
@@ -226,14 +226,6 @@ const TreatyWeb3 = ({
     </OverlayTrigger>
   );
 
-  const AccountBlockie = () => (
-    <div class="onDark">
-      <Blockies seed={account.toLowerCase()} size={10} scale={6} />
-      &nbsp;&nbsp;&nbsp;
-      <label>Account: {account}</label>
-    </div>
-  );
-
   const ConnectForm = () => (
     <form onSubmit={connectBlockchain}>
       <div className="form-group row">
@@ -274,7 +266,9 @@ const TreatyWeb3 = ({
         {account == null ? (
           <div>Account has not been loaded</div>
         ) : (
-          <AccountBlockie />
+          <div>
+            <ProfileHover address={account} />
+          </div>
         )}
         {treatyIndex == null ? (
           <div>Treaty index has not been loaded</div>

@@ -2,10 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import Blockies from "react-blockies";
 import { SignerBlockieContainer } from "./treatifyStyled";
+import ProfileHover from "profile-hover";
 
-const SignerBlockie = ({ seed }) => (
+const SignerBlockie = ({ address }) => (
   <SignerBlockieContainer>
-    <Blockies seed={seed} size={8} scale={8} />
+    <ProfileHover address={address} />
   </SignerBlockieContainer>
 );
 

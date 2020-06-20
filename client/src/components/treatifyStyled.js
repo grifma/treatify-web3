@@ -173,6 +173,7 @@ export const Header = styled(GridItem)`
 `;
 
 export const LSide = styled(GridItem)`
+  display: flex;
   padding: 10px;
   @media only screen and (min-width: 769px) {
     grid-column: span 2;
@@ -213,6 +214,8 @@ export const Footer = styled(GridItem)`
 export const SignerBlockieSetContainer = styled.div`
   display: flex;
   flex-direction: row;
+  margin: 4px;
+  padding: 12px;
 `;
 
 export const SignerBlockieContainer = styled.div`
