@@ -59,6 +59,12 @@ export const JoinButton = styled(Button)`
   margin-left: 8px;
 `;
 
+export const RefreshTreatyButton = styled(Button)`
+  display: inline-block;
+  background-color: #0df2c8;
+  margin-left: 8px;
+`;
+
 export const ActiveTreatyInput = styled.input`
   font-size: 16px;
   padding: 8px;

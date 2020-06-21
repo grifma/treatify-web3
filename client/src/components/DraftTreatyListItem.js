@@ -21,7 +21,9 @@ const DraftTreatyListItem = ({
     : TreatyItemContainerWithWarning;
   return (
     <Container createdAt={treaty.createdAt}>
-      <h3>{treaty.text}</h3>
+      <h3>
+        #{treaty.id}&nbsp;{treaty.text}
+      </h3>
       <div>
         Created at:&nbsp;
         {new Date(treaty.createdAt * 1000).toLocaleDateString()}

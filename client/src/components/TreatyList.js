@@ -10,6 +10,7 @@ import {
   markActiveRequest,
   signTreatyRequest,
   joinTreatyRequest,
+  refreshTreatyRequest,
 } from "../redux/interactions";
 import { connect } from "react-redux";
 import { removeTreaty, markActive } from "../redux/actions";
@@ -24,19 +25,20 @@ import {
 import { ListWrapper, StatusHeader } from "./treatifyStyled";
 
 const TreatyList = ({
+  isLoading,
   activeTreaties,
   draftTreaties,
   bindingTreaties,
   withdrawnTreaties,
-  isLoading,
+  web3,
+  startLoadingTreaties,
   onRemovePressed,
   onMarkActivePressed,
   onDisplayAlertClicked,
-  startLoadingTreaties,
   onAddTreatyTextPressed,
   onSignPressed,
-  web3,
   onJoinPressed,
+  onRefreshTreatyPressed,
   // propTreaties,
 }) => {
   useEffect(() => {
@@ -74,6 +76,7 @@ const TreatyList = ({
           onMarkActivePressed={onMarkActivePressed}
           onAddTreatyTextPressed={onAddTreatyTextPressed}
           onSignPressed={onSignPressed}
+          onRefreshTreatyPressed={onRefreshTreatyPressed}
         />
       ))}
     </ListWrapper>
@@ -95,6 +98,7 @@ const mapDispatchToProps = (dispatch) => ({
   // onAddTreatyTextPressed: (id, text) => dispatch(addTreatyTextRequest(id, text)),
   onSignPressed: (treaty) => dispatch(signTreatyRequest(treaty)),
   onJoinPressed: (treaty) => dispatch(joinTreatyRequest(treaty)),
+  onRefreshTreatyPressed: (treaty) => dispatch(refreshTreatyRequest(treaty)),
 });
 
 // function mapStateToProps(state) {

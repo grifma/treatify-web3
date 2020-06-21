@@ -6,6 +6,7 @@ import {
   SignButton,
   RemoveButton,
   JoinButton,
+  RefreshTreatyButton,
   TreatyTextContainer,
   SignedText,
   UnsignedText,
@@ -20,6 +21,7 @@ const ActiveTreatyListItem = ({
   onMarkActivePressed,
   onAddTreatyTextPressed,
   onSignPressed,
+  onRefreshTreatyPressed,
 }) => {
   const Container = treaty.isActive
     ? TreatyItemContainer
@@ -68,6 +70,9 @@ const ActiveTreatyListItem = ({
         <RemoveButton onClick={() => onRemovePressed(treaty)}>
           Remove
         </RemoveButton>
+        <RefreshTreatyButton onClick={() => onRefreshTreatyPressed(treaty)}>
+          Refresh
+        </RefreshTreatyButton>
       </div>
     </Container>
   );

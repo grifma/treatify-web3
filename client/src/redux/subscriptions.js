@@ -4,7 +4,7 @@ import { loadTreatyIndex } from "./interactions";
 export const subscribeToAccountsChanging = (web3) => async (dispatch) => {
   window.ethereum.on("accountsChanged", async function (accounts) {
     console.log("account changed");
-    await dispatch(loadAccountDirectDispatch(web3));
+    await dispatch(loadAccount(web3));
   });
 };
 

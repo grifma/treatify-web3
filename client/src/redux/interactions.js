@@ -35,7 +35,7 @@ import Web3 from "web3";
 import { batch } from "react-redux";
 import Box from "3box";
 import { AssertionError } from "assert";
-require("events").EventEmitter.defaultMaxListeners = 35;
+require("events").EventEmitter.defaultMaxListeners = 50;
 
 ////////////////////////////////////
 //Configuration
@@ -50,6 +50,8 @@ const TREATY_PERSIST_MODE = PersistMode.ONCHAIN;
 const TREATY_SIGNATURE_PERSIST_MODE = PersistMode.ONCHAIN;
 const TREATY_STATUS_PERSIST_MODE = PersistMode.ONCHAIN;
 const THREEBOX_POST_LIMIT = 20;
+
+const ID_SIZE = 6;
 //
 ///////////////////////////////////
 
@@ -71,24 +73,26 @@ export const displayAlert = (text) => () => {
 //Treaty specific helper functions
 ////////////////////
 
-async function parseTreaty(treatyInstance, threebox, openSpace) {
-  console.log("called parseTreaty with ", treatyInstance, threebox, openSpace);
+async function pullTreaty(treatyInstance, threebox, openSpace) {
+  console.info("[pullTreaty]", treatyInstance, threebox, openSpace);
 
   const numUnsigned = await treatyInstance.methods.getNumUnsigned().call();
   const numSigned = await treatyInstance.methods.getNumSigned().call();
   const numSigners = await treatyInstance.methods.getNumSignatures().call();
   const treatyId = await treatyInstance.methods.id().call();
 
-  console.log(`there are ${numSigners} signers. This is treaty #${treatyId}`);
+  console.log(
+    `[pullTreaty] there are ${numSigners} signers. This is treaty #${treatyId}`
+  );
 
   const signers = [];
   var i;
   for (i = 0; i < numSigners; i++) {
     signers.push(await treatyInstance.methods.signatureList(i).call());
-    console.log("signer pushed");
+    console.log("[pullTreaty] signer pushed");
   }
 
-  console.log("parse treaty] signers: :>> ", signers);
+  console.log("pullTreaty] signers: :>> ", signers);
   const treaty = {
     id: treatyId,
     text: await treatyInstance.methods.name().call(),
@@ -117,12 +121,6 @@ async function parseTreaty(treatyInstance, threebox, openSpace) {
       treatyId,
       signers
     ),
-    // unsignedTreatyText: await getFor(
-    //   numUnsigned,
-    //   getUnsignedText,
-    //   treatyInstance
-    // ),
-    // signedTreatyText: await getFor(numSigned, getSignedText, treatyInstance),
     address: await treatyInstance._address,
     contractInstance: treatyInstance,
   };
@@ -546,7 +544,7 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
         const numSigners = await treatyInstance.methods
           .getNumSignatures()
           .call();
-        const treaty = await parseTreaty(treatyInstance, threebox, openSpace);
+        const treaty = await pullTreaty(treatyInstance, threebox, openSpace);
         return treaty;
       })
     );
@@ -576,12 +574,20 @@ export const loadOneTreaty = (treatyInstance) => async (dispatch, getState) => {
     dispatch(loadOneTreatyInProgress());
     const threebox = getState().threebox.threebox;
     const openSpace = getState().threebox.openSpace;
-    const treaty = await parseTreaty(treatyInstance, threebox, openSpace);
-
-    console.log("[about to dispatch action with treaty: ] ", treaty);
+    console.log(
+      "[loadOneTreaty] Parse treaty with ",
+      treatyInstance,
+      threebox,
+      openSpace
+    );
+    const treaty = await pullTreaty(treatyInstance, threebox, openSpace);
+    console.log(
+      "[loadOneTreaty] about to dispatch success action with parsed treaty: ",
+      treaty
+    );
     dispatch(loadOneTreatySuccess(treaty));
   } catch (e) {
-    console.error("Error on loadOneTreaty: ", e);
+    console.error("[loadOneTreaty] Exception: ", e);
     dispatch(loadOneTreatyFailure());
   }
 };
@@ -701,6 +707,7 @@ export const joinTreatyRequest = (treaty) => async (dispatch, getState) => {
 
 export const addTreatyRequest = (text) => async (dispatch, getState) => {
   try {
+    console.info("[addTreatyRequest]");
     var freshWeb3 = new Web3(Web3.givenProvider);
 
     const treatyContract1 = web3.eth.contract(TreatyContract.abi);
@@ -708,16 +715,11 @@ export const addTreatyRequest = (text) => async (dispatch, getState) => {
 
     const currentAccount = getState("web3").web3.account;
     const contractCode = "0x" + TreatyBin.bin;
-    const id = Math.floor(Math.random() * 10 ** 6);
-    const name = text;
-    const initialText = text;
 
     const parameters = TreatyContract.abi;
-    //console.log(`[method3] About to deploy  ${text} . . .`);
+    console.log(`[addTreatyRequest] About to deploy  ${text} . . .`);
 
-    //method 4
-
-    var _id = Math.floor(Math.random() * 10 ** 3);
+    var _id = Math.floor(Math.random() * 10 ** ID_SIZE);
     var _name = text;
     var _initialText = "Initial text for " + text;
 
@@ -739,7 +741,7 @@ export const addTreatyRequest = (text) => async (dispatch, getState) => {
               " transactionHash: " +
               contract.transactionHash
           );
-          dispatch(addToTreatyIndexRequest(contract, contract.address));
+          dispatch(addToTreatyIndexRequest(contract));
           dispatch(loadOneTreaty(contract));
           dispatch(createTreaty(contract));
         }
@@ -752,27 +754,32 @@ export const addTreatyRequest = (text) => async (dispatch, getState) => {
   }
 };
 
-export const addToTreatyIndexRequest = (treatyInstance, address) => async (
+export const addToTreatyIndexRequest = (treatyInstance) => async (
   dispatch,
   getState
 ) => {
   try {
-    //console.log("called addToTreatyIndexRequest for address ", address);
-    //console.log(getState());
+    console.log("[addToTreatyIndexRequest] ", treatyInstance);
+    console.log(getState());
     const currentAccount = getState().web3.account;
     const web3 = getState().web3;
     const treatyIndexInstance = getState().contract.treatyIndexContract;
     //console.log("treatyIndexInstance", treatyIndexInstance);
     //console.log("currentAccount", currentAccount);
 
-    const tx = await treatyIndexInstance.methods.addTreaty(address).send({
-      from: currentAccount,
-    });
-    //console.log("tx", tx);
+    const tx = await treatyIndexInstance.methods
+      .addTreaty(treatyInstance.address)
+      .send({
+        from: currentAccount,
+      });
+    console.log(
+      "[addToTreatyIndexRequest] Treaty added to treaty index in tx: ",
+      tx
+    );
     dispatch(loadOneTreaty(treatyInstance));
     dispatch(addToTreatyIndex(treatyInstance));
   } catch (e) {
-    //console.log("[addToTreatyIndexRequest] ERROR");
+    console.error("[addToTreatyIndexRequest] Exception ", e);
     //console.log(e);
     dispatch(displayAlert(e));
   }
@@ -992,6 +999,11 @@ export const signTreatyRequest = (treaty) => async (dispatch, getState) => {
     dispatch(displayAlert(e));
   } finally {
   }
+};
+
+export const refreshTreatyRequest = (treaty) => async (dispatch) => {
+  console.info("[refreshTreatyRequest] ", treaty);
+  loadOneTreaty(treaty.contractInstance);
 };
 
 ////////////////////
