@@ -1,15 +1,17 @@
 import getWeb3 from "../getWeb3";
 import {
-  web3Loaded,
   contractLoaded,
   accountLoaded,
   valueLoaded,
-  treatyIndexContractLoaded,
-  treatyContractLoaded,
+  load3box,
+  web3Loaded,
   treatyIndexLoaded,
+  treatyContractLoaded,
+  treatyIndexContractLoaded,
   loadTreatiesInProgress,
   loadTreatiesFailure,
   loadTreatiesSuccess,
+  loadOneTreaty,
   removeTreaty,
   createTreaty,
   markActive,
@@ -17,8 +19,6 @@ import {
   signTreaty,
   joinTreaty,
   addToTreatyIndex,
-  loadOneTreaty,
-  load3box,
   openSpace,
 } from "../redux/actions";
 import {
@@ -29,7 +29,6 @@ import {
 import SimpleStorageContract from "../contracts/SimpleStorage.json";
 import TreatyIndexContract from "../contracts/TreatyIndex.json";
 import TreatyContract from "../contracts/Treaty.json";
-// import TreatyContractBinary from "../contracts/TreatyContractBinary.js";
 import TreatyBin from "../contracts/TreatyBin.json";
 import Web3 from "web3";
 import { batch } from "react-redux";
@@ -53,20 +52,20 @@ const THREEBOX_POST_LIMIT = 20;
 //
 ///////////////////////////////////
 
-export const loadWeb3DirectDispatch = () => async (dispatch) => {
+export const loadWeb3 = () => async (dispatch) => {
   const web3 = await getWeb3();
   dispatch(web3Loaded(web3));
   return web3;
 };
 
-export const loadAccountDirectDispatch = (web3) => async (dispatch) => {
+export const loadAccount = (web3) => async (dispatch) => {
   const accounts = await web3.eth.getAccounts();
   const account = accounts[0];
   dispatch(accountLoaded(account));
   return account;
 };
 
-export const loadContractDirectDispatch = (web3) => async (dispatch) => {
+export const loadContract = (web3) => async (dispatch) => {
   const networkId = await web3.eth.net.getId();
   const deployedNetwork = SimpleStorageContract.networks[networkId];
   const instance = new web3.eth.Contract(
@@ -77,20 +76,7 @@ export const loadContractDirectDispatch = (web3) => async (dispatch) => {
   return instance;
 };
 
-export const loadTreatyIndexContract = async (web3) => {
-  const networkId = await web3.eth.net.getId();
-  const deployedNetwork = TreatyIndexContract.networks[networkId];
-  const instance = new web3.eth.Contract(
-    TreatyIndexContract.abi,
-    deployedNetwork && deployedNetwork.address
-  );
-  dispatch(treatyIndexContractLoaded(instance));
-  return instance;
-};
-
-export const loadTreatyIndexContractDirectDispatch = (web3) => async (
-  dispatch
-) => {
+export const loadTreatyIndexContract = (web3) => async (dispatch) => {
   const networkId = await web3.eth.net.getId();
   const deployedNetwork = TreatyIndexContract.networks[networkId];
   const instance = new web3.eth.Contract(
@@ -112,13 +98,7 @@ export const loadTreatyContract = (web3) => async (dispatch) => {
   return instance;
 };
 
-export const loadTreatyIndex = async (contract) => {
-  const treatyIndex = await contract.methods.getTreatyIndex().call();
-  dispatch(treatyIndexLoaded(treatyIndex));
-  return treatyIndex;
-};
-
-export const loadTreatyIndexDirectDispatch = (contract) => async (dispatch) => {
+export const loadTreatyIndex = (contract) => async (dispatch) => {
   const treatyIndex = await contract.methods.getTreatyIndex().call();
   dispatch(treatyIndexLoaded(treatyIndex));
   return treatyIndex;

@@ -2,18 +2,13 @@ import React, { Component, useEffect } from "react";
 import { connect } from "react-redux";
 import "./TreatyWeb3.css";
 import {
-  loadWeb3DirectDispatch,
-  loadAccountDirectDispatch,
-  loadContractDirectDispatch,
-  loadTreatyIndexDirectDispatch,
-  loadTreatyIndexContractDirectDispatch,
   loadWeb3,
-  loadContract,
   loadAccount,
-  loadStoredData,
+  loadContract,
   loadTreatyIndex,
-  loadTreatyIndexContract,
   loadTreatyContract,
+  loadTreatyIndexContract,
+  loadStoredData,
   loadTreatiesWeb3,
   load3boxRequest,
 } from "./redux/interactions";
@@ -107,13 +102,13 @@ const TreatyWeb3 = ({
     //3box
     startLoad3box(myAccount, window.ethereum);
 
-    // startLoadWeb3: () => dispatch(loadWeb3DirectDispatch()),
-    //   startLoadAccount: (myWeb3) => dispatch(loadAccountDirectDispatch(myWeb3)),
-    //     startLoadContract: (myWeb3) => dispatch(loadContractDirectDispatch(myWeb3)),
+    // startLoadWeb3: () => dispatch(loadWeb3()),
+    //   startLoadAccount: (myWeb3) => dispatch(loadAccount(myWeb3)),
+    //     startLoadContract: (myWeb3) => dispatch(loadContract(myWeb3)),
     //       startLoadTreatyIndex: (treatyIndexContract) =>
-    //         dispatch(loadTreatyIndexDirectDispatch(treatyIndexContract)),
+    //         dispatch(loadTreatyIndex(treatyIndexContract)),
     //         startLoadTreatyIndexContract: (myWeb3) =>
-    //           dispatch(loadTreatyIndexContractDirectDispatch(myWeb3)),
+    //           dispatch(loadTreatyIndexContract(myWeb3)),
     //           startSubscribeToAccountsChanging: (web3) =>
     //             dispatch(subscribeToAccountsChanging(web3)),
     //             startLoadStoredData: (contract) => dispatch(loadStoredData(contract)),
@@ -133,13 +128,13 @@ const TreatyWeb3 = ({
     //console.log("Refresh");
     startLoadTreatiesWeb3(web3, treatyIndex);
     // loadOneTreatyRequest
-    // startLoadWeb3: () => dispatch(loadWeb3DirectDispatch()),
-    //   startLoadAccount: (myWeb3) => dispatch(loadAccountDirectDispatch(myWeb3)),
-    //     startLoadContract: (myWeb3) => dispatch(loadContractDirectDispatch(myWeb3)),
+    // startLoadWeb3: () => dispatch(loadWeb3()),
+    //   startLoadAccount: (myWeb3) => dispatch(loadAccount(myWeb3)),
+    //     startLoadContract: (myWeb3) => dispatch(loadContract(myWeb3)),
     //       startLoadTreatyIndex: (treatyIndexContract) =>
-    //         dispatch(loadTreatyIndexDirectDispatch(treatyIndexContract)),
+    //         dispatch(loadTreatyIndex(treatyIndexContract)),
     //         startLoadTreatyIndexContract: (myWeb3) =>
-    //           dispatch(loadTreatyIndexContractDirectDispatch(myWeb3)),
+    //           dispatch(loadTreatyIndexContract(myWeb3)),
     //           startSubscribeToAccountsChanging: (web3) =>
     //             dispatch(subscribeToAccountsChanging(web3)),
     //             startLoadStoredData: (contract) => dispatch(loadStoredData(contract)),
@@ -313,14 +308,14 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onRefreshTreatiesPressed: (treatyIndexContract) =>
-      dispatch(loadTreatyIndexDirectDispatch(treatyIndexContract)),
-    startLoadWeb3: () => dispatch(loadWeb3DirectDispatch()),
-    startLoadAccount: (myWeb3) => dispatch(loadAccountDirectDispatch(myWeb3)),
-    startLoadContract: (myWeb3) => dispatch(loadContractDirectDispatch(myWeb3)),
+      dispatch(loadTreatyIndex(treatyIndexContract)),
+    startLoadWeb3: () => dispatch(loadWeb3()),
+    startLoadAccount: (myWeb3) => dispatch(loadAccount(myWeb3)),
+    startLoadContract: (myWeb3) => dispatch(loadContract(myWeb3)),
     startLoadTreatyIndex: (treatyIndexContract) =>
-      dispatch(loadTreatyIndexDirectDispatch(treatyIndexContract)),
+      dispatch(loadTreatyIndex(treatyIndexContract)),
     startLoadTreatyIndexContract: (myWeb3) =>
-      dispatch(loadTreatyIndexContractDirectDispatch(myWeb3)),
+      dispatch(loadTreatyIndexContract(myWeb3)),
     startSubscribeToAccountsChanging: (web3) =>
       dispatch(subscribeToAccountsChanging(web3)),
     startLoadStoredData: (contract) => dispatch(loadStoredData(contract)),

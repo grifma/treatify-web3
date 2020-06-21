@@ -1,4 +1,4 @@
-import { loadAccount, loadAccountDirectDispatch } from "./interactions";
+import { loadAccount } from "./interactions";
 import { loadTreatyIndex } from "./interactions";
 
 export const subscribeToAccountsChanging = (web3) => async (dispatch) => {
