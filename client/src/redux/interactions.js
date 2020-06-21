@@ -67,11 +67,6 @@ export const displayAlert = (text) => () => {
   alert(text);
 };
 
-function logTimeInMs(text, ...args) {
-  const logTimeInMs = new Date().getTime();
-  console.log(`[TIME:${logTimeInMs}] ${text}`, args);
-}
-
 ////////////////////
 //Treaty specific helper functions
 ////////////////////
@@ -90,7 +85,7 @@ async function parseTreaty(treatyInstance, threebox, openSpace) {
   var i;
   for (i = 0; i < numSigners; i++) {
     signers.push(await treatyInstance.methods.signatureList(i).call());
-    logTimeInMs("signer pushed");
+    console.log("signer pushed");
   }
 
   console.log("parse treaty] signers: :>> ", signers);
@@ -576,14 +571,14 @@ export const loadTreaties = () => async (getState) => {
 };
 
 export const loadOneTreaty = (treatyInstance) => async (dispatch, getState) => {
-  logTimeInMs("[loadOneTreaty] ", treatyInstance);
+  console.log("[loadOneTreaty] ", treatyInstance);
   try {
     dispatch(loadOneTreatyInProgress());
     const threebox = getState().threebox.threebox;
     const openSpace = getState().threebox.openSpace;
     const treaty = await parseTreaty(treatyInstance, threebox, openSpace);
 
-    logTimeInMs("[about to dispatch action with treaty: ] ", treaty);
+    console.log("[about to dispatch action with treaty: ] ", treaty);
     dispatch(loadOneTreatySuccess(treaty));
   } catch (e) {
     console.error("Error on loadOneTreaty: ", e);
@@ -598,14 +593,13 @@ export const load3box = (address, provider) => async (dispatch, getState) => {
   try {
     dispatch(load3boxInProgress());
     const box = await Box.openBox(address, provider, {});
-    //console.log("successful load of 3box", box);
+    console.info("successful load of 3box", box);
     await box.syncDone;
-    //console.log("syncdone", box.syncDone);
-    await dispatch(load3box(box));
+    console.log("syncdone", box.syncDone);
     const treatifySpace = await box.openSpace("treatify");
-    //console.log("opened space ", treatifySpace);
+    console.info("opened space ", treatifySpace);
     await dispatch(openSpace(treatifySpace));
-
+    await dispatch(load3boxSuccess(box));
     dispatch(
       enrichTreatyWith3boxData(
         box,
@@ -614,6 +608,7 @@ export const load3box = (address, provider) => async (dispatch, getState) => {
       )
     );
   } catch (e) {
+    console.error("Exception in load3box ", e);
     dispatch(displayAlert(e));
   } finally {
   }
@@ -650,7 +645,7 @@ export const markActiveRequest = (treaty) => async (dispatch, getState) => {
 
       treaty.signers.map(async (x) => {
         await thread.addModerator(x);
-        logTimeInMs(`added ${x} as thread moderator`);
+        console.log(`added ${x} as thread moderator`);
       });
     }
 
@@ -796,15 +791,15 @@ export const addTreatyTextRequest = (treaty, text) => async (
     console.log("mode", TREATY_TEXT_PERSIST_MODE);
     switch (TREATY_TEXT_PERSIST_MODE) {
       case PersistMode.ONCHAIN:
-        logTimeInMs("write to chain");
+        console.log("write to chain");
         const tx = await contractInstance.methods
           .writeToTreaty(text)
           .send({ from: currentAccount });
-        logTimeInMs("done tx", tx);
+        console.log("done tx", tx);
         break;
 
       case PersistMode.THREEBOX:
-        logTimeInMs("write to threebox");
+        console.log("write to threebox");
         //console.log("state when persisting to threebox is ", getState());
         const threebox = getState().threebox.threebox;
         const openSpace = getState().threebox.openSpace;
