@@ -3,7 +3,7 @@
 // // import { Main, LSide, RSide, Header, Footer, Grid } from "./treatifyStyled";
 // import styled from "styled-components";
 // import { Button, Popover, OverlayTrigger } from "react-bootstrap";
-// import { load3boxRequest } from "../redux/interactions";
+// import { load3box } from "../redux/interactions";
 // import {
 //   threeboxSelector,
 //   openSpaceSelector,
@@ -152,7 +152,7 @@
 // function mapDispatchToProps(dispatch) {
 //   return {
 //     startLoad3box: (address, provider) =>
-//       dispatch(load3boxRequest(address, provider)),
+//       dispatch(load3box(address, provider)),
 //   };
 // }
 

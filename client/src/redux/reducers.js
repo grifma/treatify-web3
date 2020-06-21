@@ -8,8 +8,12 @@ import {
   MARK_ACTIVE,
   SIGN_TREATY,
   ADD_TEXT_TO_TREATY,
-  LOAD_ONE_TREATY,
-  LOAD_3BOX,
+  LOAD_ONE_TREATY_IN_PROGRESS,
+  LOAD_ONE_TREATY_SUCCESS,
+  LOAD_ONE_TREATY_FAILURE,
+  LOAD_3BOX_IN_PROGRESS,
+  LOAD_3BOX_SUCCESS,
+  LOAD_3BOX_FAILURE,
   OPEN_SPACE,
 } from "../redux/actions";
 
@@ -124,10 +128,11 @@ export const treaties = (state = [], action) => {
         isLoading: false,
       };
     }
-    case LOAD_ONE_TREATY: {
+    case LOAD_ONE_TREATY_SUCCESS: {
       const { treaty: loadedTreaty } = payload;
       return {
         ...state,
+        isOneTreatyLoading: false,
         data: state.data.map((treaty) => {
           if (treaty.id == loadedTreaty.id) {
             return loadedTreaty;
@@ -135,6 +140,18 @@ export const treaties = (state = [], action) => {
             return treaty;
           }
         }),
+      };
+    }
+    case LOAD_ONE_TREATY_FAILURE: {
+      return {
+        ...state,
+        isOneTreatyLoading: false,
+      };
+    }
+    case LOAD_ONE_TREATY_IN_PROGRESS: {
+      return {
+        ...state,
+        isOneTreatyLoading: true,
       };
     }
     default:
@@ -145,11 +162,24 @@ export const treaties = (state = [], action) => {
 export const threebox = (state = [], action) => {
   const { type, payload } = action;
   switch (type) {
-    case LOAD_3BOX: {
+    case LOAD_3BOX_IN_PROGRESS: {
+      return {
+        ...state,
+        is3boxLoading: true,
+      };
+    }
+    case LOAD_3BOX_SUCCESS: {
       const { box } = payload;
       return {
         ...state,
         threebox: threebox,
+        is3boxLoading: false,
+      };
+    }
+    case LOAD_3BOX_FAILURE: {
+      return {
+        ...state,
+        is3boxLoading: false,
       };
     }
     case OPEN_SPACE: {

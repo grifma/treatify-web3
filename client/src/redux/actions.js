@@ -12,20 +12,6 @@ export function accountLoaded(account) {
   };
 }
 
-export function contractLoaded(contract) {
-  return {
-    type: "CONTRACT_LOADED",
-    contract,
-  };
-}
-
-export function valueLoaded(value) {
-  return {
-    type: "VALUE_LOADED",
-    value,
-  };
-}
-
 export function treatyIndexLoaded(treatyIndex) {
   return {
     type: "TREATY_INDEX_LOADED",
@@ -140,16 +126,37 @@ export const addToTreatyIndex = (treaty) => ({
   payload: { treaty },
 });
 
-export const LOAD_ONE_TREATY = "LOAD_ONE_TREATY";
-export const loadOneTreaty = (treaty) => ({
-  type: LOAD_ONE_TREATY,
+export const LOAD_ONE_TREATY_IN_PROGRESS = "LOAD_ONE_TREATY_IN_PROGRESS";
+export const loadOneTreatyInProgress = (treaty) => ({
+  type: LOAD_ONE_TREATY_IN_PROGRESS,
   payload: { treaty },
 });
 
-export const LOAD_3BOX = "LOAD_3BOX";
-export const load3box = (box) => ({
-  type: LOAD_3BOX,
+export const LOAD_ONE_TREATY_SUCCESS = "LOAD_ONE_TREATY_SUCCESS";
+export const loadOneTreatySuccess = (treaty) => ({
+  type: LOAD_ONE_TREATY_SUCCESS,
+  payload: { treaty },
+});
+
+export const LOAD_ONE_TREATY_FAILURE = "LOAD_ONE_TREATY_FAILURE";
+export const loadOneTreatyFailure = () => ({
+  type: LOAD_ONE_TREATY_FAILURE,
+});
+
+export const LOAD_3BOX_IN_PROGRESS = "LOAD_3BOX_IN_PROGRESS";
+export const load3boxInProgress = () => ({
+  type: LOAD_3BOX_IN_PROGRESS,
+});
+
+export const LOAD_3BOX_SUCCESS = "LOAD_3BOX_SUCCESS";
+export const load3boxSuccess = (box) => ({
+  type: LOAD_3BOX_SUCCESS,
   payload: { box },
+});
+
+export const LOAD_3BOX_FAILURE = "LOAD_3BOX_FAILURE";
+export const load3boxFailure = () => ({
+  type: LOAD_3BOX_FAILURE,
 });
 
 export const OPEN_SPACE = "OPEN_SPACE";

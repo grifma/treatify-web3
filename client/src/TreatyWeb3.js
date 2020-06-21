@@ -4,16 +4,14 @@ import "./TreatyWeb3.css";
 import {
   loadWeb3,
   loadAccount,
-  loadContract,
   loadTreatyIndex,
   loadTreatyContract,
   loadTreatyIndexContract,
   loadStoredData,
   loadTreatiesWeb3,
-  load3boxRequest,
+  load3box,
 } from "./redux/interactions";
 import {
-  contractSelector,
   accountSelector,
   valueSelector,
   treatyIndexContractSelector,
@@ -48,7 +46,6 @@ import ProfileHover from "profile-hover";
 
 const TreatyWeb3 = ({
   dispatch,
-  contract,
   account,
   value,
   treatyIndex,
@@ -57,7 +54,6 @@ const TreatyWeb3 = ({
   web3,
   startLoadWeb3,
   startLoadAccount,
-  startLoadContract,
   startLoadTreatyIndex,
   startLoadTreatyIndexContract,
   startSubscribeToAccountsChanging,
@@ -75,10 +71,6 @@ const TreatyWeb3 = ({
       const myAccount = await startLoadAccount(myWeb3);
       const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
       const treatyIndex = await startLoadTreatyIndex(treatyIndexContract);
-      const simpleStorageContract = await startLoadContract(myWeb3);
-      //console.log("simpleStorageContract");
-      //console.log(simpleStorageContract);
-      await startLoadStoredData(simpleStorageContract);
       startSubscribeToAccountsChanging(myWeb3);
       const treaties = await startLoadTreatiesWeb3();
       startSubscribeToAllLogs(web3);
@@ -87,7 +79,6 @@ const TreatyWeb3 = ({
 
       //3box
       startLoad3box(myAccount, window.ethereum);
-      //console.log("effect done");
     }
     initiate();
   }, []);
@@ -102,52 +93,13 @@ const TreatyWeb3 = ({
     //3box
     startLoad3box(myAccount, window.ethereum);
 
-    // startLoadWeb3: () => dispatch(loadWeb3()),
-    //   startLoadAccount: (myWeb3) => dispatch(loadAccount(myWeb3)),
-    //     startLoadContract: (myWeb3) => dispatch(loadContract(myWeb3)),
-    //       startLoadTreatyIndex: (treatyIndexContract) =>
-    //         dispatch(loadTreatyIndex(treatyIndexContract)),
-    //         startLoadTreatyIndexContract: (myWeb3) =>
-    //           dispatch(loadTreatyIndexContract(myWeb3)),
-    //           startSubscribeToAccountsChanging: (web3) =>
-    //             dispatch(subscribeToAccountsChanging(web3)),
-    //             startLoadStoredData: (contract) => dispatch(loadStoredData(contract)),
-    //               startLoadTreatiesWeb3: (web3, treatyIndex)
-    // startLoadWeb3();
     e.preventDefault();
-    // const myWeb3 = await startLoadWeb3();
-    // await startLoadAccount(myWeb3);
-    // const simpleStorageContract = await startLoadContract(myWeb3);
-    // const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
-    // await startLoadTreatyIndex(treatyIndexContract);
-    // await loadStoredData(simpleStorageContract);
-    // subscribeToAccountsChanging(myWeb3);
   };
 
   const refresh = async (e) => {
     //console.log("Refresh");
     startLoadTreatiesWeb3(web3, treatyIndex);
-    // loadOneTreatyRequest
-    // startLoadWeb3: () => dispatch(loadWeb3()),
-    //   startLoadAccount: (myWeb3) => dispatch(loadAccount(myWeb3)),
-    //     startLoadContract: (myWeb3) => dispatch(loadContract(myWeb3)),
-    //       startLoadTreatyIndex: (treatyIndexContract) =>
-    //         dispatch(loadTreatyIndex(treatyIndexContract)),
-    //         startLoadTreatyIndexContract: (myWeb3) =>
-    //           dispatch(loadTreatyIndexContract(myWeb3)),
-    //           startSubscribeToAccountsChanging: (web3) =>
-    //             dispatch(subscribeToAccountsChanging(web3)),
-    //             startLoadStoredData: (contract) => dispatch(loadStoredData(contract)),
-    //               startLoadTreatiesWeb3: (web3, treatyIndex)
-    // startLoadWeb3();
     e.preventDefault();
-    // const myWeb3 = await startLoadWeb3();
-    // await startLoadAccount(myWeb3);
-    // const simpleStorageContract = await startLoadContract(myWeb3);
-    // const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
-    // await startLoadTreatyIndex(treatyIndexContract);
-    // await loadStoredData(simpleStorageContract);
-    // subscribeToAccountsChanging(myWeb3);
   };
 
   const emptyComponent = () => <div>EMPTY</div>;
@@ -228,10 +180,14 @@ const TreatyWeb3 = ({
           <button
             type="submit"
             className={`w-100 btn text-truncate ${
-              contract !== null ? "disabled btn-success" : "btn-danger"
+              treatyIndexContract !== null
+                ? "disabled btn-success"
+                : "btn-danger"
             }`}
           >
-            {contract !== null ? "Blockchain Connected" : "Connect Blockchain"}
+            {treatyIndexContract !== null
+              ? "Blockchain Connected"
+              : "Connect Blockchain"}
           </button>
         </div>
       </div>
@@ -296,7 +252,6 @@ const TreatyWeb3 = ({
 
 function mapStateToProps(state) {
   return {
-    contract: contractSelector(state),
     account: accountSelector(state),
     value: valueSelector(state),
     treatyIndex: treatyIndexSelector(state),
@@ -311,20 +266,17 @@ function mapDispatchToProps(dispatch) {
       dispatch(loadTreatyIndex(treatyIndexContract)),
     startLoadWeb3: () => dispatch(loadWeb3()),
     startLoadAccount: (myWeb3) => dispatch(loadAccount(myWeb3)),
-    startLoadContract: (myWeb3) => dispatch(loadContract(myWeb3)),
     startLoadTreatyIndex: (treatyIndexContract) =>
       dispatch(loadTreatyIndex(treatyIndexContract)),
     startLoadTreatyIndexContract: (myWeb3) =>
       dispatch(loadTreatyIndexContract(myWeb3)),
     startSubscribeToAccountsChanging: (web3) =>
       dispatch(subscribeToAccountsChanging(web3)),
-    startLoadStoredData: (contract) => dispatch(loadStoredData(contract)),
     startLoadTreatiesWeb3: (web3, treatyIndex) => dispatch(loadTreatiesWeb3()),
     startSubscribeToNewTreaties: () => dispatch(subscribeToNewTreaties()),
     startSubscribeToNewSignatures: () => dispatch(subscribeToNewSignatures()),
     startSubscribeToAllLogs: (web3) => dispatch(subscribeToAllLogs(web3)),
-    startLoad3box: (address, provider) =>
-      dispatch(load3boxRequest(address, provider)),
+    startLoad3box: (address, provider) => dispatch(load3box(address, provider)),
   };
 }
 
