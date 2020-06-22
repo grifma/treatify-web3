@@ -77,10 +77,8 @@
 // //   startLoad3box(account, provider);
 // //   // const myWeb3 = await startLoadWeb3();
 // //   // await startLoadAccount(myWeb3);
-// //   // const simpleStorageContract = await startLoadContract(myWeb3);
 // //   // const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
 // //   // await startLoadTreatyIndex(treatyIndexContract);
-// //   // await loadStoredData(simpleStorageContract);
 // //   // subscribeToAccountsChanging(myWeb3);
 // // };
 

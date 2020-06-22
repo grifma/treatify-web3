@@ -13,14 +13,12 @@ import {
 } from "./redux/interactions";
 import {
   accountSelector,
-  valueSelector,
   treatyIndexContractSelector,
   treatyIndexSelector,
   treatyContractSelector,
   treatyContractsSelector,
   treatyIndex,
   web3Selector,
-  getState,
 } from "./redux/selectors";
 import {
   subscribeToAccountsChanging,
@@ -252,11 +250,10 @@ const TreatyWeb3 = ({
 
 function mapStateToProps(state) {
   return {
+    web3: web3Selector(state),
     account: accountSelector(state),
-    value: valueSelector(state),
     treatyIndex: treatyIndexSelector(state),
     treatyIndexContract: treatyIndexContractSelector(state),
-    web3: web3Selector(state),
   };
 }
 
