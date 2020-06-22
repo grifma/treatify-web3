@@ -733,7 +733,7 @@ export const addTreatyRequest = (text) => async (dispatch, getState) => {
         gas: "4700000",
       },
       function (e, contract) {
-        //console.log(e, contract);
+        console.info(e, contract);
         if (typeof contract.address !== "undefined") {
           console.log(
             "Contract mined! address: " +
@@ -743,7 +743,7 @@ export const addTreatyRequest = (text) => async (dispatch, getState) => {
           );
           dispatch(addToTreatyIndexRequest(contract));
           dispatch(loadOneTreaty(contract));
-          dispatch(createTreaty(contract));
+          // dispatch(createTreaty(contract)); //no longer needed as added inside loadOneTreaty
         }
       }
     );

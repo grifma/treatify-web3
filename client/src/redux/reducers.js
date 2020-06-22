@@ -130,16 +130,23 @@ export const treaties = (state = [], action) => {
     }
     case LOAD_ONE_TREATY_SUCCESS: {
       const { treaty: loadedTreaty } = payload;
+      const treatyIdExists = (id, treatyList) => {
+        treatyList.filter((x) => x.id == id).length > 0;
+      };
       return {
         ...state,
         isOneTreatyLoading: false,
-        data: state.data.map((treaty) => {
-          if (treaty.id == loadedTreaty.id) {
-            return loadedTreaty;
-          } else {
-            return treaty;
-          }
-        }),
+        data:
+          //If treaty already exists, update it. Otherwise add it.
+          (treatyIdExists(loadedTreaty.id, state.data) &&
+            state.data.map((treaty) => {
+              if (treaty.id == loadedTreaty.id) {
+                return loadedTreaty;
+              } else {
+                return treaty;
+              }
+            })) ||
+          state.data.concat(loadedTreaty),
       };
     }
     case LOAD_ONE_TREATY_FAILURE: {
