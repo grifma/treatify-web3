@@ -1,12 +1,13 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/repo
+    working_directory: ~/repo/client
     docker:
       - image: circleci/node:10.20.0
 
     steps:
-      - checkout
+      - checkout:
+          path: ~/repo/client
       - persist_to_workspace:
           root: .
           paths:
