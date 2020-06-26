@@ -23,6 +23,13 @@ import {
   getWithdrawnTreaties,
 } from "../redux/selectors";
 import { ListWrapper, StatusHeader } from "./treatifyStyled";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link,
+  useParams,
+} from "react-router-dom";
 
 const TreatyList = ({
   isLoading,
@@ -50,6 +57,66 @@ const TreatyList = ({
 
   const loadingMessage = <div>Loading treaties</div>;
   const content = (
+    <Router>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          children={
+            <MainTreatyList
+              activeTreaties={activeTreaties}
+              draftTreaties={draftTreaties}
+              onRemovePressed={onRemovePressed}
+              onMarkActivePressed={onMarkActivePressed}
+              onAddTreatyTextPressed={onAddTreatyTextPressed}
+              onSignPressed={onSignPressed}
+              onRefreshTreatyPressed={onRefreshTreatyPressed}
+            />
+          }
+        />
+        <Route
+          path="/treaty/active/:id"
+          children={
+            <OneTreaty
+              activeTreaties={activeTreaties}
+              draftTreaties={draftTreaties}
+              onRemovePressed={onRemovePressed}
+              onMarkActivePressed={onMarkActivePressed}
+              onAddTreatyTextPressed={onAddTreatyTextPressed}
+              onSignPressed={onSignPressed}
+              onRefreshTreatyPressed={onRefreshTreatyPressed}
+            />
+          }
+        />
+        <Route path="/hello/:text" children={<Hello />} />
+        <Route path="/hellosteve" children={<HelloSteve />} />
+      </Switch>
+    </Router>
+  );
+  return isLoading ? loadingMessage : content;
+};
+
+const HelloSteve = () => {
+  return <div>HELLO Steve</div>;
+};
+
+const Hello = () => {
+  let { text } = useParams();
+  console.log(`Hello ${text}`);
+  return <div>HELLO {text}</div>;
+};
+
+const MainTreatyList = ({
+  draftTreaties,
+  activeTreaties,
+  onRemovePressed,
+  onMarkActivePressed,
+  onSignPressed,
+  onJoinPressed,
+  onAddTreatyTextPressed,
+  onRefreshTreatyPressed,
+}) => {
+  return (
     <ListWrapper>
       <NewTreatyForm />
       <h3 id="draft" className="h3">
@@ -81,7 +148,35 @@ const TreatyList = ({
       ))}
     </ListWrapper>
   );
-  return isLoading ? loadingMessage : content;
+};
+
+const OneTreaty = ({
+  activeTreaties,
+  draftTreaties,
+  onRemovePressed,
+  onMarkActivePressed,
+  onSignPressed,
+  onJoinPressed,
+  onAddTreatyTextPressed,
+  onRefreshTreatyPressed,
+}) => {
+  let { id } = useParams();
+  console.log(`Render one treaty. id is ${id}`);
+  let content = <div>ONETREATY</div>;
+  // let content = activeTreaties
+  //   .filter((treaty) => treaty.id == id)
+  //   .map((selectedTreaty) => (
+  //     <ActiveTreatyListItem
+  //       key={treaty.id}
+  //       treaty={treaty}
+  //       onRemovePressed={onRemovePressed}
+  //       onMarkActivePressed={onMarkActivePressed}
+  //       onAddTreatyTextPressed={onAddTreatyTextPressed}
+  //       onSignPressed={onSignPressed}
+  //       onRefreshTreatyPressed={onRefreshTreatyPressed}
+  //     />
+  //   ));
+  return content;
 };
 
 const mapStateToProps = (state) => ({

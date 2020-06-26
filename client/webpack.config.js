@@ -18,10 +18,17 @@ module.exports = {
       },
     ],
   },
-  resolve: { extensions: ["*", ".js", ".jsx"] },
+  resolve: {
+    extensions: ["*", ".js", ".jsx"],
+    alias: {
+      "react-dom": "@hot-loader/react-dom",
+    },
+  },
   output: {
-    path: path.resolve(__dirname, "dist/"),
-    publicPath: "/dist/",
+    // path: path.resolve(__dirname, "/dist"),
+    path: path.resolve(__dirname, "/"),
+    publicPath: "/dist",
+    // publicPath: "/",
     filename: "bundle.js",
   },
   devServer: {
@@ -29,6 +36,7 @@ module.exports = {
     port: 3030,
     publicPath: "http://localhost:3030/dist/",
     hotOnly: true,
+    historyApiFallback: true,
   },
   // devtool: "inline-source-map",
   plugins: [

@@ -51,7 +51,7 @@ const TREATY_SIGNATURE_PERSIST_MODE = PersistMode.ONCHAIN;
 const TREATY_STATUS_PERSIST_MODE = PersistMode.ONCHAIN;
 const THREEBOX_POST_LIMIT = 20;
 
-const ID_SIZE = 6;
+const ID_SIZE = 3;
 //
 ///////////////////////////////////
 

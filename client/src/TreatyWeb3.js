@@ -26,7 +26,7 @@ import {
   subscribeToNewTreaties,
   subscribeToAllLogs,
 } from "./redux/subscriptions";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+
 import TreatyList from "./components/TreatyList";
 import {
   Main,
@@ -37,10 +37,12 @@ import {
   Grid,
 } from "./components/treatifyStyled";
 import Nav from "./components/Nav";
+import { StyledPopover, StyledPopoverTitle } from "./components/treatifyStyled";
 // import Chatbox from "./components/Chatbox";
 import { Button, Popover, OverlayTrigger } from "react-bootstrap";
 import styled from "styled-components";
 import ProfileHover from "profile-hover";
+import ActiveTreatyListItem from "./components/ActiveTreatyListItem";
 
 const TreatyWeb3 = ({
   dispatch,
@@ -121,20 +123,6 @@ const TreatyWeb3 = ({
       </tbody>
     </table>
   );
-
-  const StyledPopover = styled(Popover)`
-    min-width: 450px;
-    background: #343a40;
-    color: white;
-    padding: 16px;
-  `;
-
-  const StyledPopoverTitle = styled(Popover.Title)`
-    min-width: 450px;
-    background: #343a40;
-    color: white;
-    padding: 16px;
-  `;
 
   const treatyIndexPopover = (
     <StyledPopover id="treaty-index-popover">

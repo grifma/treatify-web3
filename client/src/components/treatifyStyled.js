@@ -1,4 +1,5 @@
 import React from "react";
+import { Popover, OverlayTrigger } from "react-bootstrap";
 import styled from "styled-components";
 
 export const TreatyItemContainer = styled.div`
@@ -226,4 +227,18 @@ export const SignerBlockieSetContainer = styled.div`
 
 export const SignerBlockieContainer = styled.div`
   padding: 2px;
+`;
+
+export const StyledPopover = styled(Popover)`
+  min-width: 450px;
+  background: #343a40;
+  color: white;
+  padding: 16px;
+`;
+
+export const StyledPopoverTitle = styled(Popover.Title)`
+  min-width: 450px;
+  background: #343a40;
+  color: white;
+  padding: 16px;
 `;
