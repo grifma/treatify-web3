@@ -1,16 +1,11 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/repo/client
+    working_directory: ~/repo
     docker:
       - image: circleci/node:10.20.0
 
     steps:
-      - checkout:
-          path: ~/repo/client
-      - persist_to_workspace:
-          root: .
-          paths:
-            - client
-      - run: npm install
-      - run: npm run dev
+      - checkout
+      - run: npm --prefix ./client install
+      - run: npm --prefix ./client run dev
