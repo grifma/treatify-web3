@@ -5,12 +5,11 @@ jobs:
     docker:
       - image: circleci/node:10.20.0
 
-    - persist_to_workspace:
-          root: .
-          paths:
-            - client    
-
     steps:
       - checkout
+      - persist_to_workspace:
+          root: .
+          paths:
+            - client
       - run: npm install
       - run: npm run dev
