@@ -6,12 +6,11 @@ jobs:
       - image: circleci/node:10.20.0
 
     - persist_to_workspace:
-      root: .
-      paths:
-        - client    
+          root: .
+          paths:
+            - client    
 
     steps:
       - checkout
       - run: npm install
-      - run: npm test
       - run: npm run dev
