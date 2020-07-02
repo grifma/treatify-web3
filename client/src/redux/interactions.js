@@ -73,7 +73,7 @@ export const displayAlert = (text) => () => {
 //Treaty specific helper functions
 ////////////////////
 
-async function pullTreaty(treatyInstance, threebox, openSpace) {
+async function pullTreaty(treatyInstance, threebox, openSpace, address) {
   console.info("[pullTreaty]", treatyInstance, threebox, openSpace);
 
   const numUnsigned = await treatyInstance.methods.getNumUnsigned().call();
@@ -119,10 +119,12 @@ async function pullTreaty(treatyInstance, threebox, openSpace) {
       threebox,
       openSpace,
       treatyId,
-      signers
+      signers,
+      address
     ),
     address: await treatyInstance._address,
     contractInstance: treatyInstance,
+    developerInfo: await get3boxDeveloperInfo(treatyId, openSpace),
   };
   return treaty;
 }
@@ -191,7 +193,8 @@ async function getSignedTreatyText(
   threebox,
   openSpace,
   treatyId,
-  signers
+  signers,
+  address
 ) {
   switch (TREATY_TEXT_PERSIST_MODE) {
     case PersistMode.THREEBOX:
@@ -200,7 +203,8 @@ async function getSignedTreatyText(
         threebox,
         openSpace,
         treatyId,
-        signers
+        signers,
+        address
       );
       break;
     case PersistMode.ONCHAIN:
@@ -332,7 +336,34 @@ async function get3boxUnsignedTreatyText(
   }
 }
 
-async function get3boxSignedTreatyText(threebox, openSpace, treatyId, signers) {
+async function profileInfo(treatyId, address, thread) {
+  const profile = await Box.getProfile(address);
+  console.log("address", address);
+  console.log("profile", JSON.stringify(profile));
+
+  try {
+    const moderators = await thread.listModerators();
+    console.log(
+      `MODERATOR LIST for #${treatyId} ${JSON.stringify(moderators)}`
+    );
+    if (moderators.length == 1 && moderators[0] == profile.address) {
+      console.log("This user is the moderator");
+    }
+  } catch (e) {
+    console.error("Failed to list moderators ", e);
+  }
+}
+
+//Working on problem with loading of text.
+//Sometimes error is displayed.
+//Othertimes some text is dispalyed where as other text is not displayed.
+async function get3boxSignedTreatyText(
+  threebox,
+  openSpace,
+  treatyId,
+  signers,
+  address
+) {
   console.log(`Treaty id is ${treatyId}`);
   console.log("threadName: ", `signed-treaty-text-${treatyId}`);
   console.log("signers :>> ", signers);
@@ -361,7 +392,11 @@ async function get3boxSignedTreatyText(threebox, openSpace, treatyId, signers) {
       const thread = await openSpace.joinThread(
         `signed-treaty-text-${treatyId}`
       );
+      profileInfo(treatyId, address, thread);
 
+      // if (await thread.listModerators() == address){
+      //   console.log("moderator list: ", await thread.listModerators());
+      // }
       const posts = await thread.getPosts({
         limit: THREEBOX_POST_LIMIT,
       });
@@ -465,6 +500,31 @@ async function get3boxSignedTreatyText(threebox, openSpace, treatyId, signers) {
   // });
 }
 
+async function get3boxDeveloperInfo(treatyId, openSpace) {
+  var returnValue = {
+    "Without auth": {
+      // "UnsignedText Moderators": await openSpace
+      //   .joinThread(`unsigned-treaty-text-${treatyId}`)
+      //   .listModerators(),
+      // "SignedText Moderators": await openSpace
+      //   .joinThread(`signed-treaty-text-${treatyId}`)
+      //   .listModerators(),
+    },
+  };
+
+  if (openSpace != undefined) {
+    returnValue["With auth"] = {
+      "UnsignedText Moderators": await openSpace
+        .joinThread(`unsigned-treaty-text-${treatyId}`)
+        .listModerators(),
+      "SignedText Moderators": await openSpace
+        .joinThread(`signed-treaty-text-${treatyId}`)
+        .listModerators(),
+    };
+  }
+  return [JSON.stringify(returnValue)];
+}
+
 ////////////////////
 // Load functions
 ////////////////////
@@ -524,6 +584,7 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
     const web3 = getState().web3.connection;
     const threebox = getState().threebox.threebox;
     const openSpace = getState().threebox.openSpace;
+    const address = getState().web3.account;
 
     const treatyIndex = getState().contract.treatyIndex;
 
@@ -544,7 +605,12 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
         const numSigners = await treatyInstance.methods
           .getNumSignatures()
           .call();
-        const treaty = await pullTreaty(treatyInstance, threebox, openSpace);
+        const treaty = await pullTreaty(
+          treatyInstance,
+          threebox,
+          openSpace,
+          address
+        );
         return treaty;
       })
     );
@@ -574,13 +640,19 @@ export const loadOneTreaty = (treatyInstance) => async (dispatch, getState) => {
     dispatch(loadOneTreatyInProgress());
     const threebox = getState().threebox.threebox;
     const openSpace = getState().threebox.openSpace;
+    const address = getState().threebox.account;
     console.log(
       "[loadOneTreaty] Parse treaty with ",
       treatyInstance,
       threebox,
       openSpace
     );
-    const treaty = await pullTreaty(treatyInstance, threebox, openSpace);
+    const treaty = await pullTreaty(
+      treatyInstance,
+      threebox,
+      openSpace,
+      address
+    );
     console.log(
       "[loadOneTreaty] about to dispatch success action with parsed treaty: ",
       treaty
@@ -853,7 +925,13 @@ export const addTreatyTextRequest = (treaty, text) => async (
         const postResult = await unsignedTreatyTextThread.post(text);
         console.log("posted: ", text);
         console.log(`postResult: ${postResult}`);
-        console.log(`moderators: ${unsignedTreatyTextThread.listModerators()}`);
+        try {
+          console.log(
+            `moderators: ${unsignedTreatyTextThread.listModerators()}`
+          );
+        } catch (e) {
+          console.error("Error listing modertors ", e);
+        }
         console.log(`posts: `);
         console.log(unsignedTreatyTextThread.getPosts());
         break;
@@ -1048,6 +1126,7 @@ export const enrichTreatyWith3boxData = (
   openSpace,
   treaties
 ) => async (dispatch, getState) => {
+  const address = getState().web3.account;
   console.log("enrich treaty with auth'd 3box data. treaties: ", treaties);
   const enrichedTreaties = await treaties.map(async (treaty) => {
     return {
@@ -1062,7 +1141,8 @@ export const enrichTreatyWith3boxData = (
         threebox,
         openSpace,
         treaty.id,
-        treaty.signers
+        treaty.signers,
+        address
       ),
       enrichedWithAuthenticated3box: true,
     };

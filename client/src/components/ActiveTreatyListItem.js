@@ -11,9 +11,12 @@ import {
   SignedText,
   UnsignedText,
   SignerBlockieSetContainer,
+  StyledPopover,
+  StyledPopoverTitle,
 } from "./treatifyStyled";
 import AddTreatyTextForm from "./AddTreatyTextForm";
 import SignerBlockie from "./SignerBlockie";
+import { OverlayTrigger } from "react-bootstrap";
 
 const ActiveTreatyListItem = ({
   treaty,
@@ -50,16 +53,30 @@ const ActiveTreatyListItem = ({
         ))}
       </SignerBlockieSetContainer>
       <TreatyTextContainer>
-        <UnsignedText>
-          {treaty.unsignedTreatyText.length === 0 ? null : <h3>Unsigned</h3>}
-          {treaty.unsignedTreatyText.length > 0 &&
-            treaty.unsignedTreatyText.map((text) => <p>{text}</p>)}
-        </UnsignedText>
-        <SignedText>
-          {treaty.signedTreatyText.length === 0 ? null : <h3>Signed</h3>}
-          {treaty.signedTreatyText.length > 0 &&
-            treaty.signedTreatyText.map((text) => <p>{text}</p>)}
-        </SignedText>
+        <OverlayTrigger
+          trigger={["hover", "focus"]}
+          placement="right"
+          delay={{ show: 250, hide: 700 }}
+          overlay={developerInfoPopover(treaty)}
+        >
+          <UnsignedText>
+            {treaty.unsignedTreatyText.length === 0 ? null : <h3>Unsigned</h3>}
+            {treaty.unsignedTreatyText.length > 0 &&
+              treaty.unsignedTreatyText.map((text) => <p>{text}</p>)}
+          </UnsignedText>
+        </OverlayTrigger>
+        <OverlayTrigger
+          trigger={["hover", "focus"]}
+          placement="right"
+          delay={{ show: 250, hide: 700 }}
+          overlay={developerInfoPopover(treaty)}
+        >
+          <SignedText>
+            {treaty.signedTreatyText.length === 0 ? null : <h3>Signed</h3>}
+            {treaty.signedTreatyText.length > 0 &&
+              treaty.signedTreatyText.map((text) => <p>{text}</p>)}
+          </SignedText>
+        </OverlayTrigger>
       </TreatyTextContainer>
       <AddTreatyTextForm
         treaty={treaty}
@@ -77,5 +94,17 @@ const ActiveTreatyListItem = ({
     </Container>
   );
 };
+
+const developerInfoPopover = (treaty) => (
+  <StyledPopover id={`unsignedtext-popover-${treaty.id}`}>
+    <StyledPopoverTitle as="h3">Developer Info:</StyledPopoverTitle>
+    <StyledPopover.Content>
+      <div id={`developer-info-${treaty.id}`} class="onDark">
+        {treaty.developerInfo}
+        {/* {treaty.developerInfo.map((x) => x)} */}
+      </div>
+    </StyledPopover.Content>
+  </StyledPopover>
+);
 
 export default ActiveTreatyListItem;
