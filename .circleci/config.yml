@@ -1,11 +1,12 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/repo
+    working_directory: ~/treatify-web3/client
     docker:
       - image: circleci/node:10.20.0
 
     steps:
-      - checkout
-      - run: npm --prefix ./client install
-      - run: npm --prefix ./client run dev
+      - checkout:
+          path: ~/treatify-web3
+      - run: npm install
+      - run: npm run dev
