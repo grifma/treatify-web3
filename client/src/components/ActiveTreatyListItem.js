@@ -99,7 +99,7 @@ const developerInfoPopover = (treaty) => (
   <StyledPopover id={`unsignedtext-popover-${treaty.id}`}>
     <StyledPopoverTitle as="h3">Developer Info:</StyledPopoverTitle>
     <StyledPopover.Content>
-      <div id={`developer-info-${treaty.id}`} class="onDark">
+      <div id={`developer-info-${treaty.id}`} className="onDark">
         {treaty.developerInfo}
         {/* {treaty.developerInfo.map((x) => x)} */}
       </div>

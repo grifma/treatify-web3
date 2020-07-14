@@ -264,8 +264,10 @@ async function get3boxUnsignedTreatyText(
         })
       );
 
-      const postsUndefined = postsBySigner.filter((x) => x == postsUndefined);
+      console.log("postsBySigner", postsBySigner);
 
+      const postsUndefined = postsBySigner.filter((x) => x.length == 0);
+      console.log("postsUndefined", postsUndefined);
       var posts;
 
       if (postsUndefined.length == postsBySigner.length) {
@@ -513,13 +515,17 @@ async function get3boxDeveloperInfo(treatyId, openSpace) {
   };
 
   if (openSpace != undefined) {
+    const unsignedThread = await openSpace.joinThread(
+      `unsigned-treaty-text-${treatyId}`
+    );
+    const signedThread = await openSpace.joinThread(
+      `signed-treaty-text-${treatyId}`
+    );
+    console.log("unsignedThread :>> ", unsignedThread);
+    console.log("signedThread :>> ", signedThread);
     returnValue["With auth"] = {
-      "UnsignedText Moderators": await openSpace
-        .joinThread(`unsigned-treaty-text-${treatyId}`)
-        .listModerators(),
-      "SignedText Moderators": await openSpace
-        .joinThread(`signed-treaty-text-${treatyId}`)
-        .listModerators(),
+      "UnsignedText Moderators": await unsignedThread.listModerators(),
+      "SignedText Moderators": await signedThread.listModerators(),
     };
   }
   return [JSON.stringify(returnValue)];

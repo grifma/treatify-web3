@@ -71,6 +71,7 @@ const TreatyList = ({
               onAddTreatyTextPressed={onAddTreatyTextPressed}
               onSignPressed={onSignPressed}
               onRefreshTreatyPressed={onRefreshTreatyPressed}
+              onJoinPressed={onJoinPressed}
             />
           }
         />
@@ -85,6 +86,7 @@ const TreatyList = ({
               onAddTreatyTextPressed={onAddTreatyTextPressed}
               onSignPressed={onSignPressed}
               onRefreshTreatyPressed={onRefreshTreatyPressed}
+              onJoinPressed={onJoinPressed}
             />
           }
         />
