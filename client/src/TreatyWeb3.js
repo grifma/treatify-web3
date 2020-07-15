@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import "./TreatyWeb3.css";
 import {
   loadWeb3,
+  loadEthersProvider,
+  loadEthersSigner,
   loadAccount,
   loadTreatyIndex,
   loadTreatyContract,
@@ -19,6 +21,8 @@ import {
   treatyContractsSelector,
   treatyIndex,
   web3Selector,
+  ethersProviderSelector,
+  ethersSignerSelector,
 } from "./redux/selectors";
 import {
   subscribeToAccountsChanging,
@@ -63,10 +67,17 @@ const TreatyWeb3 = ({
   startSubscribeToNewTreaties,
   startSubscribeToNewSignatures,
   startLoad3box,
+  startLoadEthersProvider,
+  startLoadEthersSigner,
   initiated,
 }) => {
   useEffect(() => {
     async function initiate() {
+      //ethers
+      const provider = await startLoadEthersProvider(window.ethereum);
+      const signer = await startLoadEthersSigner(provider);
+      console.log("provider :>> ", provider);
+      console.log("signer :>> ", signer);
       const myWeb3 = await startLoadWeb3();
       const myAccount = await startLoadAccount(myWeb3);
       const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
@@ -240,6 +251,8 @@ function mapStateToProps(state) {
     account: accountSelector(state),
     treatyIndex: treatyIndexSelector(state),
     treatyIndexContract: treatyIndexContractSelector(state),
+    ethersProvider: ethersProviderSelector(state),
+    ethersSigner: ethersSignerSelector(state),
   };
 }
 
@@ -260,6 +273,9 @@ function mapDispatchToProps(dispatch) {
     startSubscribeToNewSignatures: () => dispatch(subscribeToNewSignatures()),
     startSubscribeToAllLogs: (web3) => dispatch(subscribeToAllLogs(web3)),
     startLoad3box: (address, provider) => dispatch(load3box(address, provider)),
+    startLoadEthersSigner: (provider) => dispatch(loadEthersSigner(provider)),
+    startLoadEthersProvider: (ethereumProvider) =>
+      dispatch(loadEthersProvider(ethereumProvider)),
   };
 }
 

@@ -5,6 +5,20 @@ export function web3Loaded(connection) {
   };
 }
 
+export function ethersProviderLoaded(provider) {
+  return {
+    type: "ETHERS_PROVIDER_LOADED",
+    provider,
+  };
+}
+
+export function ethersSignerLoaded(signer) {
+  return {
+    type: "ETHERS_SIGNER_LOADED",
+    signer,
+  };
+}
+
 export function accountLoaded(account) {
   return {
     type: "ACCOUNT_LOADED",

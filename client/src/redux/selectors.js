@@ -13,6 +13,17 @@ export const web3Selector = createSelector(web3, (w) => w);
 const account = (state) => get(state, "web3.account", null);
 export const accountSelector = createSelector(account, (a) => a);
 
+//ETHERS
+const ethersProvider = (state) => get(state, "ethers.provider", null);
+export const ethersProviderSelector = createSelector(
+  ethersProvider,
+  (ep) => ep
+);
+
+const ethersSigner = (state) => get(state, "ethers.signer", null);
+export const ethersSignerSelector = createSelector(ethersSigner, (es) => es);
+
+//TREATY
 const treatyIndexContract = (state) =>
   get(state, "contract.treatyIndexContract", null);
 export const treatyIndexContractSelector = createSelector(

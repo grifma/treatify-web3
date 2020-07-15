@@ -20,7 +20,7 @@ const DraftTreatyListItem = ({
     ? TreatyItemContainer
     : TreatyItemContainerWithWarning;
   return (
-    <Container createdAt={treaty.createdAt}>
+    <Container key={treaty.id} createdAt={treaty.createdAt}>
       <h3>
         #{treaty.id}&nbsp;{treaty.text}
       </h3>

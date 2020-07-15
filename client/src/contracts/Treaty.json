@@ -682,21 +682,14 @@
   "ast": {
     "absolutePath": "/home/grifma/Code/treatify-web3/contracts/Treaty.sol",
     "exportedSymbols": {
-      "Treaty": [
-        1225
-      ]
+      "Treaty": [1225]
     },
     "id": 1226,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 486,
-        "literals": [
-          "solidity",
-          "^",
-          "0.5",
-          ".16"
-        ],
+        "literals": ["solidity", "^", "0.5", ".16"],
         "nodeType": "PragmaDirective",
         "src": "0:24:4"
       },
@@ -743,17 +736,12 @@
             "src": "109:17:4"
           }
         ],
-        "contractDependencies": [
-          115
-        ],
+        "contractDependencies": [115],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
         "id": 1225,
-        "linearizedBaseContracts": [
-          1225,
-          115
-        ],
+        "linearizedBaseContracts": [1225, 115],
         "name": "Treaty",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -1797,10 +1785,7 @@
                       "id": 584,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1359,
-                        1360
-                      ],
+                      "overloadedDeclarations": [1359, 1360],
                       "referencedDeclaration": 1360,
                       "src": "1524:7:4",
                       "typeDescriptions": {
@@ -2027,10 +2012,7 @@
                       "id": 599,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1359,
-                        1360
-                      ],
+                      "overloadedDeclarations": [1359, 1360],
                       "referencedDeclaration": 1360,
                       "src": "1678:7:4",
                       "typeDescriptions": {
@@ -2243,10 +2225,7 @@
                       "id": 614,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1359,
-                        1360
-                      ],
+                      "overloadedDeclarations": [1359, 1360],
                       "referencedDeclaration": 1360,
                       "src": "1861:7:4",
                       "typeDescriptions": {
@@ -4076,10 +4055,7 @@
                       "id": 775,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1359,
-                        1360
-                      ],
+                      "overloadedDeclarations": [1359, 1360],
                       "referencedDeclaration": 1360,
                       "src": "3277:7:4",
                       "typeDescriptions": {
@@ -4421,10 +4397,7 @@
                       "id": 802,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1359,
-                        1360
-                      ],
+                      "overloadedDeclarations": [1359, 1360],
                       "referencedDeclaration": 1360,
                       "src": "3580:7:4",
                       "typeDescriptions": {
@@ -5461,9 +5434,7 @@
               "src": "4519:297:4",
               "statements": [
                 {
-                  "assignments": [
-                    893
-                  ],
+                  "assignments": [893],
                   "declarations": [
                     {
                       "constant": false,
@@ -5801,9 +5772,7 @@
                   },
                   "id": 922,
                   "initializationExpression": {
-                    "assignments": [
-                      897
-                    ],
+                    "assignments": [897],
                     "declarations": [
                       {
                         "constant": false,
@@ -8042,9 +8011,7 @@
                   },
                   "id": 1111,
                   "initializationExpression": {
-                    "assignments": [
-                      1091
-                    ],
+                    "assignments": [1091],
                     "declarations": [
                       {
                         "constant": false,
@@ -8166,9 +8133,7 @@
               "src": "6804:237:4",
               "statements": [
                 {
-                  "assignments": [
-                    1121
-                  ],
+                  "assignments": [1121],
                   "declarations": [
                     {
                       "constant": false,
@@ -8453,9 +8418,7 @@
                   },
                   "id": 1149,
                   "initializationExpression": {
-                    "assignments": [
-                      1125
-                    ],
+                    "assignments": [1125],
                     "declarations": [
                       {
                         "constant": false,
@@ -9113,9 +9076,7 @@
                   },
                   "id": 1202,
                   "initializationExpression": {
-                    "assignments": [
-                      1178
-                    ],
+                    "assignments": [1178],
                     "declarations": [
                       {
                         "constant": false,
@@ -9473,21 +9434,14 @@
   "legacyAST": {
     "absolutePath": "/home/grifma/Code/treatify-web3/contracts/Treaty.sol",
     "exportedSymbols": {
-      "Treaty": [
-        1225
-      ]
+      "Treaty": [1225]
     },
     "id": 1226,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 486,
-        "literals": [
-          "solidity",
-          "^",
-          "0.5",
-          ".16"
-        ],
+        "literals": ["solidity", "^", "0.5", ".16"],
         "nodeType": "PragmaDirective",
         "src": "0:24:4"
       },
@@ -9534,17 +9488,12 @@
             "src": "109:17:4"
           }
         ],
-        "contractDependencies": [
-          115
-        ],
+        "contractDependencies": [115],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
         "id": 1225,
-        "linearizedBaseContracts": [
-          1225,
-          115
-        ],
+        "linearizedBaseContracts": [1225, 115],
         "name": "Treaty",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -10588,10 +10537,7 @@
                       "id": 584,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1359,
-                        1360
-                      ],
+                      "overloadedDeclarations": [1359, 1360],
                       "referencedDeclaration": 1360,
                       "src": "1524:7:4",
                       "typeDescriptions": {
@@ -10818,10 +10764,7 @@
                       "id": 599,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1359,
-                        1360
-                      ],
+                      "overloadedDeclarations": [1359, 1360],
                       "referencedDeclaration": 1360,
                       "src": "1678:7:4",
                       "typeDescriptions": {
@@ -11034,10 +10977,7 @@
                       "id": 614,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1359,
-                        1360
-                      ],
+                      "overloadedDeclarations": [1359, 1360],
                       "referencedDeclaration": 1360,
                       "src": "1861:7:4",
                       "typeDescriptions": {
@@ -12867,10 +12807,7 @@
                       "id": 775,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1359,
-                        1360
-                      ],
+                      "overloadedDeclarations": [1359, 1360],
                       "referencedDeclaration": 1360,
                       "src": "3277:7:4",
                       "typeDescriptions": {
@@ -13212,10 +13149,7 @@
                       "id": 802,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        1359,
-                        1360
-                      ],
+                      "overloadedDeclarations": [1359, 1360],
                       "referencedDeclaration": 1360,
                       "src": "3580:7:4",
                       "typeDescriptions": {
@@ -14252,9 +14186,7 @@
               "src": "4519:297:4",
               "statements": [
                 {
-                  "assignments": [
-                    893
-                  ],
+                  "assignments": [893],
                   "declarations": [
                     {
                       "constant": false,
@@ -14592,9 +14524,7 @@
                   },
                   "id": 922,
                   "initializationExpression": {
-                    "assignments": [
-                      897
-                    ],
+                    "assignments": [897],
                     "declarations": [
                       {
                         "constant": false,
@@ -16833,9 +16763,7 @@
                   },
                   "id": 1111,
                   "initializationExpression": {
-                    "assignments": [
-                      1091
-                    ],
+                    "assignments": [1091],
                     "declarations": [
                       {
                         "constant": false,
@@ -16957,9 +16885,7 @@
               "src": "6804:237:4",
               "statements": [
                 {
-                  "assignments": [
-                    1121
-                  ],
+                  "assignments": [1121],
                   "declarations": [
                     {
                       "constant": false,
@@ -17244,9 +17170,7 @@
                   },
                   "id": 1149,
                   "initializationExpression": {
-                    "assignments": [
-                      1125
-                    ],
+                    "assignments": [1125],
                     "declarations": [
                       {
                         "constant": false,
@@ -17904,9 +17828,7 @@
                   },
                   "id": 1202,
                   "initializationExpression": {
-                    "assignments": [
-                      1178
-                    ],
+                    "assignments": [1178],
                     "declarations": [
                       {
                         "constant": false,

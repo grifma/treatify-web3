@@ -30,7 +30,7 @@ const ActiveTreatyListItem = ({
     ? TreatyItemContainer
     : TreatyItemContainerWithWarning;
   return (
-    <Container createdAt={treaty.createdAt}>
+    <Container key={treaty.key} createdAt={treaty.createdAt}>
       {/* <IH name={treaty.text} date={treaty.date} /> */}
       <h3>
         #{treaty.id}&nbsp;

@@ -22,6 +22,8 @@ import {
   joinTreaty,
   addToTreatyIndex,
   openSpace,
+  ethersProviderLoaded,
+  ethersSignerLoaded,
 } from "../redux/actions";
 import {
   humanReadableTreatyStatus,
@@ -35,7 +37,8 @@ import Web3 from "web3";
 import { batch } from "react-redux";
 import Box from "3box";
 import { AssertionError } from "assert";
-require("events").EventEmitter.defaultMaxListeners = 50;
+import ethers from "ethers";
+require("events").EventEmitter.defaultMaxListeners = 100;
 
 ////////////////////////////////////
 //Configuration
@@ -253,6 +256,9 @@ async function get3boxUnsignedTreatyText(
       //   })
       //   .filter((posts) => posts.length > 0)[0];
 
+      const preloadBeforeLogin = false;
+      if (preloadBeforeLogin == false) return ["Loading..."];
+
       const postsBySigner = await Promise.all(
         signers.map(async (signer) => {
           return await Box.getThread(
@@ -318,6 +324,7 @@ async function get3boxUnsignedTreatyText(
       //   `unsigned-treaty-text-${treatyId}`
       // );
       console.log(`[unsigned] posts for #${treatyId}`, posts);
+
       if (posts == postsUndefined) {
         console.log(
           `treaty #${treatyId}, posts are undefined. Returning empty list.`
@@ -404,6 +411,8 @@ async function get3boxSignedTreatyText(
       });
       return posts.map((x) => x.message);
     } else {
+      const preloadBeforeLogin = false;
+      if (preloadBeforeLogin == false) return ["Loading..."];
       //This is more complex that it should be because we don't know the firstModerator of the thread
       console.info(`#${treatyId} Not logged in, using getThread()`);
       const postsBySigner = await Promise.all(
@@ -534,6 +543,18 @@ async function get3boxDeveloperInfo(treatyId, openSpace) {
 ////////////////////
 // Load functions
 ////////////////////
+
+export const loadEthersProvider = (ethereumProvider) => async (dispatch) => {
+  const provider = new ethers.providers.Web3Provider(ethereumProvider);
+  dispatch(ethersProviderLoaded(provider));
+  return provider;
+};
+
+export const loadEthersSigner = (provider) => async (dispatch) => {
+  const signer = provider.getSigner();
+  dispatch(ethersSignerLoaded(signer));
+  return signer;
+};
 
 export const loadWeb3 = () => async (dispatch) => {
   const web3 = await getWeb3();
@@ -788,45 +809,92 @@ export const addTreatyRequest = (text) => async (dispatch, getState) => {
     console.info("[addTreatyRequest]");
     var freshWeb3 = new Web3(Web3.givenProvider);
 
-    const treatyContract1 = web3.eth.contract(TreatyContract.abi);
-    //console.log(treatyContract1);
+    const treatyContract = new web3.eth.Contract(TreatyContract.abi);
+    console.log("treatyContract :>> ", treatyContract);
 
     const currentAccount = getState("web3").web3.account;
     const contractCode = "0x" + TreatyBin.bin;
 
     const parameters = TreatyContract.abi;
-    console.log(`[addTreatyRequest] About to deploy  ${text} . . .`);
 
     var _id = Math.floor(Math.random() * 10 ** ID_SIZE);
     var _name = text;
     var _initialText = "Initial text for " + text;
 
-    const deployedTreaty = await treatyContract1.new(
-      _id,
-      _name,
-      _initialText,
-      {
-        from: currentAccount,
-        data: "0x" + TreatyBin.bin,
-        gas: "4700000",
-      },
-      function (e, contract) {
-        console.info(e, contract);
-        if (typeof contract.address !== "undefined") {
-          console.log(
-            "Contract mined! address: " +
-              contract.address +
-              " transactionHash: " +
-              contract.transactionHash
-          );
-          dispatch(addToTreatyIndexRequest(contract));
-          dispatch(loadOneTreaty(contract));
-          // dispatch(createTreaty(contract)); //no longer needed as added inside loadOneTreaty
-        }
-      }
+    console.log(
+      `[addTreatyRequest] About to deploy with ethers.js  ${text} . . .`
     );
+    console.log("getState() :>> ", getState());
+    const provider = getState().ethers.provider;
+    console.log("provider :>> ", provider);
+    const signer = getState().ethers.signer;
+    console.log("signer :>> ", signer);
+    const ContractFactory = ethers.ContractFactory;
+
+    const factory = new ContractFactory(
+      TreatyContract.abi,
+      TreatyBin.bin,
+      signer
+    );
+    console.log("factory :>> ", factory);
+
+    const contract = await factory.deploy(_id, _name, _initialText);
+    console.log("Contract waiting to deploy at :>> ", contract.address);
+
+    console.log("Deploy transaction: " + contract.deployTransaction);
+
+    await contract.deployTransaction.wait();
+    console.log("Contract is now ready");
+
+    console.log("contract :>> ", contract);
+
+    // console.log(`[addTreatyRequest] About to deploy  ${text} . . .`);
+    // const deployedTreaty = await treatyContract
+    //   .deploy(
+    //     // _id,
+    //     // _name,
+    //     // _initialText,
+    //     {
+    //       data: "0x" + TreatyBin.bin,
+    //       arguments: [_id, _name, _initialText],
+    //     }
+    //   )
+    //   .send({
+    //     from: currentAccount,
+    //     gas: "4700000",
+    //   });
+
+    // console.log("deployedTreaty :>> ", deployedTreaty);
+
+    // console.log(
+    //   "Contract mined! address: " +
+    //     deployedTreaty.address +
+    //     " transactionHash: " +
+    //     deployedTreaty.transactionHash
+    // );
+
+    dispatch(addToTreatyIndexRequest(contract));
+    dispatch(loadOneTreaty(contract));
+
+    // function (e, contract) {
+    //   console.info(e, contract);
+    //   if (typeof contract !== "undefined") {
+    //     console.log(
+    //       "Contract mined! address: " +
+    //         contract.address +
+    //         " transactionHash: " +
+    //         contract.transactionHash
+    //     );
+    //     dispatch(addToTreatyIndexRequest(contract));
+    //     dispatch(loadOneTreaty(contract));
+    //     // dispatch(createTreaty(contract)); //no longer needed as added inside loadOneTreaty
+    //   } else {
+    //     console.error("Contract is undefined");
+    //   }
+    // }
+    // );
   } catch (e) {
-    //console.log("[addTreatyRequest] ERROR", e);
+    console.log("[addTreatyRequest] ERROR", e);
     dispatch(displayAlert(e));
   } finally {
   }
