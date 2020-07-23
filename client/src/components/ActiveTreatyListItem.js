@@ -53,30 +53,30 @@ const ActiveTreatyListItem = ({
         ))}
       </SignerBlockieSetContainer>
       <TreatyTextContainer>
-        <OverlayTrigger
+        {/* <OverlayTrigger
           trigger={["hover", "focus"]}
           placement="right"
           delay={{ show: 250, hide: 700 }}
           overlay={developerInfoPopover(treaty)}
-        >
-          <UnsignedText>
-            {treaty.unsignedTreatyText.length === 0 ? null : <h3>Unsigned</h3>}
-            {treaty.unsignedTreatyText.length > 0 &&
-              treaty.unsignedTreatyText.map((text) => <p>{text}</p>)}
-          </UnsignedText>
-        </OverlayTrigger>
-        <OverlayTrigger
+        > */}
+        <UnsignedText>
+          {treaty.unsignedTreatyText.length === 0 ? null : <h3>Unsigned</h3>}
+          {treaty.unsignedTreatyText.length > 0 &&
+            treaty.unsignedTreatyText.map((text) => <p>{text}</p>)}
+        </UnsignedText>
+        {/* </OverlayTrigger> */}
+        {/* <OverlayTrigger
           trigger={["hover", "focus"]}
           placement="right"
           delay={{ show: 250, hide: 700 }}
           overlay={developerInfoPopover(treaty)}
-        >
-          <SignedText>
-            {treaty.signedTreatyText.length === 0 ? null : <h3>Signed</h3>}
-            {treaty.signedTreatyText.length > 0 &&
-              treaty.signedTreatyText.map((text) => <p>{text}</p>)}
-          </SignedText>
-        </OverlayTrigger>
+        > */}
+        <SignedText>
+          {treaty.signedTreatyText.length === 0 ? null : <h3>Signed</h3>}
+          {treaty.signedTreatyText.length > 0 &&
+            treaty.signedTreatyText.map((text) => <p>{text}</p>)}
+        </SignedText>
+        {/* </OverlayTrigger> */}
       </TreatyTextContainer>
       <AddTreatyTextForm
         treaty={treaty}
