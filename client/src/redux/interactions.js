@@ -1078,8 +1078,6 @@ export const addToTreatyIndexRequest = (treatyInstance) => async (
       "[addToTreatyIndexRequest] Treaty added to treaty index in tx: ",
       tx
     );
-
-    dispatch(loadOneTreaty(treatyInstance));
     dispatch(addToTreatyIndex(treatyInstance));
   } catch (e) {
     console.error("[addToTreatyIndexRequest] Exception ", e);

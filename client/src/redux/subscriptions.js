@@ -23,7 +23,8 @@ export const subscribeToNewTreaties = () => async (dispatch, getState) => {
       function (error, result) {
         if (!error) {
           console.log("[subscribeToNewTreaties]", result);
-          dispatch(loadOneTreatyByAddress(result.address));
+          console.log(`address is ${result.address}`);
+          // dispatch(loadOneTreatyByAddress(result.address));
           return;
         }
         console.error("[subscribeToNewTreaties]", error);
