@@ -37,7 +37,7 @@ const NewTreatyButton = styled.button`
   cursor: pointer;
   margin-left: 8px;
   width: 20%;
-  background-color: #9c65cc;
+  // background-color: #9c65cc;
   flex: 1 0 63px;
 `;
 const StatusHeader = styled.div`

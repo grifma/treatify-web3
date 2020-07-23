@@ -1,5 +1,6 @@
 import { loadAccount } from "./interactions";
 import { loadTreatyIndex } from "./interactions";
+import { loadOneTreatyByAddress } from "./interactions";
 
 export const subscribeToAccountsChanging = (web3) => async (dispatch) => {
   window.ethereum.on("accountsChanged", async function (accounts) {
@@ -22,6 +23,7 @@ export const subscribeToNewTreaties = () => async (dispatch, getState) => {
       function (error, result) {
         if (!error) {
           console.log("[subscribeToNewTreaties]", result);
+          dispatch(loadOneTreatyByAddress(result.address));
           return;
         }
         console.error("[subscribeToNewTreaties]", error);

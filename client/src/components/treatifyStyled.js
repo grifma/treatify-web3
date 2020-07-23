@@ -1,6 +1,9 @@
 import React from "react";
 import { Popover, OverlayTrigger } from "react-bootstrap";
 import styled from "styled-components";
+// import { MDBBtn } from "mdbreact";
+
+// export const MButton = styled(MDBBtn)``;
 
 export const TreatyItemContainer = styled.div`
   background: #fff;
@@ -33,36 +36,36 @@ export const Button = styled.button`
 
 export const ActiveButton = styled(Button)`
   display: inline-block;
-  background-color: #57a657;
+  // background-color: #57a657;
 `;
 
 export const RemoveButton = styled(Button)`
   display: inline-block;
-  background-color: #c75757;
+  // background-color: #c75757;
   margin-left: 8px;
 `;
 
 export const SignButton = styled(Button)`
   display: inline-block;
-  background-color: #b9c967;
+  // background-color: #b9c967;
   margin-left: 8px;
 `;
 
 export const AddTextButton = styled(Button)`
   display: inline-block;
-  background-color: #3cb8d9;
+  // background-color: #3cb8d9;
   margin-left: 8px;
 `;
 
 export const JoinButton = styled(Button)`
   display: inline-block;
-  background-color: #3cb8d9;
+  // background-color: #3cb8d9;
   margin-left: 8px;
 `;
 
 export const RefreshTreatyButton = styled(Button)`
   display: inline-block;
-  background-color: #0df2c8;
+  // background-color: #0df2c8;
   margin-left: 8px;
 `;
 
@@ -150,7 +153,7 @@ export const AddTreatyTextButton = styled.button`
   cursor: pointer;
   margin-left: 8px;
   width: 20%;
-  background-color: #9c65cc;
+  // background-color: #9c65cc;
   flex: 1 0 60px;
 `;
 
