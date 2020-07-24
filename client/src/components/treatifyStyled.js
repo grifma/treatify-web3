@@ -16,6 +16,7 @@ export const TreatyItemContainer = styled.div`
   color: black;
   overflow: hidden;
   padding: 10px;
+  z-index: 100;
 `;
 
 export const TreatyItemContainerWithWarning = styled(TreatyItemContainer)`
