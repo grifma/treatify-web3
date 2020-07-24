@@ -84,12 +84,12 @@ const ActiveTreatyListItem = ({
       />
       <div className="buttons-container">
         <SignButton onClick={() => onSignPressed(treaty)}>Sign</SignButton>
-        <RemoveButton onClick={() => onRemovePressed(treaty)}>
+        {/* <RemoveButton onClick={() => onRemovePressed(treaty)}>
           Remove
         </RemoveButton>
         <RefreshTreatyButton onClick={() => onRefreshTreatyPressed(treaty)}>
           Refresh
-        </RefreshTreatyButton>
+        </RefreshTreatyButton> */}
       </div>
     </Container>
   );
