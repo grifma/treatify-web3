@@ -136,7 +136,7 @@ const TreatyWeb3 = ({
   );
 
   const treatyIndexPopover = (
-    <StyledPopover id="treaty-index-popover">
+    <StyledPopover id="treaty-index-popover" boundary="window">
       <StyledPopoverTitle as="h3">
         Treaty Index Address:{" "}
         {treatyIndexContract && treatyIndexContract._address}
@@ -162,11 +162,13 @@ const TreatyWeb3 = ({
   const TreatyIndexComponent = () => (
     <OverlayTrigger
       trigger={["hover", "focus"]}
-      placement="right"
-      delay={{ show: 250, hide: 700 }}
+      placement={"right"}
+      delay={{ show: 250, hide: 2000 }}
       overlay={treatyIndexPopover}
     >
-      <a href="#">Show Treaty Index</a>
+      <a href="#" style={{ marginTop: "40px" }}>
+        Show Treaty Index
+      </a>
     </OverlayTrigger>
   );
 
@@ -207,7 +209,7 @@ const TreatyWeb3 = ({
   const isLoading = false;
   const content = (
     <Grid>
-      <Header>{/* <Nav /> */}</Header>
+      <Header>{/*<Nav />*/}</Header>
       <LSide>
         {account == null ? (
           <div>Account has not been loaded</div>

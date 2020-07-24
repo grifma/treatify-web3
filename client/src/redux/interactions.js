@@ -177,7 +177,7 @@ async function pullTreaty(treatyInstance, threebox, openSpace, address) {
       signers,
       address
     ),
-    address: await treatyInstance.address,
+    address: await treatyInstance._address,
     contractInstance: treatyInstance,
     developerInfo: await get3boxDeveloperInfo(treatyId, openSpace),
   };
@@ -771,9 +771,29 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
       })
     );
     console.log("treaties :>> ", treaties);
-    const emptyTreaties = new Set([522, 105, 455, 317, 947]);
+    const emptyTreaties = new Set([
+      522,
+      105,
+      455,
+      317,
+      947,
+      471,
+      19,
+      524,
+      803,
+      53,
+      965,
+      523,
+      122,
+      776,
+      340,
+      541,
+      538,
+      316,
+      636,
+    ]);
     const draftTreaties = new Set([44306, 281876]);
-    const goodTreaties = new Set([240, 995, 612]);
+    const goodTreaties = new Set([240, 995, 612, 540]);
     const badTreaties = new Set([770, 193, 893, 438, 1]);
     const hiddenTreaties = new Set([
       ...draftTreaties,
@@ -1024,14 +1044,15 @@ export const addTreatyRequest = (text) => async (dispatch, getState) => {
     // );
 
     dispatch(addToTreatyIndexRequest(contract));
-    const web3 = getState().web3.connection;
-    const web3TreatyInstance = await new web3.eth.Contract(
-      TreatyContract.abi,
-      contract.address
-    );
-    dispatch(loadOneTreaty(web3TreatyInstance));
-    // dispatch(loadOneTreatyByAddress(contract.address));
+    // const web3 = getState().web3.connection;
+    // const web3TreatyInstance = await new web3.eth.Contract(
+    //   TreatyContract.abi,
+    //   contract.address
+    // );
+    // dispatch(loadOneTreaty(web3TreatyInstance));
 
+    dispatch(loadOneTreatyByAddress(contract.address));
+    // dispatch(loadOneTreatyByAddress(contract.address));
     // function (e, contract) {
     //   console.info(e, contract);
     //   if (typeof contract !== "undefined") {

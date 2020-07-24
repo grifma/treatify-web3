@@ -184,6 +184,7 @@ export const Header = styled(GridItem)`
 
 export const LSide = styled(GridItem)`
   display: flex;
+  flex-flow: column;
   padding: 10px;
   @media only screen and (min-width: 769px) {
     grid-column: span 2;

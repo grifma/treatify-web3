@@ -6,8 +6,14 @@ import ProfileHover from "profile-hover";
 
 const SignerBlockie = ({ address }) => (
   <SignerBlockieContainer>
-    <ProfileHover address={address} />
+    <StyledProfileHover
+      address={address}
+      tileStyle={false}
+      orientation={"bottom"}
+    />
   </SignerBlockieContainer>
 );
+
+const StyledProfileHover = styled(ProfileHover)``;
 
 export default SignerBlockie;
