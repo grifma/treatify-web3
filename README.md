@@ -1,6 +1,6 @@
 # Treatify Web3
 
-Fully onchain version of Treatify, running on Ethereum.
+Fully onchain version of Treatify, running on Ethereum, IPFS and 3box.
 
 # Deploy status
 
