@@ -4,8 +4,8 @@ var Treaty = artifacts.require("Treaty");
 contract("TreatyIndex", async (accounts) => {
   it("can deploy", async () => {
     let treatyIndex = await TreatyIndex.deployed();
-    let name = await treatyIndex.indexName.call();
-    assert.equal(name, "Coop's Australia", "Name not correct");
+    let name = await treatyIndex.name.call();
+    assert.equal(name, "A treaty index", "Name not correct");
   });
 
   it("can add treaty", async () => {

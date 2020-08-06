@@ -4,8 +4,6 @@ const mnemonic =
   "width custom march box impact phrase fix steel eight urge surface enable";
 
 module.exports = {
-  // See <http://truffleframework.com/docs/advanced/configuration>
-  // to customize your Truffle configuration!
   contracts_directory: "./contracts",
   contracts_build_directory: path.join(__dirname, "client/src/contracts"),
   networks: {
