@@ -43,6 +43,7 @@ require("events").EventEmitter.defaultMaxListeners = 100;
 ////////////////////////////////////
 //Configuration
 const treatyServer = "http://localhost:8081";
+const preloadBeforeLogin = false;
 const PersistMode = {
   ONCHAIN: 0,
   THREEBOX: 1,
@@ -75,59 +76,6 @@ export const displayAlert = (text) => () => {
 ////////////////////
 //Treaty specific helper functions
 ////////////////////
-
-// async function pullTreaty(treatyInstance, threebox, openSpace, address) {
-//   console.info("[pullTreaty]", treatyInstance, threebox, openSpace);
-//   const numUnsigned = await treatyInstance.getNumUnsigned();
-//   const numSigned = await treatyInstance.getNumSigned();
-//   const numSigners = await treatyInstance.getNumSignatures();
-//   const treatyId = Number(await treatyInstance.id());
-
-//   console.log(
-//     `[pullTreaty] there are ${numSigners} signers. This is treaty #${treatyId}`
-//   );
-
-//   const signers = [];
-//   var i;
-//   for (i = 0; i < numSigners; i++) {
-//     signers.push(await treatyInstance.signatureList(i));
-//     console.log("[pullTreaty] signer pushed");
-//   }
-
-//   console.log("pullTreaty] signers: :>> ", signers);
-//   const treaty = {
-//     id: treatyId,
-//     text: await treatyInstance.name(),
-//     isCompleted: (await treatyInstance.treatyState()) == 1,
-//     createdAt: await treatyInstance.creationTime(),
-//     signers: await getFor(numSigners, getSigner, treatyInstance),
-//     //TODO: Retreive state of signature. signatureStatus: signers && signers.map((signer) => async ( humanReadableSignatureStatus(await treatyInstance.methods.signatureState(signer).call()) )),
-//     status: humanReadableTreatyStatus(await treatyInstance.treatyState()),
-//     unsignedTreatyText: await getUnsignedTreatyText(
-//       numUnsigned,
-//       getUnsignedText,
-//       treatyInstance,
-//       threebox,
-//       openSpace,
-//       treatyId,
-//       signers
-//     ),
-//     signedTreatyText: await getSignedTreatyText(
-//       numUnsigned,
-//       getSignedText,
-//       treatyInstance,
-//       threebox,
-//       openSpace,
-//       treatyId,
-//       signers,
-//       address
-//     ),
-//     address: await treatyInstance.address,
-//     contractInstance: treatyInstance,
-//     developerInfo: await get3boxDeveloperInfo(treatyId, openSpace),
-//   };
-//   return treaty;
-// }
 
 async function pullTreaty(treatyInstance, threebox, openSpace, address) {
   // console.info("[pullTreaty]", treatyInstance, threebox, openSpace);
@@ -184,61 +132,6 @@ async function pullTreaty(treatyInstance, threebox, openSpace, address) {
   return treaty;
 }
 
-// async function pullTreaty(treatyInstance, threebox, openSpace, address) {
-//   console.info("[pullTreaty]", treatyInstance, threebox, openSpace);
-//   const numUnsigned = await treatyInstance.methods.getNumUnsigned().call();
-//   const numSigned = await treatyInstance.methods.getNumSigned().call();
-//   const numSigners = await treatyInstance.methods.getNumSignatures().call();
-//   const treatyId = await treatyInstance.methods.id().call();
-
-//   console.log(
-//     `[pullTreaty] there are ${numSigners} signers. This is treaty #${treatyId}`
-//   );
-
-//   const signers = [];
-//   var i;
-//   for (i = 0; i < numSigners; i++) {
-//     signers.push(await treatyInstance.methods.signatureList(i).call());
-//     console.log("[pullTreaty] signer pushed");
-//   }
-
-//   console.log("pullTreaty] signers: :>> ", signers);
-//   const treaty = {
-//     id: treatyId,
-//     text: await treatyInstance.methods.name().call(),
-//     isCompleted: (await treatyInstance.methods.treatyState().call()) == 1,
-//     createdAt: await treatyInstance.methods.creationTime().call(),
-//     signers: await getFor(numSigners, getSigner, treatyInstance),
-//     //TODO: Retreive state of signature. signatureStatus: signers && signers.map((signer) => async ( humanReadableSignatureStatus(await treatyInstance.methods.signatureState(signer).call()) )),
-//     status: humanReadableTreatyStatus(
-//       await treatyInstance.methods.treatyState().call()
-//     ),
-//     unsignedTreatyText: await getUnsignedTreatyText(
-//       numUnsigned,
-//       getUnsignedText,
-//       treatyInstance,
-//       threebox,
-//       openSpace,
-//       treatyId,
-//       signers
-//     ),
-//     signedTreatyText: await getSignedTreatyText(
-//       numUnsigned,
-//       getSignedText,
-//       treatyInstance,
-//       threebox,
-//       openSpace,
-//       treatyId,
-//       signers,
-//       address
-//     ),
-//     address: await treatyInstance._address,
-//     contractInstance: treatyInstance,
-//     developerInfo: await get3boxDeveloperInfo(treatyId, openSpace),
-//   };
-//   return treaty;
-// }
-
 async function getUnsignedText(treatyInstance, i) {
   const lineOfUnsignedText = await treatyInstance.unsignedTreatyText(i);
   return lineOfUnsignedText;
@@ -248,32 +141,20 @@ async function getSignedText(treatyInstance, i) {
   const lineOfSignedText = await treatyInstance.signedTreatyText(i);
   return lineOfSignedText;
 }
-// async function getSignedText(treatyInstance, i) {
-//   const lineOfSignedText = await treatyInstance.methods
-//     .signedTreatyText(i)
-//     .call();
-//   return lineOfSignedText;
-// }
 
 async function getSigner(treatyInstance, i) {
   const signer = await treatyInstance.methods.signatureList(i).call();
   return signer;
 }
-// async function getSigner(treatyInstance, i) {
-//   const signer = await treatyInstance.methods.signatureList(i).call();
-//   return signer;
-// }
 
 async function getFor(n, lookupFunction, treatyInstance) {
   var result = [];
   for (let i = 0; i < n; i++) {
     result.push(await lookupFunction(treatyInstance, i));
   }
-  //console.log("getFor returning: ", result);
   return result;
 }
 
-//todo: Refactor this -- half of the args are unused in each case
 async function getUnsignedTreatyText(
   numUnsigned,
   getUnsignedText,
@@ -301,7 +182,6 @@ async function getUnsignedTreatyText(
   }
 }
 
-//todo: Refactor this -- half of the args are unused in each case
 async function getSignedTreatyText(
   numSigned,
   getSignedText,
@@ -353,23 +233,6 @@ async function get3boxUnsignedTreatyText(
       });
       return posts.map((x) => x.message);
     } else {
-      //This is more complex that it should be because we don't know the firstModerator of the thread
-      // console.info(`#${treatyId} Not logged in, using getThread()`);
-
-      //In order to access the thread before we are authenticated (~ 6 seconds), 3box requires us to know the first moderator of the thread
-      //As we know it is one of the signers, we try getThread with each signer
-      // const posts = signers
-      //   .map(async (signer) => {
-      //     await Box.getThread(
-      //       "treatify",
-      //       `unsigned-treaty-text-${treatyId}`,
-      //       signer,
-      //       false
-      //     );
-      //   })
-      //   .filter((posts) => posts.length > 0)[0];
-
-      const preloadBeforeLogin = false;
       if (preloadBeforeLogin == false) return ["Loading..."];
 
       const postsBySigner = await Promise.all(
@@ -382,31 +245,17 @@ async function get3boxUnsignedTreatyText(
           );
         })
       );
-
-      // console.log("postsBySigner", postsBySigner);
-
       const postsUndefined = postsBySigner.filter((x) => x.length == 0);
-      // console.log("postsUndefined", postsUndefined);
       var posts;
 
       if (postsUndefined.length == postsBySigner.length) {
-        // console.log("all posts are undefined, returning empty list");
         return [];
       } else {
-        // console.log("postsBySigner", postsBySigner);
-
         const postsBySignerEmptyFiltered = postsBySigner.filter(
           (x) => x.length > 0
         );
-        // console.log(
-        //   "postsBySignerEmptyFiltered :>> ",
-        //   postsBySignerEmptyFiltered
-        // );
-
         posts = postsBySignerEmptyFiltered[0];
-        // console.log(`[allUndefined]::[unsigned] posts for #${treatyId}`, posts);
         // const posts = postsBySigner.filter((x) => x.length > 0)[0];
-
         if (postsBySignerEmptyFiltered > 0) {
           console.error(
             "There should only be one filter match. Only one signer is the first moderator.",
@@ -415,37 +264,9 @@ async function get3boxUnsignedTreatyText(
         }
       }
 
-      // const posts = await Box.getThread(
-      //   "treatify",
-      //   `unsigned-treaty-text-${treatyId}`,
-      //   "0x01d0ef4e369bac36ee55f75d3273745f21d6b239",
-      //   false
-      // );
-      // const thread = await Box.getThread(
-      //   "treatify",
-      //   `unsigned-treaty-text-${treatyId}`,
-      //   {
-      //     firstModerator: "0x01d0ef4E369bAc36EE55f75d3273745F21D6B239",
-      //     members: false,
-      //   }
-      // );
-      // console.log(thread);
-      // const posts = await thread.getPosts();
-      // const posts = hardcodedUnsignedThread;
-      // const posts = await Box.getThread(
-      //   "treatify",
-      //   `unsigned-treaty-text-${treatyId}`
-      // );
-      // console.log(`[unsigned] posts for #${treatyId}`, posts);
-
       if (posts == postsUndefined) {
-        // console.log(
-        //   `treaty #${treatyId}, posts are undefined. Returning empty list.`
-        // );
         return [];
       }
-      // console.log(`Treaty id  ${treatyId} has ${posts.length} posts`);
-
       return posts.map((post) => {
         return post.message;
       });
@@ -460,15 +281,8 @@ async function get3boxUnsignedTreatyText(
 
 async function profileInfo(treatyId, address, thread) {
   const profile = await Box.getProfile(address);
-  // console.log("address", address);
-  // console.log("profile", JSON.stringify(profile));
-
   try {
     const moderators = await thread.listModerators();
-    console
-      .log
-      // `MODERATOR LIST for #${treatyId} ${JSON.stringify(moderators)}`
-      ();
     if (moderators.length == 1 && moderators[0] == profile.address) {
       // console.log("This user is the moderator");
     }
@@ -477,9 +291,6 @@ async function profileInfo(treatyId, address, thread) {
   }
 }
 
-//Working on problem with loading of text.
-//Sometimes error is displayed.
-//Othertimes some text is dispalyed where as other text is not displayed.
 async function get3boxSignedTreatyText(
   threebox,
   openSpace,
@@ -487,28 +298,6 @@ async function get3boxSignedTreatyText(
   signers,
   address
 ) {
-  // console.log(`Treaty id is ${treatyId}`);
-  // console.log("threadName: ", `signed-treaty-text-${treatyId}`);
-  // console.log("signers :>> ", signers);
-  //ACTIVE BEFORE 20 JUNE 2020
-  // const posts = await Box.getThread(
-  //   "treatify",
-  //   `signed-treaty-text-${treatyId}`,
-  //   "0x01d0ef4e369bac36ee55f75d3273745f21d6b239",
-  //   false
-  //   );
-  // console.log(`[signed] posts for #${treatyId}`, posts);
-
-  // if (treatyId == 1) {
-  //   return [`Hiding ${posts.length} lines`];
-  //   console.log("posts", posts);
-  // }
-
-  // return posts.map((post) => {
-  //   return post.message;
-  // });
-  //END OF ACTIVE BEFORE 20 JUNE 2020
-
   try {
     if (openSpace != undefined) {
       console.info(`#${treatyId}Logged in, using joinThread()`);
@@ -517,9 +306,6 @@ async function get3boxSignedTreatyText(
       );
       profileInfo(treatyId, address, thread);
 
-      // if (await thread.listModerators() == address){
-      //   console.log("moderator list: ", await thread.listModerators());
-      // }
       const posts = await thread.getPosts({
         limit: THREEBOX_POST_LIMIT,
       });
@@ -539,10 +325,6 @@ async function get3boxSignedTreatyText(
           );
         })
       );
-      // console.log(
-      //   `#${treatyId} 1st map done. postsBySigner :>> `,
-      //   postsBySigner
-      // );
       const undefined = postsBySigner.filter((x) => x == undefined);
 
       const allUndefined = undefined.length == postsBySigner.length;
@@ -550,22 +332,12 @@ async function get3boxSignedTreatyText(
       var posts;
 
       if (allUndefined) {
-        // console.log("all posts are undefined, returning empty list");
         return [];
       } else {
-        // console.log("postsBySigner", postsBySigner);
-
         const postsBySignerEmptyFiltered = postsBySigner.filter(
           (x) => x.length > 0
         );
-        // console.log(
-        //   "postsBySignerEmptyFiltered :>> ",
-        //   postsBySignerEmptyFiltered
-        // );
-
         posts = postsBySignerEmptyFiltered[0];
-        // console.log(`[allUndefined]::[unsigned] posts for #${treatyId}`, posts);
-        // const posts = postsBySigner.filter((x) => x.length > 0)[0];
 
         if (postsBySignerEmptyFiltered > 0) {
           console.error(
@@ -644,8 +416,6 @@ async function get3boxDeveloperInfo(treatyId, openSpace) {
     const signedThread = await openSpace.joinThread(
       `signed-treaty-text-${treatyId}`
     );
-    // console.log("unsignedThread :>> ", unsignedThread);
-    // console.log("signedThread :>> ", signedThread);
     returnValue["With auth"] = {
       "UnsignedText Moderators": await unsignedThread.listModerators(),
       "SignedText Moderators": await signedThread.listModerators(),
@@ -709,14 +479,12 @@ export const loadTreatyContract = (web3) => async (dispatch) => {
   //   TreatyContract.abi,
   //   deployedNetwork && deployedNetwork.address
   // );
-  dispatch(treatyContractLoaded(instance));
+  dispatch(treatyContractLoaded(ethersInstance));
   // return instance;
   return ethersInstance;
 };
 
 export const loadTreatyIndex = (contract) => async (dispatch) => {
-  // console.log("[loadTreatyIndex]", contract);
-  // console.log("[getTreatyIndex]", contract.getTreatyIndex());
   const treatyIndex = await contract.methods.getTreatyIndex().call();
   dispatch(treatyIndexLoaded(treatyIndex));
   return treatyIndex;
@@ -728,12 +496,8 @@ export const loadStoredData = (contract) => async (dispatch) => {
   return value;
 };
 
-export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
-  dispatch,
-  getState
-) => {
+export const loadTreatiesWeb3 = () => async (dispatch, getState) => {
   try {
-    // console.log("[loadTreatiesWeb3]");
     const web3 = getState().web3.connection;
     const threebox = getState().threebox.threebox;
     const openSpace = getState().threebox.openSpace;
@@ -906,8 +670,6 @@ export const markActiveRequest = (treaty) => async (dispatch, getState) => {
     const tx = await contractInstance.methods
       .makeActive()
       .send({ from: currentAccount });
-    //console.log("tx");
-    //console.log(tx);
     await dispatch(markActive(treaty));
 
     //If using 3box, make all registered signers moderators of the 3box thread
