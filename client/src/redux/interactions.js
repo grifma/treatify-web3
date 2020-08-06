@@ -38,12 +38,21 @@ import { batch } from "react-redux";
 import Box from "3box";
 import { AssertionError } from "assert";
 import ethers from "ethers";
-require("events").EventEmitter.defaultMaxListeners = 100;
+require("events").EventEmitter.defaultMaxListeners = 25;
+
+////////////////////////////////////
+//NOTE
+//
+//This code base is very much in progress.
+//It serves as a first exploration of 3box and first major project in React and Redux.
+//Working, but in need of enhancements and much polish.
+//
+////////////////////////////////////
 
 ////////////////////////////////////
 //Configuration
 const treatyServer = "http://localhost:8081";
-const preloadBeforeLogin = false;
+const PRELOAD_BEFORE_LOGIN = false;
 const PersistMode = {
   ONCHAIN: 0,
   THREEBOX: 1,
@@ -233,7 +242,7 @@ async function get3boxUnsignedTreatyText(
       });
       return posts.map((x) => x.message);
     } else {
-      if (preloadBeforeLogin == false) return ["Loading..."];
+      if (PRELOAD_BEFORE_LOGIN == false) return ["Loading..."];
 
       const postsBySigner = await Promise.all(
         signers.map(async (signer) => {
@@ -311,8 +320,8 @@ async function get3boxSignedTreatyText(
       });
       return posts.map((x) => x.message);
     } else {
-      const preloadBeforeLogin = false;
-      if (preloadBeforeLogin == false) return ["Loading..."];
+      const PRELOAD_BEFORE_LOGIN = false;
+      if (PRELOAD_BEFORE_LOGIN == false) return ["Loading..."];
       //This is more complex that it should be because we don't know the firstModerator of the thread
       console.info(`#${treatyId} Not logged in, using getThread()`);
       const postsBySigner = await Promise.all(
