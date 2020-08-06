@@ -4,24 +4,24 @@ import "./AccessRestriction.sol";
 
 contract TreatyIndex is AccessRestriction {
   address[] public treatyIndex;
-  string public indexName;
+  string public name;
 
   event AddTreaty(address indexed _treatyAddress);
   event DeleteTreaty(address indexed _treatyAddress);
   event Rename(string indexed _oldName, string indexed _newName);
 
-  constructor(string memory _indexName) public {
-    indexName = _indexName;
+  constructor(string memory _name) public {
+    name = _name;
   }
 
   function getNumTreaties() public view returns (uint256) {
     return treatyIndex.length;
   }
 
-  function rename(string memory _indexName) public onlyBy(owner) {
-    string memory oldName = indexName;
-    indexName = _indexName;
-    emit Rename(oldName, _indexName);
+  function rename(string memory _name) public onlyBy(owner) {
+    string memory oldName = name;
+    name = _name;
+    emit Rename(oldName, _name);
   }
 
   function addTreaty(address _treatyAddress) public {

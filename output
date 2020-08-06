@@ -1,0 +1,59 @@
+Using network 'test'.
+
+
+Compiling your contracts...
+===========================
+> Everything is up to date, there is nothing to compile.
+
+
+[0m[0m
+[0m  Contract: Treaty[0m
+  [32m  ✓[0m[90m can deploy with name[0m[33m (43ms)[0m
+Treaty with address 0x9FBDa871d559710256a2502A2517b794B482Db40 deployed to TreatyIndex with name 0xf25186B5081Ff5cE73482AD761DB0eB0d25abfBF
+  [32m  ✓[0m[90m three signers can join[0m[31m (218ms)[0m
+  [32m  ✓[0m[90m can make treaty active[0m[31m (86ms)[0m
+  [32m  ✓[0m[90m can write to treaty[0m[31m (204ms)[0m
+  [32m  ✓[0m[90m all parties can agree[0m[31m (223ms)[0m
+  [32m  ✓[0m[90m all text now signed[0m[31m (79ms)[0m
+  [32m  ✓[0m[90m signature state is reset[0m[33m (74ms)[0m
+  [32m  ✓[0m[90m more text can be added as discussions continue[0m[31m (102ms)[0m
+  [32m  ✓[0m[90m additional text can be agreed on[0m[31m (220ms)[0m
+0x536f6d6520746578742073746f726564206f6e2049504653
+  [32m  ✓[0m[90m can sign with specified hash[0m
+  [32m  ✓[0m[90m can time lock[0m[31m (76ms)[0m
+  [32m  ✓[0m[90m no changes while locked[0m[33m (66ms)[0m
+Counting to 10...
+Done.
+  [31m  1) can wait until unlock[0m
+    > No events were emitted
+  [32m  ✓[0m[90m registrar can change lawyer address[0m[31m (311ms)[0m
+  [32m  ✓[0m[90m lawyer can make treaty binding[0m[31m (251ms)[0m
+  [32m  ✓[0m[90m no changes or withdraws permitted while binding[0m[31m (286ms)[0m
+  [32m  ✓[0m[90m lawyer can unbind treaty[0m[31m (162ms)[0m
+  [32m  ✓[0m[90m treaty broken if party withdraws[0m[31m (258ms)[0m
+  [32m  ✓[0m[90m treaty mutually withdrawn if all parties withdraw[0m[31m (291ms)[0m
+
+[0m  Contract: TreatyIndex[0m
+  [32m  ✓[0m[90m can deploy[0m[33m (51ms)[0m
+  [32m  ✓[0m[90m can add treaty[0m[31m (131ms)[0m
+  [32m  ✓[0m[90m can get treaty address[0m[31m (93ms)[0m
+  [32m  ✓[0m[90m can get treaty index[0m[31m (115ms)[0m
+
+
+[92m [0m[32m 22 passing[0m[90m (14s)[0m
+[31m  1 failing[0m
+
+[0m  1) Contract: Treaty
+       can wait until unlock:
+
+      [31mTreaty has not unlocked[0m
+      [32m+ expected[0m [31m- actual[0m
+
+      [31m-true[0m
+      [32m+false[0m
+      [0m[90m
+      at Context.<anonymous> (test/testTreaty.js:194:12)
+      at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[0m
+
+

@@ -1,4 +1,5 @@
 var Treaty = artifacts.require("Treaty");
+const Web3 = require("web3");
 
 contract("Treaty", async (accounts) => {
   var registrar = accounts[0];
@@ -68,7 +69,7 @@ contract("Treaty", async (accounts) => {
     let treaty = await Treaty.deployed();
     assert.equal(
       await treaty.signedTreatyText.call(0).valueOf(),
-      "Initial text",
+      "Details of Test Treaty",
       "text not correct or text not signed"
     );
     assert.equal(
@@ -124,6 +125,33 @@ contract("Treaty", async (accounts) => {
     );
   });
 
+  it("can sign with specified hash", async () => {
+    let treaty = await Treaty.deployed();
+    const hash = Web3.utils.keccak256("Content being signed");
+    const txSignA = await treaty.signHash(hash, { from: partyA });
+    const txSignB = await treaty.signHash(hash, { from: partyB });
+    const txSignC = await treaty.signHash(hash, { from: partyC });
+    assert.equal(await treaty.getLastSignedHash(), hash);
+  });
+
+  it("different hash resets signatures ", async () => {
+    let treaty = await Treaty.deployed();
+    const hash1 = Web3.utils.keccak256("Content X being signed");
+    const hash2 = Web3.utils.keccak256("Modified content X being signed");
+    await treaty.signHash(hash1, { from: partyA });
+    await treaty.signHash(hash1, { from: partyB });
+    await treaty.signHash(hash2, { from: partyC });
+    assert.notEqual(await treaty.getLastSignedHash(), hash1);
+  });
+
+  it("signed once everyone signs same hash", async () => {
+    let treaty = await Treaty.deployed();
+    const hash2 = Web3.utils.keccak256("Modified content X being signed");
+    await treaty.signHash(hash2, { from: partyA });
+    await treaty.signHash(hash2, { from: partyB });
+    assert.equal(await treaty.getLastSignedHash(), hash2);
+  });
+
   it("can time lock", async () => {
     let treaty = await Treaty.deployed();
     await treaty.lockFor(2, { from: partyA });
@@ -150,8 +178,8 @@ contract("Treaty", async (accounts) => {
   });
 
   it("can wait until unlock", async () => {
-    console.log("Counting to 10...");
-    await timeout(10000);
+    console.log("Counting to 2...");
+    await timeout(2000);
     console.log("Done.");
     let treaty = await Treaty.deployed();
     let locked = await treaty.getLocked.call();

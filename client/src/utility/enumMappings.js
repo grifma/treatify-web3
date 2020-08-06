@@ -20,12 +20,14 @@ function humanReadableSignatureStatus(int) {
   const i = parseInt(int);
   switch (i) {
     case 0:
-      return "Unsigned";
+      return "NotRegistered";
     case 1:
-      return "Signed";
+      return "Unsigned";
     case 2:
-      return "Withdrawn";
+      return "Signed";
     case 3:
+      return "Withdrawn";
+    case 4:
       return "Broken";
   }
 }

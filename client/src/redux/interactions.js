@@ -792,7 +792,7 @@ export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
       316,
       636,
     ]);
-    const draftTreaties = new Set([44306, 281876]);
+    const draftTreaties = new Set([261, 501, 44306, 281876, 799, 805]);
     const goodTreaties = new Set([240, 995, 612, 540]);
     const badTreaties = new Set([770, 193, 893, 438, 1]);
     const hiddenTreaties = new Set([

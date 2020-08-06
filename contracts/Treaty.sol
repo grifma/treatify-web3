@@ -15,9 +15,12 @@ contract Treaty is AccessRestriction {
   States public treatyState = INITIAL_STATE;
   mapping(address => SignatureState) public signatureState;
 
-  /// Agreement text (plain or hashed) ///
+  /// Agreement text (plain text) ///
   string[] public unsignedTreatyText;
   string[] public signedTreatyText;
+  /// Agreement text (bytes32 hash) ///
+  bytes32[] public unsignedHash;
+  bytes32[] public signedHash;
 
   /// Addresses ///
   address[] public signatureList;
@@ -39,6 +42,7 @@ contract Treaty is AccessRestriction {
   event Locked(uint256 _lockTime);
   event UnLocked();
   event SignedBy(address indexed _signer);
+  event SignHash(address indexed _signer, bytes32 indexed _hash);
   event SignedByAll(address indexed _treatyAddress);
   event WithdrawnFromTreaty(address indexed _signer);
   event MutuallyWithdrawn();
@@ -48,6 +52,11 @@ contract Treaty is AccessRestriction {
   event WriteToTreaty(string indexed _text);
   event MakeActive(address indexed _treatyAddress);
   event RegisterAsSigner(address _signer);
+
+  event LogBytes32(bytes32 _b);
+  // event LogString(string memory _s);
+  event LogOK();
+  event LogNotOK();
 
   /// Modifiers ///
   modifier inState(States _state) {
@@ -106,9 +115,49 @@ contract Treaty is AccessRestriction {
   }
 
   function signTreaty() public inState(States.Active) stateChange() {
+    require(
+      signatureState[msg.sender] == SignatureState.Unsigned,
+      "Unexpected signature"
+    );
     signatureState[msg.sender] = SignatureState.Signed;
     emit SignedBy(msg.sender);
 
+    if (allSignaturesInState(SignatureState.Signed)) {
+      confirmTreatyText();
+    }
+  }
+
+  // function signHash(string memory _hash)
+  //   public
+  //   inState(States.Active)
+  //   stateChange()
+  // {
+  //   require(
+  //     signatureState[msg.sender] == SignatureState.Unsigned,
+  //     "Unexpected signature"
+  //   );
+  //   if (!compareStrings(_hash, getLastUnsignedText())) {
+  //     resetSignatures();
+  //     emit WriteToTreaty(_hash);
+  //   }
+  //   signatureState[msg.sender] = SignatureState.Signed;
+  //   emit SignedBy(msg.sender, _hash);
+  //   if (allSignaturesInState(SignatureState.Signed)) {
+  //     confirmTreatyText();
+  //   }
+  // }
+
+  function signHash(bytes32 _hash) public inState(States.Active) stateChange() {
+    require(
+      signatureState[msg.sender] == SignatureState.Unsigned,
+      "Unexpected signature"
+    );
+    if (_hash != getLastUnsignedHash()) {
+      resetSignatures();
+      unsignedHash.push(_hash);
+    }
+    signatureState[msg.sender] = SignatureState.Signed;
+    emit SignHash(msg.sender, _hash);
     if (allSignaturesInState(SignatureState.Signed)) {
       confirmTreatyText();
     }
@@ -274,14 +323,58 @@ contract Treaty is AccessRestriction {
       signedTreatyText.push(unsignedTreatyText[i]);
       delete unsignedTreatyText[i];
     }
+    for (uint256 i = 0; i < unsignedHash.length; i++) {
+      signedHash.push(unsignedHash[i]);
+      delete unsignedHash[i];
+    }
     for (uint256 i = 0; i < signatureList.length; i++) {
       signatureState[signatureList[i]] = SignatureState.Unsigned;
     }
     unsignedTreatyText.length = 0;
+    unsignedHash.length = 0;
     emit SignedByAll(address(this));
   }
 
   function isSignedByAll() internal view returns (bool) {
     return allSignaturesInState(SignatureState.Signed);
+  }
+
+  function getLastUnsignedText() public view returns (string memory) {
+    return unsignedTreatyText[unsignedTreatyText.length - 1];
+  }
+
+  function getLastSignedText() public view returns (string memory) {
+    return signedTreatyText[signedTreatyText.length - 1];
+  }
+
+  function getLastUnsignedHash() public view returns (bytes32) {
+    if (unsignedHash.length == 0) {
+      return bytes32(0x0);
+    }
+    return unsignedHash[unsignedHash.length - 1];
+  }
+
+  function getLastSignedHash() public view returns (bytes32) {
+    if (signedHash.length == 0) {
+      return bytes32(0x0);
+    }
+    return signedHash[signedHash.length - 1];
+  }
+
+  // function compareStrings(string memory a, string memory b)
+  //   public
+  //   view
+  //   returns (bool)
+  // {
+  //   return (keccak256(abi.encodePacked((a))) ==
+  //     keccak256(abi.encodePacked((b))));
+  // }
+
+  function compareStrings(string memory a, string memory b)
+    public
+    view
+    returns (bool)
+  {
+    return true;
   }
 }
