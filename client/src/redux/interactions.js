@@ -49,25 +49,6 @@ require("events").EventEmitter.defaultMaxListeners = 25;
 //
 ////////////////////////////////////
 
-////////////////////////////////////
-//Configuration
-const treatyServer = "http://localhost:8081";
-const PRELOAD_BEFORE_LOGIN = false;
-const PersistMode = {
-  ONCHAIN: 0,
-  THREEBOX: 1,
-  MONGO: 2,
-};
-const TREATY_TEXT_PERSIST_MODE = PersistMode.THREEBOX;
-const TREATY_PERSIST_MODE = PersistMode.ONCHAIN;
-const TREATY_SIGNATURE_PERSIST_MODE = PersistMode.ONCHAIN;
-const TREATY_STATUS_PERSIST_MODE = PersistMode.ONCHAIN;
-const THREEBOX_POST_LIMIT = 20;
-
-const ID_SIZE = 3;
-//
-///////////////////////////////////
-
 ////////////////////
 //General helper functions
 ////////////////////
@@ -173,7 +154,7 @@ async function getUnsignedTreatyText(
   treatyId,
   signers
 ) {
-  switch (TREATY_TEXT_PERSIST_MODE) {
+  switch (process.env.TREATY_TEXT_PERSIST_MODE) {
     case PersistMode.THREEBOX:
       // console.log("Case: THREEBOX");
       return await get3boxUnsignedTreatyText(
@@ -201,7 +182,7 @@ async function getSignedTreatyText(
   signers,
   address
 ) {
-  switch (TREATY_TEXT_PERSIST_MODE) {
+  switch (process.env.TREATY_TEXT_PERSIST_MODE) {
     case PersistMode.THREEBOX:
       // console.log("Case: THREEBOX");
       return await get3boxSignedTreatyText(
@@ -238,11 +219,11 @@ async function get3boxUnsignedTreatyText(
       );
 
       const posts = await thread.getPosts({
-        limit: THREEBOX_POST_LIMIT,
+        limit: process.env.THREEBOX_POST_LIMIT,
       });
       return posts.map((x) => x.message);
     } else {
-      if (PRELOAD_BEFORE_LOGIN == false) return ["Loading..."];
+      if (process.env.PRELOAD_BEFORE_LOGIN == false) return ["Loading..."];
 
       const postsBySigner = await Promise.all(
         signers.map(async (signer) => {
@@ -316,13 +297,11 @@ async function get3boxSignedTreatyText(
       profileInfo(treatyId, address, thread);
 
       const posts = await thread.getPosts({
-        limit: THREEBOX_POST_LIMIT,
+        limit: process.env.THREEBOX_POST_LIMIT,
       });
       return posts.map((x) => x.message);
     } else {
-      const PRELOAD_BEFORE_LOGIN = false;
-      if (PRELOAD_BEFORE_LOGIN == false) return ["Loading..."];
-      //This is more complex that it should be because we don't know the firstModerator of the thread
+      if (process.env.PRELOAD_BEFORE_LOGIN == false) return ["Loading..."];
       console.info(`#${treatyId} Not logged in, using getThread()`);
       const postsBySigner = await Promise.all(
         signers.map(async (signer) => {
@@ -402,7 +381,7 @@ async function get3boxSignedTreatyText(
   //   `signed-treaty-text-${treatyId}`
   // );
   // const signedTreatyText = await signedTreatyTextThread.getPosts({
-  //   limit: THREEBOX_POST_LIMIT,
+  //   limit: process.env.THREEBOX_POST_LIMIT,
   // });
 }
 
@@ -463,15 +442,42 @@ export const loadAccount = (web3) => async (dispatch) => {
   return account;
 };
 
-export const loadTreatyIndexContract = (web3) => async (dispatch) => {
+export const loadTreatyIndexContractWeb3 = (web3) => async (dispatch) => {
   const networkId = await web3.eth.net.getId();
   const deployedNetwork = TreatyIndexContract.networks[networkId];
   const instance = new web3.eth.Contract(
     TreatyIndexContract.abi,
     deployedNetwork && deployedNetwork.address
   );
+  console.log("LOAD TREATY INDEX");
+  console.log("instance :>> ", instance);
+  console.log("networkId :>> ", networkId);
+  console.log("web3 :>> ", web3);
   dispatch(treatyIndexContractLoaded(instance));
   return instance;
+};
+
+export const loadTreatyIndexContract = (web3 /* Delete me */) => async (
+  dispatch,
+  getState
+) => {
+  console.log("loadTreatyIndexContract ETHERS :>> ", web3);
+  const provider = await getState().ethers.provider;
+  console.log("provider :>> ", provider);
+  // const networkId = await web3.eth.net.getId();
+  // const deployedNetwork = TreatyIndexContract.networks[networkId];
+  console.log("TreatyIndexContract.address :>> ", TreatyIndexContract.address);
+  const ethersInstance = new ethers.Contract(
+    // TreatyIndexContract.address,
+    "0xe560cd48F2bc1927A9274AB50cD4C46a7797A5Cb", //TODO Load this from json
+    TreatyIndexContract.abi,
+    provider
+  );
+  console.log("LOAD TREATY INDEX");
+  console.log("ethersInstance :>> ", ethersInstance);
+  console.log("provider :>> ", provider);
+  dispatch(treatyIndexContractLoaded(ethersInstance));
+  return ethersInstance;
 };
 
 export const loadTreatyContract = (web3) => async (dispatch) => {
@@ -493,8 +499,22 @@ export const loadTreatyContract = (web3) => async (dispatch) => {
   return ethersInstance;
 };
 
-export const loadTreatyIndex = (contract) => async (dispatch) => {
+export const loadTreatyIndex = (contract) => async (dispatch, getState) => {
+  console.log("etherscontract", contract);
+  const treatyIndex = await contract.getTreatyIndex();
+  console.log(`there are ${await contract.getNumTreaties()} treaties`);
+  console.log("treatyIndex :>> ", treatyIndex);
+  dispatch(treatyIndexLoaded(treatyIndex));
+  return treatyIndex;
+};
+
+export const loadTreatyIndexW3 = (contract) => async (dispatch) => {
+  console.log("etherscontract", contract);
   const treatyIndex = await contract.methods.getTreatyIndex().call();
+  console.log(
+    `there are ${await contract.methods.getNumTreaties().call()} treaties`
+  );
+  console.log("treatyIndex :>> ", treatyIndex);
   dispatch(treatyIndexLoaded(treatyIndex));
   return treatyIndex;
 };
@@ -589,7 +609,7 @@ export const loadTreatiesWeb3 = () => async (dispatch, getState) => {
 export const loadTreaties = () => async (getState) => {
   try {
     dispatch(loadTreatiesInProgress());
-    const response = await fetch(`${treatyServer}/treaties`);
+    const response = await fetch(`${process.env.TREATY_SERVER}/treaties`);
     const treaties = await response.json();
     dispatch(loadTreatiesSuccess(treaties));
   } catch (e) {
@@ -682,7 +702,7 @@ export const markActiveRequest = (treaty) => async (dispatch, getState) => {
     await dispatch(markActive(treaty));
 
     //If using 3box, make all registered signers moderators of the 3box thread
-    if (TREATY_TEXT_PERSIST_MODE == PersistMode.THREEBOX) {
+    if (process.env.TREATY_TEXT_PERSIST_MODE == PersistMode.THREEBOX) {
       console.log("3box mode enabled");
       // const threebox = getState().threebox.threebox;
       const openSpace = getState().threebox.openSpace;
@@ -703,7 +723,7 @@ export const markActiveRequest = (treaty) => async (dispatch, getState) => {
     dispatch(loadOneTreaty(contractInstance));
     // dispatch(markActive(activeTreaty));
 
-    // const response = await fetch(`${treatyServer}/treaties/${id}/active`, {
+    // const response = await fetch(`${process.env.TREATY_SERVER}/treaties/${id}/active`, {
     //   headers: {
     //     "Content-Type": "application/json",
     //   },
@@ -736,7 +756,7 @@ export const joinTreatyRequest = (treaty) => async (dispatch, getState) => {
     console.log("tx", tx);
     dispatch(joinTreaty(treaty));
     dispatch(loadOneTreaty(contractInstance));
-    // const response = await fetch(`${treatyServer}/treaties/${id}/active`, {
+    // const response = await fetch(`${process.env.TREATY_SERVER}/treaties/${id}/active`, {
     //   headers: {
     //     "Content-Type": "application/json",
     //   },
@@ -759,7 +779,7 @@ export const addTreatyRequest = (text) => async (dispatch, getState) => {
     const currentAccount = getState("web3").web3.account;
     const contractCode = "0x" + TreatyBin.bin;
     const parameters = TreatyContract.abi;
-    var _id = Math.floor(Math.random() * 10 ** ID_SIZE);
+    var _id = Math.floor(Math.random() * 10 ** process.env.ID_SIZE);
     var _name = text;
     var _initialText = "Initial text for " + text;
     console.log(
@@ -888,8 +908,8 @@ export const addTreatyTextRequest = (treaty, text) => async (
     const { contractInstance } = treaty;
     const currentAccount = getState().web3.account;
 
-    console.log("mode", TREATY_TEXT_PERSIST_MODE);
-    switch (TREATY_TEXT_PERSIST_MODE) {
+    console.log("mode", process.env.TREATY_TEXT_PERSIST_MODE);
+    switch (process.env.TREATY_TEXT_PERSIST_MODE) {
       case PersistMode.ONCHAIN:
         console.log("write to chain");
         const tx = await contractInstance.methods
@@ -938,7 +958,7 @@ export const addTreatyTextRequest = (treaty, text) => async (
 
         //get posts with:
         const unsignedTreatyText = await unsignedTreatyTextThread.getPosts({
-          limit: THREEBOX_POST_LIMIT,
+          limit: process.env.THREEBOX_POST_LIMIT,
         });
         //console.log("thread says: ", unsignedTreatyText);
 
@@ -958,13 +978,16 @@ export const addTreatyTextRequest = (treaty, text) => async (
         break;
 
       case PersistMode.MONGO:
-        const response = await fetch(`${treatyServer}/treaties/${id}/text`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ text }),
-          method: "post",
-        });
+        const response = await fetch(
+          `${process.env.TREATY_SERVER}/treaties/${id}/text`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ text }),
+            method: "post",
+          }
+        );
         const updatedTreaty = await response.json();
         //console.log(updatedTreaty);
         break;
@@ -1013,69 +1036,39 @@ export const signTreatyRequest = (treaty) => async (dispatch, getState) => {
   const { id, address, contractInstance } = treaty;
   const currentAccount = getState().web3.account;
   try {
-    // if (TREATY_TEXT_PERSIST_MODE == PersistMode.THREEBOX) {
-    //   const threebox = getState().threebox.threebox;
-    //   const openSpace = getState().threebox.openSpace;
-    //   const contentBeingSigned = get3boxUnsignedTreatyText(
-    //     threebox,
-    //     openSpace,
-    //     id
-    //   );
+    if (process.env.TREATY_TEXT_PERSIST_MODE == PersistMode.THREEBOX) {
+      const threebox = getState().threebox.threebox;
+      const openSpace = getState().threebox.openSpace;
+      const contentBeingSigned = get3boxUnsignedTreatyText(
+        threebox,
+        openSpace,
+        id
+      );
+      const verify = confirm(`Sign content?\n${contentBeingSigned}`);
+      if (!verify) throw "User did not sign";
 
-    //   //show this content in a modal for verification
-    //   //hash the content, and store the result onchain
-    //   //we need to convert contentToBeSigned to bytes32, as this is what the contract expects
-    //   //web3.fromAscii may work
-    //   const hash = await contractInstance.methods
-    //     .calcSHA3(contentBeingSigned)
-    //     .call();
-    //   console.log("hash");
-    //   console.log(hash);
-
-    //   //is this hash already saved on the contract?
-    //   const verify = confirm("Sign content?");
-    //   if (!verify) throw "User did not sign";
-
-    //   const onchainHash = await contractInstance.methods
-    //     .getUnsignedTreatyText(0)
-    //     .call();
-
-    //   if (onchainHash == hash) {
-    //     console.log("this hash is already onchain");
-    //   } else {
-    //     console.log("adding hash to chain");
-    //     const addHashTx = await contractInstance.methods
-    //       .addTextToTreaty(hash)
-    //       .send({ from: currentAccount });
-    //     console.log("addHashTx");
-    //     console.log(addHashTx);
-    //   }
-    // }
-
-    const tx = await contractInstance.methods
-      .signTreaty()
-      .send({ from: currentAccount });
-    console.log("tx");
-    console.log(tx);
-
-    const signTransactionBlock = tx.blockNumber;
-
-    //if we are using 3box,
-    //and this is the last signature needed to sign,
-    //we will need to move the unsigned thread to the signed thread
-    console.log("tx.events");
-    console.log(tx.events);
+      //hash the content, and store the result onchain
+      const hash = Web3.utils.keccak256(contentBeingSigned);
+      const tx = await contractInstance.methods
+        .signHash()
+        .send({ from: currentAccount });
+      console.log("sign tx", tx);
+    } else {
+      const tx = await contractInstance.methods
+        .signTreaty()
+        .send({ from: currentAccount });
+      console.log("sign tx", tx);
+    }
 
     if (tx.events.SignedByAll != undefined) {
       console.log(
-        `Signed by all. Signature: ${tx.events.SignedByAll.signature}`
+        `Signed by all in block ${tx.blockNumber}. Signature: ${tx.events.SignedByAll.signature}`
       );
 
       //todo: Replace with code that waits until openSpace is added to state
-      console.log("About to wait 6 seconds");
-      await delay(6000, "done");
+      console.log("About to wait 2 seconds");
+      await delay(2000, "done");
       const openSpace = getState().threebox.openSpace;
-
       const {
         signedTreatyTextThread,
         unsignedTreatyTextThread,
@@ -1118,13 +1111,13 @@ async function sign3boxTreatyText(treaty, openSpace, myAddress) {
 
   console.log(`moderators ${unsignedTreatyTextThread.listModerators()}`);
   const unsignedTreatyText = await unsignedTreatyTextThread.getPosts({
-    limit: THREEBOX_POST_LIMIT,
+    limit: process.env.THREEBOX_POST_LIMIT,
   });
   const signedTreatyTextThread = await openSpace.joinThread(
     `signed-treaty-text-${treatyId}`
   );
   const existingSignedTreatyText = await signedTreatyTextThread.getPosts({
-    limit: THREEBOX_POST_LIMIT,
+    limit: process.env.THREEBOX_POST_LIMIT,
   });
   console.log("unsignedTreatyText:", unsignedTreatyText);
   for (var i in unsignedTreatyText) {
