@@ -36,6 +36,10 @@ const ActiveTreatyListItem = ({
         #{treaty.id}&nbsp;
         {treaty.text}
       </h3>
+      <h3>
+        Balance:&nbsp;
+        {treaty.balance}
+      </h3>
       <p>
         Created at:&nbsp;
         {new Date(treaty.createdAt * 1000).toLocaleDateString()}
@@ -72,7 +76,10 @@ const ActiveTreatyListItem = ({
           overlay={developerInfoPopover(treaty)}
         > */}
         <SignedText>
-          {treaty.signedTreatyText.length === 0 ? null : <h3>Signed</h3>}
+          {treaty.signedTreatyText.length === 0 ||
+          treaty.signedTreatyText[0] == "" ? null : (
+            <h3>Signed</h3>
+          )}
           {treaty.signedTreatyText.length > 0 &&
             treaty.signedTreatyText.map((text) => <p>{text}</p>)}
         </SignedText>

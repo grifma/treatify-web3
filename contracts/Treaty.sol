@@ -127,26 +127,6 @@ contract Treaty is AccessRestriction {
     }
   }
 
-  // function signHash(string memory _hash)
-  //   public
-  //   inState(States.Active)
-  //   stateChange()
-  // {
-  //   require(
-  //     signatureState[msg.sender] == SignatureState.Unsigned,
-  //     "Unexpected signature"
-  //   );
-  //   if (!compareStrings(_hash, getLastUnsignedText())) {
-  //     resetSignatures();
-  //     emit WriteToTreaty(_hash);
-  //   }
-  //   signatureState[msg.sender] = SignatureState.Signed;
-  //   emit SignedBy(msg.sender, _hash);
-  //   if (allSignaturesInState(SignatureState.Signed)) {
-  //     confirmTreatyText();
-  //   }
-  // }
-
   function signHash(bytes32 _hash) public inState(States.Active) stateChange() {
     require(
       signatureState[msg.sender] == SignatureState.Unsigned,
@@ -340,10 +320,16 @@ contract Treaty is AccessRestriction {
   }
 
   function getLastUnsignedText() public view returns (string memory) {
+    if (unsignedTreatyText.length == 0) {
+      return "No unsigned text";
+    }
     return unsignedTreatyText[unsignedTreatyText.length - 1];
   }
 
   function getLastSignedText() public view returns (string memory) {
+    if (signedTreatyText.length == 0) {
+      return "No signed text";
+    }
     return signedTreatyText[signedTreatyText.length - 1];
   }
 
@@ -359,22 +345,5 @@ contract Treaty is AccessRestriction {
       return bytes32(0x0);
     }
     return signedHash[signedHash.length - 1];
-  }
-
-  // function compareStrings(string memory a, string memory b)
-  //   public
-  //   view
-  //   returns (bool)
-  // {
-  //   return (keccak256(abi.encodePacked((a))) ==
-  //     keccak256(abi.encodePacked((b))));
-  // }
-
-  function compareStrings(string memory a, string memory b)
-    public
-    view
-    returns (bool)
-  {
-    return true;
   }
 }

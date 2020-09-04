@@ -7,8 +7,10 @@ import {
   loadEthersSigner,
   loadAccount,
   loadTreatyIndex,
+  loadTreatyIndexWeb3,
   loadTreatyContract,
   loadTreatyIndexContract,
+  loadTreatyIndexContractWeb3,
   loadStoredData,
   loadTreatiesWeb3,
   load3box,
@@ -83,7 +85,8 @@ const TreatyWeb3 = ({
       const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
       const treatyIndex = await startLoadTreatyIndex(treatyIndexContract);
       startSubscribeToAccountsChanging(myWeb3);
-      const treaties = await startLoadTreatiesWeb3();
+      const treaties = await startLoadTreatiesWeb3(myWeb3, treatyIndex);
+      console.log("treaties :>>> ", treaties);
       startSubscribeToAllLogs(web3);
       startSubscribeToNewTreaties();
       startSubscribeToNewSignatures();
@@ -265,9 +268,9 @@ function mapDispatchToProps(dispatch) {
     startLoadWeb3: () => dispatch(loadWeb3()),
     startLoadAccount: (myWeb3) => dispatch(loadAccount(myWeb3)),
     startLoadTreatyIndex: (treatyIndexContract) =>
-      dispatch(loadTreatyIndex(treatyIndexContract)),
+      dispatch(loadTreatyIndexWeb3(treatyIndexContract)),
     startLoadTreatyIndexContract: (myWeb3) =>
-      dispatch(loadTreatyIndexContract(myWeb3)),
+      dispatch(loadTreatyIndexContractWeb3(myWeb3)),
     startSubscribeToAccountsChanging: (web3) =>
       dispatch(subscribeToAccountsChanging(web3)),
     startLoadTreatiesWeb3: (web3, treatyIndex) => dispatch(loadTreatiesWeb3()),

@@ -4,8 +4,8 @@ var Treaty = artifacts.require("./Treaty.sol");
 
 module.exports = async function (deployer) {
   // await deployer.deploy(StringUtils);
-  await deployer.deploy(Treaty, 123, "Test Treaty", "Details of Test Treaty");
-  await deployer.deploy(TreatyIndex, "A treaty index").then(() => {
+  deployer.deploy(Treaty, 123, "Test Treaty", "Details of Test Treaty");
+  deployer.deploy(TreatyIndex, "A treaty index").then(() => {
     TreatyIndex.deployed().then((treatyIndex) => {
       deployer
         .deploy(Treaty, 1, "A treaty", "Some treaty text")

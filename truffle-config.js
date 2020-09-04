@@ -12,6 +12,17 @@ module.exports = {
       network_id: "*",
       port: 8545,
     },
+    devvps: {
+      provider: function () {
+        return new HDWalletProvider(
+          mnemonic,
+          "http://161.97.97.238:8547",
+          0,
+          1
+        );
+      },
+      network_id: "*",
+    },
     truffleteams: {
       provider: function () {
         return new HDWalletProvider(

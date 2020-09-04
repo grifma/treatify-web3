@@ -89,7 +89,7 @@ export function loadTreatiesFailure() {
 // export const loadTreaties = () => async (dispatch, getState) => {
 //   try {
 //     dispatch(loadTreatiesInProgress());
-//     const response = await fetch(`${treatyServer}/treaties`);
+//     const response = await fetch(`${process.env.TREATY_SERVER}/treaties`);
 //     const treaties = await response.json();
 //     dispatch(loadTreatiesSuccess(treaties));
 //   } catch (e) {

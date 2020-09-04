@@ -235,14 +235,14 @@
     "absolutePath": "/home/grifma/Code/treatify-web3/contracts/TreatyIndex.sol",
     "exportedSymbols": {
       "TreatyIndex": [
-        1516
+        1615
       ]
     },
-    "id": 1517,
+    "id": 1616,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1377,
+        "id": 1476,
         "literals": [
           "solidity",
           "^",
@@ -255,9 +255,9 @@
       {
         "absolutePath": "/home/grifma/Code/treatify-web3/contracts/AccessRestriction.sol",
         "file": "./AccessRestriction.sol",
-        "id": 1378,
+        "id": 1477,
         "nodeType": "ImportDirective",
-        "scope": 1517,
+        "scope": 1616,
         "sourceUnit": 116,
         "src": "26:33:4",
         "symbolAliases": [],
@@ -269,7 +269,7 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 1379,
+              "id": 1478,
               "name": "AccessRestriction",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 115,
@@ -279,7 +279,7 @@
                 "typeString": "contract AccessRestriction"
               }
             },
-            "id": 1380,
+            "id": 1479,
             "nodeType": "InheritanceSpecifier",
             "src": "85:17:4"
           }
@@ -290,9 +290,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 1516,
+        "id": 1615,
         "linearizedBaseContracts": [
-          1516,
+          1615,
           115
         ],
         "name": "TreatyIndex",
@@ -300,10 +300,10 @@
         "nodes": [
           {
             "constant": false,
-            "id": 1383,
+            "id": 1482,
             "name": "treatyIndex",
             "nodeType": "VariableDeclaration",
-            "scope": 1516,
+            "scope": 1615,
             "src": "107:28:4",
             "stateVariable": true,
             "storageLocation": "default",
@@ -313,7 +313,7 @@
             },
             "typeName": {
               "baseType": {
-                "id": 1381,
+                "id": 1480,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "107:7:4",
@@ -323,7 +323,7 @@
                   "typeString": "address"
                 }
               },
-              "id": 1382,
+              "id": 1481,
               "length": null,
               "nodeType": "ArrayTypeName",
               "src": "107:9:4",
@@ -337,10 +337,10 @@
           },
           {
             "constant": false,
-            "id": 1385,
+            "id": 1484,
             "name": "name",
             "nodeType": "VariableDeclaration",
-            "scope": 1516,
+            "scope": 1615,
             "src": "139:18:4",
             "stateVariable": true,
             "storageLocation": "default",
@@ -349,7 +349,7 @@
               "typeString": "string"
             },
             "typeName": {
-              "id": 1384,
+              "id": 1483,
               "name": "string",
               "nodeType": "ElementaryTypeName",
               "src": "139:6:4",
@@ -364,20 +364,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 1389,
+            "id": 1488,
             "name": "AddTreaty",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 1388,
+              "id": 1487,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1387,
+                  "id": 1486,
                   "indexed": true,
                   "name": "_treatyAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1389,
+                  "scope": 1488,
                   "src": "178:30:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -386,7 +386,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1386,
+                    "id": 1485,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "178:7:4",
@@ -407,20 +407,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 1393,
+            "id": 1492,
             "name": "DeleteTreaty",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 1392,
+              "id": 1491,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1391,
+                  "id": 1490,
                   "indexed": true,
                   "name": "_treatyAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1393,
+                  "scope": 1492,
                   "src": "232:30:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -429,7 +429,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1390,
+                    "id": 1489,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "232:7:4",
@@ -450,20 +450,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 1399,
+            "id": 1498,
             "name": "Rename",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 1398,
+              "id": 1497,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1395,
+                  "id": 1494,
                   "indexed": true,
                   "name": "_oldName",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1399,
+                  "scope": 1498,
                   "src": "280:23:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -472,7 +472,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1394,
+                    "id": 1493,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "280:6:4",
@@ -486,11 +486,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 1397,
+                  "id": 1496,
                   "indexed": true,
                   "name": "_newName",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1399,
+                  "scope": 1498,
                   "src": "305:23:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -499,7 +499,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1396,
+                    "id": 1495,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "305:6:4",
@@ -518,25 +518,25 @@
           },
           {
             "body": {
-              "id": 1408,
+              "id": 1507,
               "nodeType": "Block",
               "src": "374:23:4",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1406,
+                    "id": 1505,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1404,
+                      "id": 1503,
                       "name": "name",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1385,
+                      "referencedDeclaration": 1484,
                       "src": "380:4:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_storage",
@@ -547,11 +547,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 1405,
+                      "id": 1504,
                       "name": "_name",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1401,
+                      "referencedDeclaration": 1500,
                       "src": "387:5:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_memory_ptr",
@@ -564,29 +564,29 @@
                       "typeString": "string storage ref"
                     }
                   },
-                  "id": 1407,
+                  "id": 1506,
                   "nodeType": "ExpressionStatement",
                   "src": "380:12:4"
                 }
               ]
             },
             "documentation": null,
-            "id": 1409,
+            "id": 1508,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1402,
+              "id": 1501,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1401,
+                  "id": 1500,
                   "name": "_name",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1409,
+                  "scope": 1508,
                   "src": "346:19:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -595,7 +595,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1400,
+                    "id": 1499,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "346:6:4",
@@ -611,12 +611,12 @@
               "src": "345:21:4"
             },
             "returnParameters": {
-              "id": 1403,
+              "id": 1502,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "374:0:4"
             },
-            "scope": 1516,
+            "scope": 1615,
             "src": "334:63:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -624,7 +624,7 @@
           },
           {
             "body": {
-              "id": 1417,
+              "id": 1516,
               "nodeType": "Block",
               "src": "457:36:4",
               "statements": [
@@ -633,18 +633,18 @@
                     "argumentTypes": null,
                     "expression": {
                       "argumentTypes": null,
-                      "id": 1414,
+                      "id": 1513,
                       "name": "treatyIndex",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1383,
+                      "referencedDeclaration": 1482,
                       "src": "470:11:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_array$_t_address_$dyn_storage",
                         "typeString": "address[] storage ref"
                       }
                     },
-                    "id": 1415,
+                    "id": 1514,
                     "isConstant": false,
                     "isLValue": true,
                     "isPure": false,
@@ -658,36 +658,36 @@
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 1413,
-                  "id": 1416,
+                  "functionReturnParameters": 1512,
+                  "id": 1515,
                   "nodeType": "Return",
                   "src": "463:25:4"
                 }
               ]
             },
             "documentation": null,
-            "id": 1418,
+            "id": 1517,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getNumTreaties",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1410,
+              "id": 1509,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "424:2:4"
             },
             "returnParameters": {
-              "id": 1413,
+              "id": 1512,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1412,
+                  "id": 1511,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1418,
+                  "scope": 1517,
                   "src": "448:7:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -696,7 +696,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1411,
+                    "id": 1510,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "448:7:4",
@@ -711,7 +711,7 @@
               ],
               "src": "447:9:4"
             },
-            "scope": 1516,
+            "scope": 1615,
             "src": "401:92:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -719,21 +719,21 @@
           },
           {
             "body": {
-              "id": 1439,
+              "id": 1538,
               "nodeType": "Block",
               "src": "555:90:4",
               "statements": [
                 {
                   "assignments": [
-                    1427
+                    1526
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 1427,
+                      "id": 1526,
                       "name": "oldName",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1439,
+                      "scope": 1538,
                       "src": "561:21:4",
                       "stateVariable": false,
                       "storageLocation": "memory",
@@ -742,7 +742,7 @@
                         "typeString": "string"
                       },
                       "typeName": {
-                        "id": 1426,
+                        "id": 1525,
                         "name": "string",
                         "nodeType": "ElementaryTypeName",
                         "src": "561:6:4",
@@ -755,14 +755,14 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 1429,
+                  "id": 1528,
                   "initialValue": {
                     "argumentTypes": null,
-                    "id": 1428,
+                    "id": 1527,
                     "name": "name",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 1385,
+                    "referencedDeclaration": 1484,
                     "src": "585:4:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage",
@@ -775,18 +775,18 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1432,
+                    "id": 1531,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1430,
+                      "id": 1529,
                       "name": "name",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1385,
+                      "referencedDeclaration": 1484,
                       "src": "595:4:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_storage",
@@ -797,11 +797,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 1431,
+                      "id": 1530,
                       "name": "_name",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1420,
+                      "referencedDeclaration": 1519,
                       "src": "602:5:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_memory_ptr",
@@ -814,7 +814,7 @@
                       "typeString": "string storage ref"
                     }
                   },
-                  "id": 1433,
+                  "id": 1532,
                   "nodeType": "ExpressionStatement",
                   "src": "595:12:4"
                 },
@@ -824,11 +824,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 1435,
+                        "id": 1534,
                         "name": "oldName",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1427,
+                        "referencedDeclaration": 1526,
                         "src": "625:7:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -837,11 +837,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 1436,
+                        "id": 1535,
                         "name": "_name",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1420,
+                        "referencedDeclaration": 1519,
                         "src": "634:5:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -860,18 +860,18 @@
                           "typeString": "string memory"
                         }
                       ],
-                      "id": 1434,
+                      "id": 1533,
                       "name": "Rename",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1399,
+                      "referencedDeclaration": 1498,
                       "src": "618:6:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_string_memory_ptr_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (string memory,string memory)"
                       }
                     },
-                    "id": 1437,
+                    "id": 1536,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -885,14 +885,14 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1438,
+                  "id": 1537,
                   "nodeType": "EmitStatement",
                   "src": "613:27:4"
                 }
               ]
             },
             "documentation": null,
-            "id": 1440,
+            "id": 1539,
             "implemented": true,
             "kind": "function",
             "modifiers": [
@@ -900,7 +900,7 @@
                 "arguments": [
                   {
                     "argumentTypes": null,
-                    "id": 1423,
+                    "id": 1522,
                     "name": "owner",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
@@ -912,10 +912,10 @@
                     }
                   }
                 ],
-                "id": 1424,
+                "id": 1523,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 1422,
+                  "id": 1521,
                   "name": "onlyBy",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
@@ -933,15 +933,15 @@
             "name": "rename",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1421,
+              "id": 1520,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1420,
+                  "id": 1519,
                   "name": "_name",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1440,
+                  "scope": 1539,
                   "src": "513:19:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -950,7 +950,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1419,
+                    "id": 1518,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "513:6:4",
@@ -966,12 +966,12 @@
               "src": "512:21:4"
             },
             "returnParameters": {
-              "id": 1425,
+              "id": 1524,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "555:0:4"
             },
-            "scope": 1516,
+            "scope": 1615,
             "src": "497:148:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -979,7 +979,7 @@
           },
           {
             "body": {
-              "id": 1455,
+              "id": 1554,
               "nodeType": "Block",
               "src": "699:79:4",
               "statements": [
@@ -989,11 +989,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 1448,
+                        "id": 1547,
                         "name": "_treatyAddress",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1442,
+                        "referencedDeclaration": 1541,
                         "src": "722:14:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1010,18 +1010,18 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 1445,
+                        "id": 1544,
                         "name": "treatyIndex",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1383,
+                        "referencedDeclaration": 1482,
                         "src": "705:11:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_address_$dyn_storage",
                           "typeString": "address[] storage ref"
                         }
                       },
-                      "id": 1447,
+                      "id": 1546,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1035,7 +1035,7 @@
                         "typeString": "function (address) returns (uint256)"
                       }
                     },
-                    "id": 1449,
+                    "id": 1548,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1049,7 +1049,7 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 1450,
+                  "id": 1549,
                   "nodeType": "ExpressionStatement",
                   "src": "705:32:4"
                 },
@@ -1059,11 +1059,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 1452,
+                        "id": 1551,
                         "name": "_treatyAddress",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1442,
+                        "referencedDeclaration": 1541,
                         "src": "758:14:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1078,18 +1078,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 1451,
+                      "id": 1550,
                       "name": "AddTreaty",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1389,
+                      "referencedDeclaration": 1488,
                       "src": "748:9:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 1453,
+                    "id": 1552,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1103,29 +1103,29 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1454,
+                  "id": 1553,
                   "nodeType": "EmitStatement",
                   "src": "743:30:4"
                 }
               ]
             },
             "documentation": null,
-            "id": 1456,
+            "id": 1555,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "addTreaty",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1443,
+              "id": 1542,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1442,
+                  "id": 1541,
                   "name": "_treatyAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1456,
+                  "scope": 1555,
                   "src": "668:22:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1134,7 +1134,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1441,
+                    "id": 1540,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "668:7:4",
@@ -1151,12 +1151,12 @@
               "src": "667:24:4"
             },
             "returnParameters": {
-              "id": 1444,
+              "id": 1543,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "699:0:4"
             },
-            "scope": 1516,
+            "scope": 1615,
             "src": "649:129:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1164,21 +1164,21 @@
           },
           {
             "body": {
-              "id": 1505,
+              "id": 1604,
               "nodeType": "Block",
               "src": "849:298:4",
               "statements": [
                 {
                   "assignments": [
-                    1465
+                    1564
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 1465,
+                      "id": 1564,
                       "name": "addressToDelete",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1505,
+                      "scope": 1604,
                       "src": "855:23:4",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -1187,7 +1187,7 @@
                         "typeString": "address"
                       },
                       "typeName": {
-                        "id": 1464,
+                        "id": 1563,
                         "name": "address",
                         "nodeType": "ElementaryTypeName",
                         "src": "855:7:4",
@@ -1201,30 +1201,30 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 1469,
+                  "id": 1568,
                   "initialValue": {
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 1466,
+                      "id": 1565,
                       "name": "treatyIndex",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1383,
+                      "referencedDeclaration": 1482,
                       "src": "881:11:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_array$_t_address_$dyn_storage",
                         "typeString": "address[] storage ref"
                       }
                     },
-                    "id": 1468,
+                    "id": 1567,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 1467,
+                      "id": 1566,
                       "name": "_indexToDelete",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1458,
+                      "referencedDeclaration": 1557,
                       "src": "893:14:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -1247,15 +1247,15 @@
                 },
                 {
                   "assignments": [
-                    1471
+                    1570
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 1471,
+                      "id": 1570,
                       "name": "addressToMove",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1505,
+                      "scope": 1604,
                       "src": "914:21:4",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -1264,7 +1264,7 @@
                         "typeString": "address"
                       },
                       "typeName": {
-                        "id": 1470,
+                        "id": 1569,
                         "name": "address",
                         "nodeType": "ElementaryTypeName",
                         "src": "914:7:4",
@@ -1278,30 +1278,30 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 1478,
+                  "id": 1577,
                   "initialValue": {
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 1472,
+                      "id": 1571,
                       "name": "treatyIndex",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1383,
+                      "referencedDeclaration": 1482,
                       "src": "938:11:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_array$_t_address_$dyn_storage",
                         "typeString": "address[] storage ref"
                       }
                     },
-                    "id": 1477,
+                    "id": 1576,
                     "indexExpression": {
                       "argumentTypes": null,
                       "commonType": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       },
-                      "id": 1476,
+                      "id": 1575,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1310,18 +1310,18 @@
                         "argumentTypes": null,
                         "expression": {
                           "argumentTypes": null,
-                          "id": 1473,
+                          "id": 1572,
                           "name": "treatyIndex",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1383,
+                          "referencedDeclaration": 1482,
                           "src": "950:11:4",
                           "typeDescriptions": {
                             "typeIdentifier": "t_array$_t_address_$dyn_storage",
                             "typeString": "address[] storage ref"
                           }
                         },
-                        "id": 1474,
+                        "id": 1573,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
@@ -1340,7 +1340,7 @@
                       "rightExpression": {
                         "argumentTypes": null,
                         "hexValue": "31",
-                        "id": 1475,
+                        "id": 1574,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1378,7 +1378,7 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1483,
+                    "id": 1582,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1387,25 +1387,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 1479,
+                        "id": 1578,
                         "name": "treatyIndex",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1383,
+                        "referencedDeclaration": 1482,
                         "src": "979:11:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_address_$dyn_storage",
                           "typeString": "address[] storage ref"
                         }
                       },
-                      "id": 1481,
+                      "id": 1580,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 1480,
+                        "id": 1579,
                         "name": "_indexToDelete",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1458,
+                        "referencedDeclaration": 1557,
                         "src": "991:14:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -1427,11 +1427,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 1482,
+                      "id": 1581,
                       "name": "addressToMove",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1471,
+                      "referencedDeclaration": 1570,
                       "src": "1009:13:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -1444,14 +1444,14 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 1484,
+                  "id": 1583,
                   "nodeType": "ExpressionStatement",
                   "src": "979:43:4"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1494,
+                    "id": 1593,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1460,25 +1460,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 1485,
+                        "id": 1584,
                         "name": "treatyIndex",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1383,
+                        "referencedDeclaration": 1482,
                         "src": "1028:11:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_address_$dyn_storage",
                           "typeString": "address[] storage ref"
                         }
                       },
-                      "id": 1490,
+                      "id": 1589,
                       "indexExpression": {
                         "argumentTypes": null,
                         "commonType": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         },
-                        "id": 1489,
+                        "id": 1588,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1487,18 +1487,18 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 1486,
+                            "id": 1585,
                             "name": "treatyIndex",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1383,
+                            "referencedDeclaration": 1482,
                             "src": "1040:11:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_array$_t_address_$dyn_storage",
                               "typeString": "address[] storage ref"
                             }
                           },
-                          "id": 1487,
+                          "id": 1586,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
@@ -1517,7 +1517,7 @@
                         "rightExpression": {
                           "argumentTypes": null,
                           "hexValue": "31",
-                          "id": 1488,
+                          "id": 1587,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -1557,7 +1557,7 @@
                         {
                           "argumentTypes": null,
                           "hexValue": "30",
-                          "id": 1492,
+                          "id": 1591,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -1580,7 +1580,7 @@
                             "typeString": "int_const 0"
                           }
                         ],
-                        "id": 1491,
+                        "id": 1590,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1593,7 +1593,7 @@
                         },
                         "typeName": "address"
                       },
-                      "id": 1493,
+                      "id": 1592,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -1613,14 +1613,14 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 1495,
+                  "id": 1594,
                   "nodeType": "ExpressionStatement",
                   "src": "1028:48:4"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1499,
+                    "id": 1598,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1633,18 +1633,18 @@
                       "argumentTypes": null,
                       "expression": {
                         "argumentTypes": null,
-                        "id": 1496,
+                        "id": 1595,
                         "name": "treatyIndex",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1383,
+                        "referencedDeclaration": 1482,
                         "src": "1082:11:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_address_$dyn_storage",
                           "typeString": "address[] storage ref"
                         }
                       },
-                      "id": 1498,
+                      "id": 1597,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
@@ -1663,7 +1663,7 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 1500,
+                  "id": 1599,
                   "nodeType": "ExpressionStatement",
                   "src": "1082:20:4"
                 },
@@ -1673,11 +1673,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 1502,
+                        "id": 1601,
                         "name": "addressToDelete",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1465,
+                        "referencedDeclaration": 1564,
                         "src": "1126:15:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1692,18 +1692,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 1501,
+                      "id": 1600,
                       "name": "DeleteTreaty",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1393,
+                      "referencedDeclaration": 1492,
                       "src": "1113:12:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 1503,
+                    "id": 1602,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1717,14 +1717,14 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1504,
+                  "id": 1603,
                   "nodeType": "EmitStatement",
                   "src": "1108:34:4"
                 }
               ]
             },
             "documentation": null,
-            "id": 1506,
+            "id": 1605,
             "implemented": true,
             "kind": "function",
             "modifiers": [
@@ -1732,7 +1732,7 @@
                 "arguments": [
                   {
                     "argumentTypes": null,
-                    "id": 1461,
+                    "id": 1560,
                     "name": "owner",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
@@ -1744,10 +1744,10 @@
                     }
                   }
                 ],
-                "id": 1462,
+                "id": 1561,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 1460,
+                  "id": 1559,
                   "name": "onlyBy",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
@@ -1765,15 +1765,15 @@
             "name": "deleteTreaty",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1459,
+              "id": 1558,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1458,
+                  "id": 1557,
                   "name": "_indexToDelete",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1506,
+                  "scope": 1605,
                   "src": "804:22:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1782,7 +1782,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1457,
+                    "id": 1556,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "804:7:4",
@@ -1798,12 +1798,12 @@
               "src": "803:24:4"
             },
             "returnParameters": {
-              "id": 1463,
+              "id": 1562,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "849:0:4"
             },
-            "scope": 1516,
+            "scope": 1615,
             "src": "782:365:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1811,54 +1811,54 @@
           },
           {
             "body": {
-              "id": 1514,
+              "id": 1613,
               "nodeType": "Block",
               "src": "1216:29:4",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1512,
+                    "id": 1611,
                     "name": "treatyIndex",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 1383,
+                    "referencedDeclaration": 1482,
                     "src": "1229:11:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_address_$dyn_storage",
                       "typeString": "address[] storage ref"
                     }
                   },
-                  "functionReturnParameters": 1511,
-                  "id": 1513,
+                  "functionReturnParameters": 1610,
+                  "id": 1612,
                   "nodeType": "Return",
                   "src": "1222:18:4"
                 }
               ]
             },
             "documentation": null,
-            "id": 1515,
+            "id": 1614,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getTreatyIndex",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1507,
+              "id": 1606,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1174:2:4"
             },
             "returnParameters": {
-              "id": 1511,
+              "id": 1610,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1510,
+                  "id": 1609,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1515,
+                  "scope": 1614,
                   "src": "1198:16:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1868,7 +1868,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 1508,
+                      "id": 1607,
                       "name": "address",
                       "nodeType": "ElementaryTypeName",
                       "src": "1198:7:4",
@@ -1878,7 +1878,7 @@
                         "typeString": "address"
                       }
                     },
-                    "id": 1509,
+                    "id": 1608,
                     "length": null,
                     "nodeType": "ArrayTypeName",
                     "src": "1198:9:4",
@@ -1893,14 +1893,14 @@
               ],
               "src": "1197:18:4"
             },
-            "scope": 1516,
+            "scope": 1615,
             "src": "1151:94:4",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 1517,
+        "scope": 1616,
         "src": "61:1186:4"
       }
     ],
@@ -1910,14 +1910,14 @@
     "absolutePath": "/home/grifma/Code/treatify-web3/contracts/TreatyIndex.sol",
     "exportedSymbols": {
       "TreatyIndex": [
-        1516
+        1615
       ]
     },
-    "id": 1517,
+    "id": 1616,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1377,
+        "id": 1476,
         "literals": [
           "solidity",
           "^",
@@ -1930,9 +1930,9 @@
       {
         "absolutePath": "/home/grifma/Code/treatify-web3/contracts/AccessRestriction.sol",
         "file": "./AccessRestriction.sol",
-        "id": 1378,
+        "id": 1477,
         "nodeType": "ImportDirective",
-        "scope": 1517,
+        "scope": 1616,
         "sourceUnit": 116,
         "src": "26:33:4",
         "symbolAliases": [],
@@ -1944,7 +1944,7 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 1379,
+              "id": 1478,
               "name": "AccessRestriction",
               "nodeType": "UserDefinedTypeName",
               "referencedDeclaration": 115,
@@ -1954,7 +1954,7 @@
                 "typeString": "contract AccessRestriction"
               }
             },
-            "id": 1380,
+            "id": 1479,
             "nodeType": "InheritanceSpecifier",
             "src": "85:17:4"
           }
@@ -1965,9 +1965,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 1516,
+        "id": 1615,
         "linearizedBaseContracts": [
-          1516,
+          1615,
           115
         ],
         "name": "TreatyIndex",
@@ -1975,10 +1975,10 @@
         "nodes": [
           {
             "constant": false,
-            "id": 1383,
+            "id": 1482,
             "name": "treatyIndex",
             "nodeType": "VariableDeclaration",
-            "scope": 1516,
+            "scope": 1615,
             "src": "107:28:4",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1988,7 +1988,7 @@
             },
             "typeName": {
               "baseType": {
-                "id": 1381,
+                "id": 1480,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "107:7:4",
@@ -1998,7 +1998,7 @@
                   "typeString": "address"
                 }
               },
-              "id": 1382,
+              "id": 1481,
               "length": null,
               "nodeType": "ArrayTypeName",
               "src": "107:9:4",
@@ -2012,10 +2012,10 @@
           },
           {
             "constant": false,
-            "id": 1385,
+            "id": 1484,
             "name": "name",
             "nodeType": "VariableDeclaration",
-            "scope": 1516,
+            "scope": 1615,
             "src": "139:18:4",
             "stateVariable": true,
             "storageLocation": "default",
@@ -2024,7 +2024,7 @@
               "typeString": "string"
             },
             "typeName": {
-              "id": 1384,
+              "id": 1483,
               "name": "string",
               "nodeType": "ElementaryTypeName",
               "src": "139:6:4",
@@ -2039,20 +2039,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 1389,
+            "id": 1488,
             "name": "AddTreaty",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 1388,
+              "id": 1487,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1387,
+                  "id": 1486,
                   "indexed": true,
                   "name": "_treatyAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1389,
+                  "scope": 1488,
                   "src": "178:30:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2061,7 +2061,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1386,
+                    "id": 1485,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "178:7:4",
@@ -2082,20 +2082,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 1393,
+            "id": 1492,
             "name": "DeleteTreaty",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 1392,
+              "id": 1491,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1391,
+                  "id": 1490,
                   "indexed": true,
                   "name": "_treatyAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1393,
+                  "scope": 1492,
                   "src": "232:30:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2104,7 +2104,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1390,
+                    "id": 1489,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "232:7:4",
@@ -2125,20 +2125,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 1399,
+            "id": 1498,
             "name": "Rename",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 1398,
+              "id": 1497,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1395,
+                  "id": 1494,
                   "indexed": true,
                   "name": "_oldName",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1399,
+                  "scope": 1498,
                   "src": "280:23:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2147,7 +2147,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1394,
+                    "id": 1493,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "280:6:4",
@@ -2161,11 +2161,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 1397,
+                  "id": 1496,
                   "indexed": true,
                   "name": "_newName",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1399,
+                  "scope": 1498,
                   "src": "305:23:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2174,7 +2174,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1396,
+                    "id": 1495,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "305:6:4",
@@ -2193,25 +2193,25 @@
           },
           {
             "body": {
-              "id": 1408,
+              "id": 1507,
               "nodeType": "Block",
               "src": "374:23:4",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1406,
+                    "id": 1505,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1404,
+                      "id": 1503,
                       "name": "name",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1385,
+                      "referencedDeclaration": 1484,
                       "src": "380:4:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_storage",
@@ -2222,11 +2222,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 1405,
+                      "id": 1504,
                       "name": "_name",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1401,
+                      "referencedDeclaration": 1500,
                       "src": "387:5:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_memory_ptr",
@@ -2239,29 +2239,29 @@
                       "typeString": "string storage ref"
                     }
                   },
-                  "id": 1407,
+                  "id": 1506,
                   "nodeType": "ExpressionStatement",
                   "src": "380:12:4"
                 }
               ]
             },
             "documentation": null,
-            "id": 1409,
+            "id": 1508,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1402,
+              "id": 1501,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1401,
+                  "id": 1500,
                   "name": "_name",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1409,
+                  "scope": 1508,
                   "src": "346:19:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -2270,7 +2270,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1400,
+                    "id": 1499,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "346:6:4",
@@ -2286,12 +2286,12 @@
               "src": "345:21:4"
             },
             "returnParameters": {
-              "id": 1403,
+              "id": 1502,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "374:0:4"
             },
-            "scope": 1516,
+            "scope": 1615,
             "src": "334:63:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -2299,7 +2299,7 @@
           },
           {
             "body": {
-              "id": 1417,
+              "id": 1516,
               "nodeType": "Block",
               "src": "457:36:4",
               "statements": [
@@ -2308,18 +2308,18 @@
                     "argumentTypes": null,
                     "expression": {
                       "argumentTypes": null,
-                      "id": 1414,
+                      "id": 1513,
                       "name": "treatyIndex",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1383,
+                      "referencedDeclaration": 1482,
                       "src": "470:11:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_array$_t_address_$dyn_storage",
                         "typeString": "address[] storage ref"
                       }
                     },
-                    "id": 1415,
+                    "id": 1514,
                     "isConstant": false,
                     "isLValue": true,
                     "isPure": false,
@@ -2333,36 +2333,36 @@
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 1413,
-                  "id": 1416,
+                  "functionReturnParameters": 1512,
+                  "id": 1515,
                   "nodeType": "Return",
                   "src": "463:25:4"
                 }
               ]
             },
             "documentation": null,
-            "id": 1418,
+            "id": 1517,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getNumTreaties",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1410,
+              "id": 1509,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "424:2:4"
             },
             "returnParameters": {
-              "id": 1413,
+              "id": 1512,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1412,
+                  "id": 1511,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1418,
+                  "scope": 1517,
                   "src": "448:7:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2371,7 +2371,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1411,
+                    "id": 1510,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "448:7:4",
@@ -2386,7 +2386,7 @@
               ],
               "src": "447:9:4"
             },
-            "scope": 1516,
+            "scope": 1615,
             "src": "401:92:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -2394,21 +2394,21 @@
           },
           {
             "body": {
-              "id": 1439,
+              "id": 1538,
               "nodeType": "Block",
               "src": "555:90:4",
               "statements": [
                 {
                   "assignments": [
-                    1427
+                    1526
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 1427,
+                      "id": 1526,
                       "name": "oldName",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1439,
+                      "scope": 1538,
                       "src": "561:21:4",
                       "stateVariable": false,
                       "storageLocation": "memory",
@@ -2417,7 +2417,7 @@
                         "typeString": "string"
                       },
                       "typeName": {
-                        "id": 1426,
+                        "id": 1525,
                         "name": "string",
                         "nodeType": "ElementaryTypeName",
                         "src": "561:6:4",
@@ -2430,14 +2430,14 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 1429,
+                  "id": 1528,
                   "initialValue": {
                     "argumentTypes": null,
-                    "id": 1428,
+                    "id": 1527,
                     "name": "name",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 1385,
+                    "referencedDeclaration": 1484,
                     "src": "585:4:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage",
@@ -2450,18 +2450,18 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1432,
+                    "id": 1531,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1430,
+                      "id": 1529,
                       "name": "name",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1385,
+                      "referencedDeclaration": 1484,
                       "src": "595:4:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_storage",
@@ -2472,11 +2472,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 1431,
+                      "id": 1530,
                       "name": "_name",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1420,
+                      "referencedDeclaration": 1519,
                       "src": "602:5:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_memory_ptr",
@@ -2489,7 +2489,7 @@
                       "typeString": "string storage ref"
                     }
                   },
-                  "id": 1433,
+                  "id": 1532,
                   "nodeType": "ExpressionStatement",
                   "src": "595:12:4"
                 },
@@ -2499,11 +2499,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 1435,
+                        "id": 1534,
                         "name": "oldName",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1427,
+                        "referencedDeclaration": 1526,
                         "src": "625:7:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -2512,11 +2512,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 1436,
+                        "id": 1535,
                         "name": "_name",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1420,
+                        "referencedDeclaration": 1519,
                         "src": "634:5:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -2535,18 +2535,18 @@
                           "typeString": "string memory"
                         }
                       ],
-                      "id": 1434,
+                      "id": 1533,
                       "name": "Rename",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1399,
+                      "referencedDeclaration": 1498,
                       "src": "618:6:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_string_memory_ptr_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (string memory,string memory)"
                       }
                     },
-                    "id": 1437,
+                    "id": 1536,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2560,14 +2560,14 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1438,
+                  "id": 1537,
                   "nodeType": "EmitStatement",
                   "src": "613:27:4"
                 }
               ]
             },
             "documentation": null,
-            "id": 1440,
+            "id": 1539,
             "implemented": true,
             "kind": "function",
             "modifiers": [
@@ -2575,7 +2575,7 @@
                 "arguments": [
                   {
                     "argumentTypes": null,
-                    "id": 1423,
+                    "id": 1522,
                     "name": "owner",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
@@ -2587,10 +2587,10 @@
                     }
                   }
                 ],
-                "id": 1424,
+                "id": 1523,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 1422,
+                  "id": 1521,
                   "name": "onlyBy",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
@@ -2608,15 +2608,15 @@
             "name": "rename",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1421,
+              "id": 1520,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1420,
+                  "id": 1519,
                   "name": "_name",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1440,
+                  "scope": 1539,
                   "src": "513:19:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -2625,7 +2625,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1419,
+                    "id": 1518,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "513:6:4",
@@ -2641,12 +2641,12 @@
               "src": "512:21:4"
             },
             "returnParameters": {
-              "id": 1425,
+              "id": 1524,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "555:0:4"
             },
-            "scope": 1516,
+            "scope": 1615,
             "src": "497:148:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -2654,7 +2654,7 @@
           },
           {
             "body": {
-              "id": 1455,
+              "id": 1554,
               "nodeType": "Block",
               "src": "699:79:4",
               "statements": [
@@ -2664,11 +2664,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 1448,
+                        "id": 1547,
                         "name": "_treatyAddress",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1442,
+                        "referencedDeclaration": 1541,
                         "src": "722:14:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2685,18 +2685,18 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 1445,
+                        "id": 1544,
                         "name": "treatyIndex",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1383,
+                        "referencedDeclaration": 1482,
                         "src": "705:11:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_address_$dyn_storage",
                           "typeString": "address[] storage ref"
                         }
                       },
-                      "id": 1447,
+                      "id": 1546,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2710,7 +2710,7 @@
                         "typeString": "function (address) returns (uint256)"
                       }
                     },
-                    "id": 1449,
+                    "id": 1548,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2724,7 +2724,7 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 1450,
+                  "id": 1549,
                   "nodeType": "ExpressionStatement",
                   "src": "705:32:4"
                 },
@@ -2734,11 +2734,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 1452,
+                        "id": 1551,
                         "name": "_treatyAddress",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1442,
+                        "referencedDeclaration": 1541,
                         "src": "758:14:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2753,18 +2753,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 1451,
+                      "id": 1550,
                       "name": "AddTreaty",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1389,
+                      "referencedDeclaration": 1488,
                       "src": "748:9:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 1453,
+                    "id": 1552,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2778,29 +2778,29 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1454,
+                  "id": 1553,
                   "nodeType": "EmitStatement",
                   "src": "743:30:4"
                 }
               ]
             },
             "documentation": null,
-            "id": 1456,
+            "id": 1555,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "addTreaty",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1443,
+              "id": 1542,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1442,
+                  "id": 1541,
                   "name": "_treatyAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1456,
+                  "scope": 1555,
                   "src": "668:22:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2809,7 +2809,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1441,
+                    "id": 1540,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "668:7:4",
@@ -2826,12 +2826,12 @@
               "src": "667:24:4"
             },
             "returnParameters": {
-              "id": 1444,
+              "id": 1543,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "699:0:4"
             },
-            "scope": 1516,
+            "scope": 1615,
             "src": "649:129:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -2839,21 +2839,21 @@
           },
           {
             "body": {
-              "id": 1505,
+              "id": 1604,
               "nodeType": "Block",
               "src": "849:298:4",
               "statements": [
                 {
                   "assignments": [
-                    1465
+                    1564
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 1465,
+                      "id": 1564,
                       "name": "addressToDelete",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1505,
+                      "scope": 1604,
                       "src": "855:23:4",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -2862,7 +2862,7 @@
                         "typeString": "address"
                       },
                       "typeName": {
-                        "id": 1464,
+                        "id": 1563,
                         "name": "address",
                         "nodeType": "ElementaryTypeName",
                         "src": "855:7:4",
@@ -2876,30 +2876,30 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 1469,
+                  "id": 1568,
                   "initialValue": {
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 1466,
+                      "id": 1565,
                       "name": "treatyIndex",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1383,
+                      "referencedDeclaration": 1482,
                       "src": "881:11:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_array$_t_address_$dyn_storage",
                         "typeString": "address[] storage ref"
                       }
                     },
-                    "id": 1468,
+                    "id": 1567,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 1467,
+                      "id": 1566,
                       "name": "_indexToDelete",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1458,
+                      "referencedDeclaration": 1557,
                       "src": "893:14:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -2922,15 +2922,15 @@
                 },
                 {
                   "assignments": [
-                    1471
+                    1570
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 1471,
+                      "id": 1570,
                       "name": "addressToMove",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1505,
+                      "scope": 1604,
                       "src": "914:21:4",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -2939,7 +2939,7 @@
                         "typeString": "address"
                       },
                       "typeName": {
-                        "id": 1470,
+                        "id": 1569,
                         "name": "address",
                         "nodeType": "ElementaryTypeName",
                         "src": "914:7:4",
@@ -2953,30 +2953,30 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 1478,
+                  "id": 1577,
                   "initialValue": {
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 1472,
+                      "id": 1571,
                       "name": "treatyIndex",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1383,
+                      "referencedDeclaration": 1482,
                       "src": "938:11:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_array$_t_address_$dyn_storage",
                         "typeString": "address[] storage ref"
                       }
                     },
-                    "id": 1477,
+                    "id": 1576,
                     "indexExpression": {
                       "argumentTypes": null,
                       "commonType": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       },
-                      "id": 1476,
+                      "id": 1575,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2985,18 +2985,18 @@
                         "argumentTypes": null,
                         "expression": {
                           "argumentTypes": null,
-                          "id": 1473,
+                          "id": 1572,
                           "name": "treatyIndex",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1383,
+                          "referencedDeclaration": 1482,
                           "src": "950:11:4",
                           "typeDescriptions": {
                             "typeIdentifier": "t_array$_t_address_$dyn_storage",
                             "typeString": "address[] storage ref"
                           }
                         },
-                        "id": 1474,
+                        "id": 1573,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
@@ -3015,7 +3015,7 @@
                       "rightExpression": {
                         "argumentTypes": null,
                         "hexValue": "31",
-                        "id": 1475,
+                        "id": 1574,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -3053,7 +3053,7 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1483,
+                    "id": 1582,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3062,25 +3062,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 1479,
+                        "id": 1578,
                         "name": "treatyIndex",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1383,
+                        "referencedDeclaration": 1482,
                         "src": "979:11:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_address_$dyn_storage",
                           "typeString": "address[] storage ref"
                         }
                       },
-                      "id": 1481,
+                      "id": 1580,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 1480,
+                        "id": 1579,
                         "name": "_indexToDelete",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1458,
+                        "referencedDeclaration": 1557,
                         "src": "991:14:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -3102,11 +3102,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 1482,
+                      "id": 1581,
                       "name": "addressToMove",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1471,
+                      "referencedDeclaration": 1570,
                       "src": "1009:13:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -3119,14 +3119,14 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 1484,
+                  "id": 1583,
                   "nodeType": "ExpressionStatement",
                   "src": "979:43:4"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1494,
+                    "id": 1593,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3135,25 +3135,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 1485,
+                        "id": 1584,
                         "name": "treatyIndex",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1383,
+                        "referencedDeclaration": 1482,
                         "src": "1028:11:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_address_$dyn_storage",
                           "typeString": "address[] storage ref"
                         }
                       },
-                      "id": 1490,
+                      "id": 1589,
                       "indexExpression": {
                         "argumentTypes": null,
                         "commonType": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         },
-                        "id": 1489,
+                        "id": 1588,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -3162,18 +3162,18 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 1486,
+                            "id": 1585,
                             "name": "treatyIndex",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1383,
+                            "referencedDeclaration": 1482,
                             "src": "1040:11:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_array$_t_address_$dyn_storage",
                               "typeString": "address[] storage ref"
                             }
                           },
-                          "id": 1487,
+                          "id": 1586,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
@@ -3192,7 +3192,7 @@
                         "rightExpression": {
                           "argumentTypes": null,
                           "hexValue": "31",
-                          "id": 1488,
+                          "id": 1587,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -3232,7 +3232,7 @@
                         {
                           "argumentTypes": null,
                           "hexValue": "30",
-                          "id": 1492,
+                          "id": 1591,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -3255,7 +3255,7 @@
                             "typeString": "int_const 0"
                           }
                         ],
-                        "id": 1491,
+                        "id": 1590,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -3268,7 +3268,7 @@
                         },
                         "typeName": "address"
                       },
-                      "id": 1493,
+                      "id": 1592,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -3288,14 +3288,14 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 1495,
+                  "id": 1594,
                   "nodeType": "ExpressionStatement",
                   "src": "1028:48:4"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1499,
+                    "id": 1598,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3308,18 +3308,18 @@
                       "argumentTypes": null,
                       "expression": {
                         "argumentTypes": null,
-                        "id": 1496,
+                        "id": 1595,
                         "name": "treatyIndex",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1383,
+                        "referencedDeclaration": 1482,
                         "src": "1082:11:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_address_$dyn_storage",
                           "typeString": "address[] storage ref"
                         }
                       },
-                      "id": 1498,
+                      "id": 1597,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
@@ -3338,7 +3338,7 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 1500,
+                  "id": 1599,
                   "nodeType": "ExpressionStatement",
                   "src": "1082:20:4"
                 },
@@ -3348,11 +3348,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 1502,
+                        "id": 1601,
                         "name": "addressToDelete",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1465,
+                        "referencedDeclaration": 1564,
                         "src": "1126:15:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -3367,18 +3367,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 1501,
+                      "id": 1600,
                       "name": "DeleteTreaty",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1393,
+                      "referencedDeclaration": 1492,
                       "src": "1113:12:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 1503,
+                    "id": 1602,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3392,14 +3392,14 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1504,
+                  "id": 1603,
                   "nodeType": "EmitStatement",
                   "src": "1108:34:4"
                 }
               ]
             },
             "documentation": null,
-            "id": 1506,
+            "id": 1605,
             "implemented": true,
             "kind": "function",
             "modifiers": [
@@ -3407,7 +3407,7 @@
                 "arguments": [
                   {
                     "argumentTypes": null,
-                    "id": 1461,
+                    "id": 1560,
                     "name": "owner",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
@@ -3419,10 +3419,10 @@
                     }
                   }
                 ],
-                "id": 1462,
+                "id": 1561,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 1460,
+                  "id": 1559,
                   "name": "onlyBy",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
@@ -3440,15 +3440,15 @@
             "name": "deleteTreaty",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1459,
+              "id": 1558,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1458,
+                  "id": 1557,
                   "name": "_indexToDelete",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1506,
+                  "scope": 1605,
                   "src": "804:22:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3457,7 +3457,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 1457,
+                    "id": 1556,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "804:7:4",
@@ -3473,12 +3473,12 @@
               "src": "803:24:4"
             },
             "returnParameters": {
-              "id": 1463,
+              "id": 1562,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "849:0:4"
             },
-            "scope": 1516,
+            "scope": 1615,
             "src": "782:365:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3486,54 +3486,54 @@
           },
           {
             "body": {
-              "id": 1514,
+              "id": 1613,
               "nodeType": "Block",
               "src": "1216:29:4",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1512,
+                    "id": 1611,
                     "name": "treatyIndex",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 1383,
+                    "referencedDeclaration": 1482,
                     "src": "1229:11:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_address_$dyn_storage",
                       "typeString": "address[] storage ref"
                     }
                   },
-                  "functionReturnParameters": 1511,
-                  "id": 1513,
+                  "functionReturnParameters": 1610,
+                  "id": 1612,
                   "nodeType": "Return",
                   "src": "1222:18:4"
                 }
               ]
             },
             "documentation": null,
-            "id": 1515,
+            "id": 1614,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "getTreatyIndex",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1507,
+              "id": 1606,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1174:2:4"
             },
             "returnParameters": {
-              "id": 1511,
+              "id": 1610,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1510,
+                  "id": 1609,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1515,
+                  "scope": 1614,
                   "src": "1198:16:4",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -3543,7 +3543,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 1508,
+                      "id": 1607,
                       "name": "address",
                       "nodeType": "ElementaryTypeName",
                       "src": "1198:7:4",
@@ -3553,7 +3553,7 @@
                         "typeString": "address"
                       }
                     },
-                    "id": 1509,
+                    "id": 1608,
                     "length": null,
                     "nodeType": "ArrayTypeName",
                     "src": "1198:9:4",
@@ -3568,14 +3568,14 @@
               ],
               "src": "1197:18:4"
             },
-            "scope": 1516,
+            "scope": 1615,
             "src": "1151:94:4",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 1517,
+        "scope": 1616,
         "src": "61:1186:4"
       }
     ],
@@ -3585,9 +3585,219 @@
     "name": "solc",
     "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
-  "networks": {},
-  "schemaVersion": "3.0.23",
-  "updatedAt": "2020-08-06T15:24:21.906Z",
+  "networks": {
+    "5777": {
+      "events": {
+        "0x3d161e346251d835e0a657f8873cd7a7d010932c2a3f43a4ee721b9bd8ffa01c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "_treatyAddress",
+              "type": "address"
+            }
+          ],
+          "name": "AddTreaty",
+          "type": "event"
+        },
+        "0x5ba83b406531a80fa1a80c009cffc5d3ce820b2293bc446251e4913f256f344e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "_treatyAddress",
+              "type": "address"
+            }
+          ],
+          "name": "DeleteTreaty",
+          "type": "event"
+        },
+        "0x9dcbf7ea77f2a51cdccb1567c20a197cd7fa3e55e0c35b571ec2178fb0773e15": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "string",
+              "name": "_oldName",
+              "type": "string"
+            },
+            {
+              "indexed": true,
+              "internalType": "string",
+              "name": "_newName",
+              "type": "string"
+            }
+          ],
+          "name": "Rename",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x00fEc565143140a826A6f97a42bbBB60244CC408",
+      "transactionHash": "0x4c8f48d342a43e5d4893e51d34feb65f7d23aae8cb26b7cd0455ddfe6671c4f9"
+    },
+    "1596731397700": {
+      "events": {
+        "0x3d161e346251d835e0a657f8873cd7a7d010932c2a3f43a4ee721b9bd8ffa01c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "_treatyAddress",
+              "type": "address"
+            }
+          ],
+          "name": "AddTreaty",
+          "type": "event"
+        },
+        "0x5ba83b406531a80fa1a80c009cffc5d3ce820b2293bc446251e4913f256f344e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "_treatyAddress",
+              "type": "address"
+            }
+          ],
+          "name": "DeleteTreaty",
+          "type": "event"
+        },
+        "0x9dcbf7ea77f2a51cdccb1567c20a197cd7fa3e55e0c35b571ec2178fb0773e15": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "string",
+              "name": "_oldName",
+              "type": "string"
+            },
+            {
+              "indexed": true,
+              "internalType": "string",
+              "name": "_newName",
+              "type": "string"
+            }
+          ],
+          "name": "Rename",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xd17ee59815305a63BFEe091d5225628db43f90E3",
+      "transactionHash": "0x6fee0bdf94aa2d7630c02add6581b37d1272a123481a33b9728427deddec92f3"
+    },
+    "1597485976720": {
+      "events": {
+        "0x3d161e346251d835e0a657f8873cd7a7d010932c2a3f43a4ee721b9bd8ffa01c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "_treatyAddress",
+              "type": "address"
+            }
+          ],
+          "name": "AddTreaty",
+          "type": "event"
+        },
+        "0x5ba83b406531a80fa1a80c009cffc5d3ce820b2293bc446251e4913f256f344e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "_treatyAddress",
+              "type": "address"
+            }
+          ],
+          "name": "DeleteTreaty",
+          "type": "event"
+        },
+        "0x9dcbf7ea77f2a51cdccb1567c20a197cd7fa3e55e0c35b571ec2178fb0773e15": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "string",
+              "name": "_oldName",
+              "type": "string"
+            },
+            {
+              "indexed": true,
+              "internalType": "string",
+              "name": "_newName",
+              "type": "string"
+            }
+          ],
+          "name": "Rename",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xAD5fC38EDAa6D4D4B8088e9a856bdbfd55892c15",
+      "transactionHash": "0xb9e08a41ae4500b0ec12cba46ae829ad4756ca50d017e08be86aef52a6ef952a"
+    },
+    "1599186668645": {
+      "events": {
+        "0x3d161e346251d835e0a657f8873cd7a7d010932c2a3f43a4ee721b9bd8ffa01c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "_treatyAddress",
+              "type": "address"
+            }
+          ],
+          "name": "AddTreaty",
+          "type": "event"
+        },
+        "0x5ba83b406531a80fa1a80c009cffc5d3ce820b2293bc446251e4913f256f344e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "_treatyAddress",
+              "type": "address"
+            }
+          ],
+          "name": "DeleteTreaty",
+          "type": "event"
+        },
+        "0x9dcbf7ea77f2a51cdccb1567c20a197cd7fa3e55e0c35b571ec2178fb0773e15": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "string",
+              "name": "_oldName",
+              "type": "string"
+            },
+            {
+              "indexed": true,
+              "internalType": "string",
+              "name": "_newName",
+              "type": "string"
+            }
+          ],
+          "name": "Rename",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x56a342C8b0BA5F1f408E811475d6AF1F8E05f900",
+      "transactionHash": "0x1be0b75d8455ef1b212e2b831a1c2f618b473d829b18015d9900e784ad1c3097"
+    }
+  },
+  "schemaVersion": "3.2.3",
+  "updatedAt": "2020-09-04T15:14:28.684Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {}
   },

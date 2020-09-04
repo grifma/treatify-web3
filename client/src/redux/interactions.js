@@ -38,6 +38,7 @@ import { batch } from "react-redux";
 import Box from "3box";
 import { AssertionError } from "assert";
 import ethers from "ethers";
+import { PersistMode } from "./constants";
 require("events").EventEmitter.defaultMaxListeners = 25;
 
 ////////////////////////////////////
@@ -118,16 +119,19 @@ async function pullTreaty(treatyInstance, threebox, openSpace, address) {
     address: await treatyInstance._address,
     contractInstance: treatyInstance,
     developerInfo: await get3boxDeveloperInfo(treatyId, openSpace),
+    balance: 0,
   };
   return treaty;
 }
 
 async function getUnsignedText(treatyInstance, i) {
+  if (treatyInstance.unsignedTreatyText == undefined) return "";
   const lineOfUnsignedText = await treatyInstance.unsignedTreatyText(i);
   return lineOfUnsignedText;
 }
 
 async function getSignedText(treatyInstance, i) {
+  if (treatyInstance.signedTreatyText == undefined) return "";
   const lineOfSignedText = await treatyInstance.signedTreatyText(i);
   return lineOfSignedText;
 }
@@ -154,9 +158,19 @@ async function getUnsignedTreatyText(
   treatyId,
   signers
 ) {
-  switch (process.env.TREATY_TEXT_PERSIST_MODE) {
+  console.log("PersistMode :>> ", PersistMode);
+  console.log(
+    "process.env.TREATY_TEXT_PERSIST_MODE :>> ",
+    process.env.TREATY_TEXT_PERSIST_MODE
+  );
+  console.log(typeof process.env.TREATY_TEXT_PERSIST_MODE);
+  console.log(
+    "EQUAL :>> ",
+    process.env.TREATY_TEXT_PERSIST_MODE === PersistMode.THREEBOX
+  );
+  switch (parseInt(process.env.TREATY_TEXT_PERSIST_MODE)) {
     case PersistMode.THREEBOX:
-      // console.log("Case: THREEBOX");
+      console.log("Case: THREEBOX");
       return await get3boxUnsignedTreatyText(
         threebox,
         openSpace,
@@ -165,9 +179,9 @@ async function getUnsignedTreatyText(
       );
       break;
     case PersistMode.ONCHAIN:
-    // console.log("Case: ONCHAIN");
+      console.log("Case: ONCHAIN");
     default:
-      // console.log("Case: DEFAULT");
+      console.log("Case: DEFAULT");
       return await getFor(numUnsigned, getUnsignedText, treatyInstance);
   }
 }
@@ -182,7 +196,7 @@ async function getSignedTreatyText(
   signers,
   address
 ) {
-  switch (process.env.TREATY_TEXT_PERSIST_MODE) {
+  switch (parseInt(process.env.TREATY_TEXT_PERSIST_MODE)) {
     case PersistMode.THREEBOX:
       // console.log("Case: THREEBOX");
       return await get3boxSignedTreatyText(
@@ -223,6 +237,14 @@ async function get3boxUnsignedTreatyText(
       });
       return posts.map((x) => x.message);
     } else {
+      console.log(
+        "process.env.PRELOAD_BEFORE_LOGIN == false :>> ",
+        process.env.PRELOAD_BEFORE_LOGIN == false
+      );
+      console.log(
+        "process.env.PRELOAD_BEFORE_LOGIN == 0 :>> ",
+        process.env.PRELOAD_BEFORE_LOGIN == 0
+      );
       if (process.env.PRELOAD_BEFORE_LOGIN == false) return ["Loading..."];
 
       const postsBySigner = await Promise.all(
@@ -457,30 +479,54 @@ export const loadTreatyIndexContractWeb3 = (web3) => async (dispatch) => {
   return instance;
 };
 
-export const loadTreatyIndexContract = (web3 /* Delete me */) => async (
-  dispatch,
-  getState
-) => {
-  console.log("loadTreatyIndexContract ETHERS :>> ", web3);
-  const provider = await getState().ethers.provider;
-  console.log("provider :>> ", provider);
-  // const networkId = await web3.eth.net.getId();
-  // const deployedNetwork = TreatyIndexContract.networks[networkId];
-  console.log("TreatyIndexContract.address :>> ", TreatyIndexContract.address);
-  const ethersInstance = new ethers.Contract(
-    // TreatyIndexContract.address,
-    "0xe560cd48F2bc1927A9274AB50cD4C46a7797A5Cb", //TODO Load this from json
-    TreatyIndexContract.abi,
-    provider
+// export const loadTreatyIndexContract = (web3 /* Delete me */) => async (
+//   dispatch,
+//   getState
+// ) => {
+//   console.log("loadTreatyIndexContract ETHERS :>> ");
+//   const provider = await getState().ethers.provider;
+//   console.log("provider :>> ", provider);
+//   console.log("provider.getNetwork() :>> ", provider.getNetwork());
+//   const network = await provider.getNetwork();
+//   const networkId = network.chainId;
+//   console.log("networkId :>> ", networkId);
+//   const deployedNetwork = TreatyIndexContract.networks[networkId];
+//   console.log("deployedNetwork :>> ", deployedNetwork);
+//   console.log("TreatyIndexContract :>> ", TreatyIndexContract);
+//   console.log("TreatyIndexContract.address :>> ", TreatyIndexContract.address);
+//   console.log("TreatyIndexContract.address :>> ", TreatyIndexContract._address);
+//   console.log(
+//     "TreatyIndexContract deployedNetwork.address :>> ",
+//     deployedNetwork.address
+//   );
+//   const ethersInstance = new ethers.Contract(
+//     // TreatyIndexContract.address,
+//     "0x56a342C8b0BA5F1f408E811475d6AF1F8E05f900", //TODO Load this from json
+//     TreatyIndexContract.abi,
+//     provider
+//   );
+//   console.log("LOAD TREATY INDEX");
+//   console.log("ethersInstance :>> ", ethersInstance);
+//   console.log("provider :>> ", provider);
+//   dispatch(treatyIndexContractLoaded(ethersInstance));
+//   return ethersInstance;
+// };
+
+export const loadTreatyContractWeb3 = (web3) => async (dispatch) => {
+  console.log("[loadTreatyContractWeb3]");
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = TreatyContract.networks[networkId];
+  const provider = getState().ethers.provider;
+  const instance = new web3.eth.Contract(
+    TreatyContract.abi,
+    deployedNetwork && deployedNetwork.address
   );
-  console.log("LOAD TREATY INDEX");
-  console.log("ethersInstance :>> ", ethersInstance);
-  console.log("provider :>> ", provider);
-  dispatch(treatyIndexContractLoaded(ethersInstance));
-  return ethersInstance;
+  dispatch(treatyContractLoaded(instance));
+  return instance;
 };
 
 export const loadTreatyContract = (web3) => async (dispatch) => {
+  console.log("[loadTreatyContract]");
   const networkId = await web3.eth.net.getId();
   const deployedNetwork = TreatyContract.networks[networkId];
   const provider = getState().ethers.provider;
@@ -508,7 +554,7 @@ export const loadTreatyIndex = (contract) => async (dispatch, getState) => {
   return treatyIndex;
 };
 
-export const loadTreatyIndexW3 = (contract) => async (dispatch) => {
+export const loadTreatyIndexWeb3 = (contract) => async (dispatch) => {
   console.log("etherscontract", contract);
   const treatyIndex = await contract.methods.getTreatyIndex().call();
   console.log(
@@ -542,11 +588,6 @@ export const loadTreatiesWeb3 = () => async (dispatch, getState) => {
     console.log("treatyIndex :>> ", treatyIndex);
     const treatyInstances = treatyIndex.map((treatyAddress) => {
       return new web3.eth.Contract(TreatyContract.abi, treatyAddress);
-      // return new ethers.Contract(
-      //   treatyAddress,
-      //   TreatyContract.abi,
-      //   provider.getSigner(0)
-      // );
     });
     console.log("treatyInstances :>> ", treatyInstances);
     const treaties = await Promise.all(
@@ -564,43 +605,12 @@ export const loadTreatiesWeb3 = () => async (dispatch, getState) => {
       })
     );
     console.log("treaties :>> ", treaties);
-    const emptyTreaties = new Set([
-      522,
-      105,
-      455,
-      317,
-      947,
-      471,
-      19,
-      524,
-      803,
-      53,
-      965,
-      523,
-      122,
-      776,
-      340,
-      541,
-      538,
-      316,
-      636,
-    ]);
-    const draftTreaties = new Set([261, 501, 44306, 281876, 799, 805]);
-    const goodTreaties = new Set([240, 995, 612, 540]);
-    const badTreaties = new Set([770, 193, 893, 438, 1]);
-    const hiddenTreaties = new Set([
-      ...draftTreaties,
-      ...goodTreaties,
-      ...badTreaties,
-      ...emptyTreaties,
-    ]);
-    const visibleTreaties = treaties.filter(
-      (x) => hiddenTreaties.has(x.id) == false
-    );
-    console.log("visibleTreaties :>> ", visibleTreaties);
-    dispatch(loadTreatiesSuccess(visibleTreaties));
-    dispatch(enrichTreatyWith3boxData(threebox, openSpace, visibleTreaties));
+
+    dispatch(loadTreatiesSuccess(treaties));
+    console.log("about to enrich from loadTreatiesWeb3");
+    dispatch(enrichTreatyWith3boxData(threebox, openSpace, treaties));
   } catch (e) {
+    console.error("Failure during loadTreatiesWeb3");
     dispatch(loadTreatiesFailure());
     dispatch(displayAlert(e));
   }
@@ -673,13 +683,16 @@ export const load3box = (address, provider) => async (dispatch, getState) => {
     console.info("opened space ", treatifySpace);
     await dispatch(openSpace(treatifySpace));
     await dispatch(load3boxSuccess(box));
-    dispatch(
-      enrichTreatyWith3boxData(
-        box,
-        treatifySpace,
-        await getState().treaties.data
-      )
-    );
+    console.log("about to enrich from load3box");
+    if ((await getState().treaties.data) != undefined) {
+      dispatch(
+        enrichTreatyWith3boxData(
+          box,
+          treatifySpace,
+          await getState().treaties.data
+        )
+      );
+    }
   } catch (e) {
     console.error("Exception in load3box ", e);
     dispatch(displayAlert(e));
@@ -909,7 +922,7 @@ export const addTreatyTextRequest = (treaty, text) => async (
     const currentAccount = getState().web3.account;
 
     console.log("mode", process.env.TREATY_TEXT_PERSIST_MODE);
-    switch (process.env.TREATY_TEXT_PERSIST_MODE) {
+    switch (parseInt(process.env.TREATY_TEXT_PERSIST_MODE)) {
       case PersistMode.ONCHAIN:
         console.log("write to chain");
         const tx = await contractInstance.methods
@@ -1036,25 +1049,32 @@ export const signTreatyRequest = (treaty) => async (dispatch, getState) => {
   const { id, address, contractInstance } = treaty;
   const currentAccount = getState().web3.account;
   try {
+    let tx;
     if (process.env.TREATY_TEXT_PERSIST_MODE == PersistMode.THREEBOX) {
       const threebox = getState().threebox.threebox;
       const openSpace = getState().threebox.openSpace;
-      const contentBeingSigned = get3boxUnsignedTreatyText(
+      console.log("threebox :>> ", threebox);
+      console.log("openSpace :>> ", openSpace);
+      console.log("id :>> ", id);
+      const contentBeingSigned = await get3boxUnsignedTreatyText(
         threebox,
         openSpace,
         id
       );
-      const verify = confirm(`Sign content?\n${contentBeingSigned}`);
+      console.log("contentBeingSigned :>> ", contentBeingSigned);
+      const verify = confirm(
+        `Sign content?\n${JSON.stringify(contentBeingSigned)}`
+      );
       if (!verify) throw "User did not sign";
 
       //hash the content, and store the result onchain
       const hash = Web3.utils.keccak256(contentBeingSigned);
-      const tx = await contractInstance.methods
-        .signHash()
+      tx = await contractInstance.methods
+        .signHash(hash)
         .send({ from: currentAccount });
       console.log("sign tx", tx);
     } else {
-      const tx = await contractInstance.methods
+      tx = await contractInstance.methods
         .signTreaty()
         .send({ from: currentAccount });
       console.log("sign tx", tx);
@@ -1140,6 +1160,10 @@ export const enrichTreatyWith3boxData = (
   openSpace,
   treaties
 ) => async (dispatch, getState) => {
+  if (treaties == undefined) {
+    console.info("treaties undefined");
+    dispatch(loadTreatiesSuccess([]));
+  }
   const address = getState().web3.account;
   console.log("enrich treaty with auth'd 3box data. treaties: ", treaties);
   const enrichedTreaties = await treaties.map(async (treaty) => {
