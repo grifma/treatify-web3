@@ -2,6 +2,11 @@
 
 Fully onchain version of Treatify, running on Ethereum, IPFS and 3box.
 
+Agreement text is stored on IPFS, and is private to the participants of the agreement.
+
+Once signed, the agreement text is hashed, and the hash result is stored onchain.
+
+
 # Deploy status
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/fdc86f98-d03b-4a79-abf2-fdd419e6cc44/deploy-status)](https://app.netlify.com/sites/treatify-staging/deploys)
