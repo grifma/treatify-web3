@@ -230,8 +230,24 @@ export const SignerBlockieSetContainer = styled.div`
   padding: 12px;
 `;
 
-export const SignerBlockieContainer = styled.div`
+export const UnsignedSignerBlockieContainer = styled.div`
   padding: 2px;
+  display: flex;
+`;
+export const SignedSignerBlockieContainer = styled.div`
+  padding: 2px;
+  background: hsl(115, 98%, 80%);
+  display: flex;
+`;
+export const BrokenSignerBlockieContainer = styled.div`
+  padding: 2px;
+  background: hsl(1, 94%, 51%);
+  display: flex;
+`;
+export const WithdrawnSignerBlockieContainer = styled.div`
+  padding: 2px;
+  background: #e46967;
+  display: flex;
 `;
 
 export const StyledPopover = styled(Popover)`

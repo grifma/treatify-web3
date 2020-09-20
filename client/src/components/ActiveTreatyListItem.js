@@ -29,6 +29,13 @@ const ActiveTreatyListItem = ({
   const Container = treaty.isActive
     ? TreatyItemContainer
     : TreatyItemContainerWithWarning;
+  try {
+    console.log("SigState square for ", treaty.signatureState);
+    console.log(treaty.signatureState[0]);
+    console.log(treaty.signatureState[1]);
+  } catch (e) {
+    console.error(e);
+  }
   return (
     <Container key={treaty.key} createdAt={treaty.createdAt}>
       {/* <IH name={treaty.text} date={treaty.date} /> */}
@@ -50,9 +57,12 @@ const ActiveTreatyListItem = ({
       </p>
       <SignerBlockieSetContainer>
         Signers:&nbsp;
-        {treaty.signers.map((signer) => (
+        {treaty.signers.map((signer, i) => (
           <div>
-            <SignerBlockie address={signer} />
+            <SignerBlockie
+              address={signer}
+              signatureState={treaty.signatureState[i]}
+            />
           </div>
         ))}
       </SignerBlockieSetContainer>
@@ -64,7 +74,7 @@ const ActiveTreatyListItem = ({
           overlay={developerInfoPopover(treaty)}
         > */}
         <UnsignedText>
-          {treaty.unsignedTreatyText.length === 0 ? null : <h3>Unsigned</h3>}
+          <h3>Unsigned</h3>
           {treaty.unsignedTreatyText.length > 0 &&
             treaty.unsignedTreatyText.map((text) => <p>{text}</p>)}
         </UnsignedText>
@@ -76,10 +86,7 @@ const ActiveTreatyListItem = ({
           overlay={developerInfoPopover(treaty)}
         > */}
         <SignedText>
-          {treaty.signedTreatyText.length === 0 ||
-          treaty.signedTreatyText[0] == "" ? null : (
-            <h3>Signed</h3>
-          )}
+          <h3>Signed</h3>
           {treaty.signedTreatyText.length > 0 &&
             treaty.signedTreatyText.map((text) => <p>{text}</p>)}
         </SignedText>

@@ -39,7 +39,6 @@ import Box from "3box";
 import { AssertionError } from "assert";
 import ethers from "ethers";
 import { PersistMode } from "./constants";
-require("events").EventEmitter.defaultMaxListeners = 25;
 
 ////////////////////////////////////
 //NOTE
@@ -68,7 +67,13 @@ export const displayAlert = (text) => () => {
 //Treaty specific helper functions
 ////////////////////
 
-async function pullTreaty(treatyInstance, threebox, openSpace, address) {
+async function pullTreaty(
+  treatyInstance,
+  threebox,
+  openSpace,
+  address
+  // daiInstance
+) {
   // console.info("[pullTreaty]", treatyInstance, threebox, openSpace);
   const numUnsigned = await treatyInstance.methods.getNumUnsigned().call();
   const numSigned = await treatyInstance.methods.getNumSigned().call();
@@ -93,7 +98,17 @@ async function pullTreaty(treatyInstance, threebox, openSpace, address) {
     isCompleted: (await treatyInstance.methods.treatyState().call()) == 1,
     createdAt: await treatyInstance.methods.creationTime().call(),
     signers: await getFor(numSigners, getSigner, treatyInstance),
-    //TODO: Retreive state of signature. signatureStatus: signers && signers.map((signer) => async ( humanReadableSignatureStatus(await treatyInstance.methods.signatureState(signer).call()) )),
+    signatureState:
+      signers &&
+      (await Promise.all(
+        signers.map(async (signer) => {
+          console.log("signatureStatus called for signer: ", signer);
+          const result = humanReadableSignatureStatus(
+            await treatyInstance.methods.signatureState(signer).call()
+          );
+          return result;
+        })
+      )),
     status: humanReadableTreatyStatus(
       await treatyInstance.methods.treatyState().call()
     ),
@@ -119,8 +134,10 @@ async function pullTreaty(treatyInstance, threebox, openSpace, address) {
     address: await treatyInstance._address,
     contractInstance: treatyInstance,
     developerInfo: await get3boxDeveloperInfo(treatyId, openSpace),
+    // balance: await daiInstance.balanceOf(address),
     balance: 0,
   };
+  console.log("treaty.signatureStatus :>> ", treaty.signatureStatus);
   return treaty;
 }
 
@@ -158,16 +175,6 @@ async function getUnsignedTreatyText(
   treatyId,
   signers
 ) {
-  console.log("PersistMode :>> ", PersistMode);
-  console.log(
-    "process.env.TREATY_TEXT_PERSIST_MODE :>> ",
-    process.env.TREATY_TEXT_PERSIST_MODE
-  );
-  console.log(typeof process.env.TREATY_TEXT_PERSIST_MODE);
-  console.log(
-    "EQUAL :>> ",
-    process.env.TREATY_TEXT_PERSIST_MODE === PersistMode.THREEBOX
-  );
   switch (parseInt(process.env.TREATY_TEXT_PERSIST_MODE)) {
     case PersistMode.THREEBOX:
       console.log("Case: THREEBOX");
@@ -224,7 +231,6 @@ async function get3boxUnsignedTreatyText(
   // console.log(`Treaty id is ${treatyId}`);
   // console.log("threadName: ", `unsigned-treaty-text-${treatyId}`);
   // console.log("signers :>> ", signers);
-
   try {
     if (openSpace != undefined) {
       // console.info(`#${treatyId}Logged in, using joinThread()`);
@@ -356,29 +362,6 @@ async function get3boxSignedTreatyText(
           );
         }
       }
-
-      // const posts = await Box.getThread(
-      //   "treatify",
-      //   `unsigned-treaty-text-${treatyId}`,
-      //   "0x01d0ef4e369bac36ee55f75d3273745f21d6b239",
-      //   false
-      // );
-      // const thread = await Box.getThread(
-      //   "treatify",
-      //   `unsigned-treaty-text-${treatyId}`,
-      //   {
-      //     firstModerator: "0x01d0ef4E369bAc36EE55f75d3273745F21D6B239",
-      //     members: false,
-      //   }
-      // );
-      // console.log(thread);
-      // const posts = await thread.getPosts();
-      // const posts = hardcodedUnsignedThread;
-      // const posts = await Box.getThread(
-      //   "treatify",
-      //   `unsigned-treaty-text-${treatyId}`
-      // );
-      // console.log(`[unsigned] posts for #${treatyId}`, posts);
       if (posts == undefined) {
         // console.log(
         //   `treaty #${treatyId}, posts are undefined. Returning empty list.`
@@ -646,6 +629,7 @@ export const loadOneTreaty = (treatyInstance) => async (dispatch, getState) => {
     const threebox = getState().threebox.threebox;
     const openSpace = getState().threebox.openSpace;
     const address = getState().threebox.account;
+    // const daiInstance = getState().currencies.daiInstance;
     console.log(
       "[loadOneTreaty] Parse treaty with ",
       treatyInstance,
@@ -1069,6 +1053,7 @@ export const signTreatyRequest = (treaty) => async (dispatch, getState) => {
 
       //hash the content, and store the result onchain
       const hash = Web3.utils.keccak256(contentBeingSigned);
+      console.log("hash :>> ", hash);
       tx = await contractInstance.methods
         .signHash(hash)
         .send({ from: currentAccount });

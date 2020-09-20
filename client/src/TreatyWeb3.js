@@ -227,12 +227,6 @@ const TreatyWeb3 = ({
           <TreatyIndexComponent />
         )}
         <p></p>
-        {/* <Chatbox box={box} title={"Chatbox"} space={space} /> */}
-        {/* <Chatbox
-          title={"Chatbox"}
-          account={account}
-          provider={window.ethereum}
-        /> */}
       </LSide>
       <Main>
         {treatyIndex == null ? (
