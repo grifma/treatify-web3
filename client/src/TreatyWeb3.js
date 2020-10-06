@@ -30,6 +30,8 @@ import {
   subscribeToAccountsChanging,
   subscribeToNewSignatures,
   subscribeToNewTreaties,
+  subscribeToMakeActive,
+  subscribeToRegisterAsSigner,
   subscribeToAllLogs,
 } from "./redux/subscriptions";
 
@@ -49,6 +51,7 @@ import { Button, Popover, OverlayTrigger } from "react-bootstrap";
 import styled from "styled-components";
 import ProfileHover from "profile-hover";
 import ActiveTreatyListItem from "./components/ActiveTreatyListItem";
+import { withCookies } from "react-cookie";
 
 const TreatyWeb3 = ({
   dispatch,
@@ -68,10 +71,13 @@ const TreatyWeb3 = ({
   startSubscribeToAllLogs,
   startSubscribeToNewTreaties,
   startSubscribeToNewSignatures,
+  startSubscribeToMakeActive,
+  startSubscribeToRegisterAsSigner,
   startLoad3box,
   startLoadEthersProvider,
   startLoadEthersSigner,
   initiated,
+  cookies,
 }) => {
   useEffect(() => {
     async function initiate() {
@@ -90,6 +96,8 @@ const TreatyWeb3 = ({
       startSubscribeToAllLogs(web3);
       startSubscribeToNewTreaties();
       startSubscribeToNewSignatures();
+      startSubscribeToRegisterAsSigner();
+      startSubscribeToMakeActive();
 
       //3box
       startLoad3box(myAccount, window.ethereum);
@@ -232,7 +240,7 @@ const TreatyWeb3 = ({
         {treatyIndex == null ? (
           <div>Treaty index has not been loaded</div>
         ) : (
-          <TreatyList web3={web3} />
+          <TreatyList web3={web3} pCookies={cookies} />
         )}
       </Main>
       <RSide>
@@ -270,6 +278,9 @@ function mapDispatchToProps(dispatch) {
     startLoadTreatiesWeb3: (web3, treatyIndex) => dispatch(loadTreatiesWeb3()),
     startSubscribeToNewTreaties: () => dispatch(subscribeToNewTreaties()),
     startSubscribeToNewSignatures: () => dispatch(subscribeToNewSignatures()),
+    startSubscribeToRegisterAsSigner: () =>
+      dispatch(subscribeToRegisterAsSigner()),
+    startSubscribeToMakeActive: () => dispatch(subscribeToMakeActive()),
     startSubscribeToAllLogs: (web3) => dispatch(subscribeToAllLogs(web3)),
     startLoad3box: (address, provider) => dispatch(load3box(address, provider)),
     startLoadEthersSigner: (provider) => dispatch(loadEthersSigner(provider)),
@@ -278,4 +289,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TreatyWeb3);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withCookies(TreatyWeb3));

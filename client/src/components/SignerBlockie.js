@@ -20,7 +20,7 @@ const SignerBlockie = ({ address, signatureState }) => {
       <UnsignedSignerBlockieContainer>
         <StyledProfileHover
           address={address}
-          tileStyle={false}
+          tileStyle={true}
           orientation={"bottom"}
         />
       </UnsignedSignerBlockieContainer>
@@ -31,7 +31,7 @@ const SignerBlockie = ({ address, signatureState }) => {
       <SignedSignerBlockieContainer>
         <StyledProfileHover
           address={address}
-          tileStyle={false}
+          tileStyle={true}
           orientation={"bottom"}
         />
       </SignedSignerBlockieContainer>
@@ -42,7 +42,7 @@ const SignerBlockie = ({ address, signatureState }) => {
       <BrokenSignerBlockieContainer>
         <StyledProfileHover
           address={address}
-          tileStyle={false}
+          tileStyle={true}
           orientation={"bottom"}
         />
       </BrokenSignerBlockieContainer>
@@ -53,7 +53,7 @@ const SignerBlockie = ({ address, signatureState }) => {
       <WithdrawnSignerBlockieContainer>
         <StyledProfileHover
           address={address}
-          tileStyle={false}
+          tileStyle={true}
           orientation={"bottom"}
         />
       </WithdrawnSignerBlockieContainer>

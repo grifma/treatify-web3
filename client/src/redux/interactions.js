@@ -39,6 +39,7 @@ import Box from "3box";
 import { AssertionError } from "assert";
 import ethers from "ethers";
 import { PersistMode } from "./constants";
+require("events").EventEmitter.defaultMaxListeners = 50;
 
 ////////////////////////////////////
 //NOTE
@@ -963,6 +964,9 @@ export const addTreatyTextRequest = (treaty, text) => async (
         const postResult = await unsignedTreatyTextThread.post(text);
         console.log("posted: ", text);
         console.log(`postResult: ${postResult}`);
+
+        //todo: Reset onchain signatures. OR, when we next sign something, check if the hash is the same.
+
         try {
           console.log(
             `moderators: ${unsignedTreatyTextThread.listModerators()}`
