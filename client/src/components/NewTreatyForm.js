@@ -50,12 +50,12 @@ const NewTreatyForm = ({ treaties, onCreatePressed }) => {
   return (
     <div>
       <h3>
-        <StatusHeader>Add New Treaty</StatusHeader>
+        <StatusHeader>Add New Project Wallet</StatusHeader>
       </h3>
       <FormContainer>
         <NewTreatyInput
           type="text"
-          placeholder="Type your new treaty here"
+          placeholder="Name your Project Wallet here"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
@@ -70,7 +70,7 @@ const NewTreatyForm = ({ treaties, onCreatePressed }) => {
             }
           }}
         >
-          Create Treaty
+          Create Project Wallet
         </NewTreatyButton>
       </FormContainer>
     </div>

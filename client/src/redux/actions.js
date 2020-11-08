@@ -150,6 +150,17 @@ export const openSpace = (space) => ({
   payload: { space },
 });
 
+export const HIDE_TREATIES = "HIDE_TREATIES";
+export const hideTreaties = (ids) => ({
+  type: HIDE_TREATIES,
+  payload: { ids },
+});
+
+export const SHOW_ALL_TREATIES = "SHOW_ALL_TREATIES";
+export const showAllTreaties = () => ({
+  type: SHOW_ALL_TREATIES,
+});
+
 export const WEB3_LOADED = "WEB3_LOADED";
 export const ACCOUNT_LOADED = "ACCOUNT_LOADED";
 export const ETHERS_SIGNER_LOADED = "ETHERS_SIGNER_LOADED";

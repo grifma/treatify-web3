@@ -44,14 +44,13 @@ import {
   Footer,
   Grid,
 } from "./components/treatifyStyled";
-import Nav from "./components/Nav";
 import { StyledPopover, StyledPopoverTitle } from "./components/treatifyStyled";
-// import Chatbox from "./components/Chatbox";
 import { Button, Popover, OverlayTrigger } from "react-bootstrap";
 import styled from "styled-components";
 import ProfileHover from "profile-hover";
 import ActiveTreatyListItem from "./components/ActiveTreatyListItem";
 import { withCookies } from "react-cookie";
+import { showAllTreaties } from "./redux/actions";
 
 const TreatyWeb3 = ({
   dispatch,
@@ -76,6 +75,7 @@ const TreatyWeb3 = ({
   startLoad3box,
   startLoadEthersProvider,
   startLoadEthersSigner,
+  startShowAllTreaties,
   initiated,
   cookies,
 }) => {
@@ -91,6 +91,7 @@ const TreatyWeb3 = ({
       const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
       const treatyIndex = await startLoadTreatyIndex(treatyIndexContract);
       startSubscribeToAccountsChanging(myWeb3);
+      startShowAllTreaties();
       const treaties = await startLoadTreatiesWeb3(myWeb3, treatyIndex);
       console.log("treaties :>>> ", treaties);
       startSubscribeToAllLogs(web3);
@@ -149,7 +150,7 @@ const TreatyWeb3 = ({
   const treatyIndexPopover = (
     <StyledPopover id="treaty-index-popover" boundary="window">
       <StyledPopoverTitle as="h3">
-        Treaty Index Address:{" "}
+        Project Board Address:{" "}
         {treatyIndexContract && treatyIndexContract._address}
       </StyledPopoverTitle>
       <StyledPopover.Content>
@@ -177,8 +178,8 @@ const TreatyWeb3 = ({
       delay={{ show: 250, hide: 2000 }}
       overlay={treatyIndexPopover}
     >
-      <a href="#" style={{ marginTop: "40px" }}>
-        Show Treaty Index
+      <a href="#" style={{ marginTop: "40px", color: "white" }}>
+        Show Project Wallet Board
       </a>
     </OverlayTrigger>
   );
@@ -230,7 +231,7 @@ const TreatyWeb3 = ({
           </div>
         )}
         {treatyIndex == null ? (
-          <div>Treaty index has not been loaded</div>
+          <div>Project Wallet Board has not been loaded</div>
         ) : (
           <TreatyIndexComponent />
         )}
@@ -238,7 +239,7 @@ const TreatyWeb3 = ({
       </LSide>
       <Main>
         {treatyIndex == null ? (
-          <div>Treaty index has not been loaded</div>
+          <div>Project Wallet Board has not been loaded</div>
         ) : (
           <TreatyList web3={web3} pCookies={cookies} />
         )}
@@ -286,6 +287,7 @@ function mapDispatchToProps(dispatch) {
     startLoadEthersSigner: (provider) => dispatch(loadEthersSigner(provider)),
     startLoadEthersProvider: (ethereumProvider) =>
       dispatch(loadEthersProvider(ethereumProvider)),
+    startShowAllTreaties: () => dispatch(showAllTreaties()),
   };
 }
 

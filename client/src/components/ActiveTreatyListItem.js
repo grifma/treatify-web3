@@ -1,71 +1,38 @@
 import React from "react";
 import {
-  TreatyItemContainer,
-  TreatyItemContainerWithWarning,
+  FocusedTreatyItemContainer,
+  UnfocusedTreatyItemContainer,
   ActiveButton,
   SignButton,
-  RemoveButton,
+  HideButton,
   JoinButton,
   RefreshTreatyButton,
   TreatyTextContainer,
   SignedText,
   UnsignedText,
-  SignerBlockieSetContainer,
   StyledPopover,
   StyledPopoverTitle,
 } from "./treatifyStyled";
 import AddTreatyTextForm from "./AddTreatyTextForm";
-import SignerBlockie from "./SignerBlockie";
+import TreatyListItemCommonHeader from "./TreatyListItemCommonHeader";
+import TreatyListItemCommonSignatures from "./TreatyListItemCommonSignatures";
 import { OverlayTrigger } from "react-bootstrap";
 
 const ActiveTreatyListItem = ({
   treaty,
-  onRemovePressed,
+  onHidePressed,
   onMarkActivePressed,
   onAddTreatyTextPressed,
   onSignPressed,
   onRefreshTreatyPressed,
 }) => {
-  const Container = treaty.isActive
-    ? TreatyItemContainer
-    : TreatyItemContainerWithWarning;
-  try {
-    console.log("SigState square for ", treaty.signatureState);
-    console.log(treaty.signatureState[0]);
-    console.log(treaty.signatureState[1]);
-  } catch (e) {
-    console.error(e);
-  }
+  const Container = treaty.inFocus
+    ? FocusedTreatyItemContainer
+    : UnfocusedTreatyItemContainer;
   return (
     <Container key={treaty.key} createdAt={treaty.createdAt}>
-      {/* <IH name={treaty.text} date={treaty.date} /> */}
-      <h3>
-        #{treaty.id}&nbsp;
-        {treaty.text}
-      </h3>
-      <h3>
-        Balance:&nbsp;
-        {treaty.balance}
-      </h3>
-      <p>
-        Created at:&nbsp;
-        {new Date(treaty.createdAt * 1000).toLocaleDateString()}
-      </p>
-      <p>
-        Lives at:&nbsp;
-        {treaty.address}
-      </p>
-      <SignerBlockieSetContainer>
-        Signers:&nbsp;
-        {treaty.signers.map((signer, i) => (
-          <div>
-            <SignerBlockie
-              address={signer}
-              signatureState={treaty.signatureState[i]}
-            />
-          </div>
-        ))}
-      </SignerBlockieSetContainer>
+      <TreatyListItemCommonHeader key={treaty.key} treaty={treaty} />
+      <TreatyListItemCommonSignatures key={treaty.key} treaty={treaty} />
       <TreatyTextContainer>
         {/* <OverlayTrigger
           trigger={["hover", "focus"]}
@@ -98,12 +65,7 @@ const ActiveTreatyListItem = ({
       />
       <div className="buttons-container">
         <SignButton onClick={() => onSignPressed(treaty)}>Sign</SignButton>
-        {/* <RemoveButton onClick={() => onRemovePressed(treaty)}>
-          Remove
-        </RemoveButton>
-        <RefreshTreatyButton onClick={() => onRefreshTreatyPressed(treaty)}>
-          Refresh
-        </RefreshTreatyButton> */}
+        <HideButton onClick={() => onHidePressed(treaty.id)}>Hide</HideButton>
       </div>
     </Container>
   );

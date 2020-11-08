@@ -77,6 +77,10 @@ export const getBrokenTreaties = createSelector(getTreaties, (treaties) =>
     : treaties.filter((treaty) => treaty.status == "Broken")
 );
 
+//Config
+export const getHiddenTreaties = (state) =>
+  get(state, "config.hiddenTreaties", []);
+
 //3box
 
 const threebox = (state) => {

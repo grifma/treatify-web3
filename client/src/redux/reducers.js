@@ -24,6 +24,8 @@ import {
   TREATY_CONTRACT_LOADED,
   VALUE_LOADED,
   TREATY_INDEX_LOADED,
+  HIDE_TREATIES,
+  SHOW_ALL_TREATIES,
 } from "../redux/actions";
 
 function web3(state = {}, action) {
@@ -184,6 +186,34 @@ export const treaties = (state = [], action) => {
   }
 };
 
+export const config = (state = [], action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case HIDE_TREATIES: {
+      console.log("HIDE_TREATIES");
+      console.log("state :>> ", state);
+      console.log("payload :>> ", payload);
+      console.log("ids :>> ", ids);
+      const { ids } = payload;
+      return {
+        ...state,
+        hiddenTreaties: state.hiddenTreaties.concat(ids),
+        // hiddenTreaties:
+        //   (state.config.hiddenTreaties == undefined && new Set(ids)) ||
+        //   state.config.hiddenTreaties.concat(ids),
+      };
+    }
+    case SHOW_ALL_TREATIES: {
+      return {
+        ...state,
+        hiddenTreaties: [],
+      };
+    }
+    default:
+      return state;
+  }
+};
+
 export const threebox = (state = [], action) => {
   const { type, payload } = action;
   switch (type) {
@@ -225,6 +255,7 @@ const rootReducer = new combineReducers({
   contract,
   treaties,
   threebox,
+  config,
 });
 
 export default rootReducer;
