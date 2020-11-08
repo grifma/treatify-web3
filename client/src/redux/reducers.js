@@ -15,13 +15,24 @@ import {
   LOAD_3BOX_SUCCESS,
   LOAD_3BOX_FAILURE,
   OPEN_SPACE,
+  WEB3_LOADED,
+  ACCOUNT_LOADED,
+  ETHERS_SIGNER_LOADED,
+  ETHERS_PROVIDER_LOADED,
+  CONTRACT_LOADED,
+  TREATY_INDEX_CONTRACT_LOADED,
+  TREATY_CONTRACT_LOADED,
+  VALUE_LOADED,
+  TREATY_INDEX_LOADED,
+  HIDE_TREATIES,
+  SHOW_ALL_TREATIES,
 } from "../redux/actions";
 
 function web3(state = {}, action) {
   switch (action.type) {
-    case "WEB3_LOADED":
+    case WEB3_LOADED:
       return { ...state, connection: action.connection };
-    case "ACCOUNT_LOADED":
+    case ACCOUNT_LOADED:
       return { ...state, account: action.account };
     default:
       return state;
@@ -30,9 +41,9 @@ function web3(state = {}, action) {
 
 function ethers(state = {}, action) {
   switch (action.type) {
-    case "ETHERS_SIGNER_LOADED":
+    case ETHERS_SIGNER_LOADED:
       return { ...state, signer: action.signer };
-    case "ETHERS_PROVIDER_LOADED":
+    case ETHERS_PROVIDER_LOADED:
       return { ...state, provider: action.provider };
     default:
       return state;
@@ -41,18 +52,18 @@ function ethers(state = {}, action) {
 
 function contract(state = {}, action) {
   switch (action.type) {
-    case "CONTRACT_LOADED":
+    case CONTRACT_LOADED:
       return { ...state, contract: action.contract };
-    case "TREATY_INDEX_CONTRACT_LOADED":
+    case TREATY_INDEX_CONTRACT_LOADED:
       return { ...state, treatyIndexContract: action.treatyIndexContract };
-    case "TREATY_CONTRACT_LOADED":
+    case TREATY_CONTRACT_LOADED:
       return {
         ...state,
         treatyContracts: state.treatyContracts.concat(action.treatyContract),
       };
-    case "VALUE_LOADED":
+    case VALUE_LOADED:
       return { ...state, value: action.value };
-    case "TREATY_INDEX_LOADED":
+    case TREATY_INDEX_LOADED:
       return { ...state, treatyIndex: action.treatyIndex };
     default:
       return state;
@@ -78,15 +89,11 @@ export const treaties = (state = [], action) => {
       };
     }
     case MARK_ACTIVE: {
-      //console.log("detected mark_active event");
       const { treaty: activeTreaty } = payload;
-      //console.log("payload is " + payload);
-      //console.log("deconstructed payload is " + activeTreaty);
       return {
         ...state,
         data: state.data.map((treaty) => {
           if (treaty.id === activeTreaty.id) {
-            // return { ...treaty, isActive: true, treaty. }
             return Object.assign(activeTreaty, { status: "Active" });
           }
           return treaty;
@@ -107,16 +114,13 @@ export const treaties = (state = [], action) => {
       };
     }
     case ADD_TEXT_TO_TREATY: {
-      console.log("ADDTEXTTOTREATY WITH PAYLOAD " + payload);
       const { treaty: updatedTreaty } = payload;
       return {
         ...state,
         data: state.data.map((treaty) => {
           if (treaty.id === updatedTreaty.id) {
-            console.log("returning updated treaty. id: " + treaty.id);
             return updatedTreaty;
           } else {
-            console.log("returning treaty untouched. id: " + treaty.id);
             return treaty;
           }
         }),
@@ -145,7 +149,6 @@ export const treaties = (state = [], action) => {
     }
     case LOAD_ONE_TREATY_SUCCESS: {
       const { treaty: loadedTreaty } = payload;
-      console.log(`LOAD_ONE_TREATY_SUCCESS with payload ${payload}`);
       const treatyIdExists = (id, treatyList) => {
         return treatyList.filter((x) => x.id == id).length > 0;
       };
@@ -176,6 +179,34 @@ export const treaties = (state = [], action) => {
       return {
         ...state,
         isOneTreatyLoading: true,
+      };
+    }
+    default:
+      return state;
+  }
+};
+
+export const config = (state = [], action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case HIDE_TREATIES: {
+      console.log("HIDE_TREATIES");
+      console.log("state :>> ", state);
+      console.log("payload :>> ", payload);
+      console.log("ids :>> ", ids);
+      const { ids } = payload;
+      return {
+        ...state,
+        hiddenTreaties: state.hiddenTreaties.concat(ids),
+        // hiddenTreaties:
+        //   (state.config.hiddenTreaties == undefined && new Set(ids)) ||
+        //   state.config.hiddenTreaties.concat(ids),
+      };
+    }
+    case SHOW_ALL_TREATIES: {
+      return {
+        ...state,
+        hiddenTreaties: [],
       };
     }
     default:
@@ -224,6 +255,7 @@ const rootReducer = new combineReducers({
   contract,
   treaties,
   threebox,
+  config,
 });
 
 export default rootReducer;

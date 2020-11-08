@@ -31,6 +31,7 @@ function humanReadableSignatureStatus(int) {
       return "Broken";
   }
 }
+// enum SignatureState { Unsigned, Signed, Withdrawn, Broken }
 
 function humanReadableTreatyType(int) {
   const i = parseInt(int);

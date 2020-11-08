@@ -1,8 +1,6 @@
 import { get } from "lodash";
 import { createSelector } from "reselect";
 
-//todo: Selector consistency
-
 // WEB3
 const web3 = (state) => get(state, "web3.connection", null);
 export const web3Selector = createSelector(web3, (w) => w);
@@ -78,6 +76,10 @@ export const getBrokenTreaties = createSelector(getTreaties, (treaties) =>
     ? []
     : treaties.filter((treaty) => treaty.status == "Broken")
 );
+
+//Config
+export const getHiddenTreaties = (state) =>
+  get(state, "config.hiddenTreaties", []);
 
 //3box
 

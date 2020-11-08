@@ -30,6 +30,8 @@ import {
   subscribeToAccountsChanging,
   subscribeToNewSignatures,
   subscribeToNewTreaties,
+  subscribeToMakeActive,
+  subscribeToRegisterAsSigner,
   subscribeToAllLogs,
 } from "./redux/subscriptions";
 
@@ -42,13 +44,13 @@ import {
   Footer,
   Grid,
 } from "./components/treatifyStyled";
-import Nav from "./components/Nav";
 import { StyledPopover, StyledPopoverTitle } from "./components/treatifyStyled";
-// import Chatbox from "./components/Chatbox";
 import { Button, Popover, OverlayTrigger } from "react-bootstrap";
 import styled from "styled-components";
 import ProfileHover from "profile-hover";
 import ActiveTreatyListItem from "./components/ActiveTreatyListItem";
+import { withCookies } from "react-cookie";
+import { showAllTreaties } from "./redux/actions";
 
 const TreatyWeb3 = ({
   dispatch,
@@ -68,10 +70,14 @@ const TreatyWeb3 = ({
   startSubscribeToAllLogs,
   startSubscribeToNewTreaties,
   startSubscribeToNewSignatures,
+  startSubscribeToMakeActive,
+  startSubscribeToRegisterAsSigner,
   startLoad3box,
   startLoadEthersProvider,
   startLoadEthersSigner,
+  startShowAllTreaties,
   initiated,
+  cookies,
 }) => {
   useEffect(() => {
     async function initiate() {
@@ -85,11 +91,14 @@ const TreatyWeb3 = ({
       const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
       const treatyIndex = await startLoadTreatyIndex(treatyIndexContract);
       startSubscribeToAccountsChanging(myWeb3);
+      startShowAllTreaties();
       const treaties = await startLoadTreatiesWeb3(myWeb3, treatyIndex);
       console.log("treaties :>>> ", treaties);
       startSubscribeToAllLogs(web3);
       startSubscribeToNewTreaties();
       startSubscribeToNewSignatures();
+      startSubscribeToRegisterAsSigner();
+      startSubscribeToMakeActive();
 
       //3box
       startLoad3box(myAccount, window.ethereum);
@@ -141,7 +150,7 @@ const TreatyWeb3 = ({
   const treatyIndexPopover = (
     <StyledPopover id="treaty-index-popover" boundary="window">
       <StyledPopoverTitle as="h3">
-        Treaty Index Address:{" "}
+        Project Board Address:{" "}
         {treatyIndexContract && treatyIndexContract._address}
       </StyledPopoverTitle>
       <StyledPopover.Content>
@@ -169,8 +178,8 @@ const TreatyWeb3 = ({
       delay={{ show: 250, hide: 2000 }}
       overlay={treatyIndexPopover}
     >
-      <a href="#" style={{ marginTop: "40px" }}>
-        Show Treaty Index
+      <a href="#" style={{ marginTop: "40px", color: "white" }}>
+        Show Project Wallet Board
       </a>
     </OverlayTrigger>
   );
@@ -222,23 +231,17 @@ const TreatyWeb3 = ({
           </div>
         )}
         {treatyIndex == null ? (
-          <div>Treaty index has not been loaded</div>
+          <div>Project Wallet Board has not been loaded</div>
         ) : (
           <TreatyIndexComponent />
         )}
         <p></p>
-        {/* <Chatbox box={box} title={"Chatbox"} space={space} /> */}
-        {/* <Chatbox
-          title={"Chatbox"}
-          account={account}
-          provider={window.ethereum}
-        /> */}
       </LSide>
       <Main>
         {treatyIndex == null ? (
-          <div>Treaty index has not been loaded</div>
+          <div>Project Wallet Board has not been loaded</div>
         ) : (
-          <TreatyList web3={web3} />
+          <TreatyList web3={web3} pCookies={cookies} />
         )}
       </Main>
       <RSide>
@@ -276,12 +279,19 @@ function mapDispatchToProps(dispatch) {
     startLoadTreatiesWeb3: (web3, treatyIndex) => dispatch(loadTreatiesWeb3()),
     startSubscribeToNewTreaties: () => dispatch(subscribeToNewTreaties()),
     startSubscribeToNewSignatures: () => dispatch(subscribeToNewSignatures()),
+    startSubscribeToRegisterAsSigner: () =>
+      dispatch(subscribeToRegisterAsSigner()),
+    startSubscribeToMakeActive: () => dispatch(subscribeToMakeActive()),
     startSubscribeToAllLogs: (web3) => dispatch(subscribeToAllLogs(web3)),
     startLoad3box: (address, provider) => dispatch(load3box(address, provider)),
     startLoadEthersSigner: (provider) => dispatch(loadEthersSigner(provider)),
     startLoadEthersProvider: (ethereumProvider) =>
       dispatch(loadEthersProvider(ethereumProvider)),
+    startShowAllTreaties: () => dispatch(showAllTreaties()),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TreatyWeb3);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withCookies(TreatyWeb3));

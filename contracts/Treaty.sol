@@ -35,7 +35,7 @@ contract Treaty is AccessRestriction {
 
   /// Enums ///
   enum States { Draft, Active, Binding, Broken, MutuallyWithdrawn }
-  enum SignatureState { Unsigned, Signed, Withdrawn, Broken }
+  enum SignatureState { NotRegistered, Unsigned, Signed, Withdrawn, Broken }
   enum TreatyType { ProjectToFounder, ProjectToMentor, Volunteer }
 
   /// Events ///

@@ -69,35 +69,6 @@ export function loadTreatiesFailure() {
   };
 }
 
-//these will not work because: Unhandled Rejection (Error): Actions must be plain objects. Use custom middleware for async actions.
-// export const LOAD_TREATIES_IN_PROGRESS = "LOAD_TREATIES_IN_PROGRESS";
-// export const loadTreatiesInProgress = () => ({
-//   type: LOAD_TREATIES_IN_PROGRESS,
-// });
-
-// export const LOAD_TREATIES_SUCCESS = "LOAD_TREATIES_SUCCESS";
-// export const loadTreatiesSuccess = (treaties) => ({
-//   type: LOAD_TREATIES_SUCCESS,
-//   payload: { treaties },
-// });
-
-// export const LOAD_TREATIES_FAILURE = "LOAD_TREATIES_FAILURE";
-// export const loadTreatiesFailure = () => ({
-//   type: LOAD_TREATIES_FAILURE,
-// });
-
-// export const loadTreaties = () => async (dispatch, getState) => {
-//   try {
-//     dispatch(loadTreatiesInProgress());
-//     const response = await fetch(`${process.env.TREATY_SERVER}/treaties`);
-//     const treaties = await response.json();
-//     dispatch(loadTreatiesSuccess(treaties));
-//   } catch (e) {
-//     dispatch(loadTreatiesFailure());
-//     dispatch(displayAlert(e));
-//   }
-// };
-
 export const CREATE_TREATY = "CREATE_TREATY";
 export const createTreaty = (treaty) => ({
   type: CREATE_TREATY,
@@ -178,3 +149,24 @@ export const openSpace = (space) => ({
   type: OPEN_SPACE,
   payload: { space },
 });
+
+export const HIDE_TREATIES = "HIDE_TREATIES";
+export const hideTreaties = (ids) => ({
+  type: HIDE_TREATIES,
+  payload: { ids },
+});
+
+export const SHOW_ALL_TREATIES = "SHOW_ALL_TREATIES";
+export const showAllTreaties = () => ({
+  type: SHOW_ALL_TREATIES,
+});
+
+export const WEB3_LOADED = "WEB3_LOADED";
+export const ACCOUNT_LOADED = "ACCOUNT_LOADED";
+export const ETHERS_SIGNER_LOADED = "ETHERS_SIGNER_LOADED";
+export const ETHERS_PROVIDER_LOADED = "ETHERS_PROVIDER_LOADED";
+export const CONTRACT_LOADED = "CONTRACT_LOADED";
+export const TREATY_INDEX_CONTRACT_LOADED = "TREATY_INDEX_CONTRACT_LOADED";
+export const TREATY_CONTRACT_LOADED = "TREATY_CONTRACT_LOADED";
+export const VALUE_LOADED = "VALUE_LOADED";
+export const TREATY_INDEX_LOADED = "TREATY_INDEX_LOADED";

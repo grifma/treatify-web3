@@ -9,7 +9,7 @@ import {
 
 const WithdrawnTreatyListItem = ({
   treaty,
-  onRemovePressed,
+  onHidePressed,
   onMarkActivePressed,
 }) => {
   const Container = treaty.isActive

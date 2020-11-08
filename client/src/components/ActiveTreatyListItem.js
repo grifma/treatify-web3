@@ -1,61 +1,38 @@
 import React from "react";
 import {
-  TreatyItemContainer,
-  TreatyItemContainerWithWarning,
+  FocusedTreatyItemContainer,
+  UnfocusedTreatyItemContainer,
   ActiveButton,
   SignButton,
-  RemoveButton,
+  HideButton,
   JoinButton,
   RefreshTreatyButton,
   TreatyTextContainer,
   SignedText,
   UnsignedText,
-  SignerBlockieSetContainer,
   StyledPopover,
   StyledPopoverTitle,
 } from "./treatifyStyled";
 import AddTreatyTextForm from "./AddTreatyTextForm";
-import SignerBlockie from "./SignerBlockie";
+import TreatyListItemCommonHeader from "./TreatyListItemCommonHeader";
+import TreatyListItemCommonSignatures from "./TreatyListItemCommonSignatures";
 import { OverlayTrigger } from "react-bootstrap";
 
 const ActiveTreatyListItem = ({
   treaty,
-  onRemovePressed,
+  onHidePressed,
   onMarkActivePressed,
   onAddTreatyTextPressed,
   onSignPressed,
   onRefreshTreatyPressed,
 }) => {
-  const Container = treaty.isActive
-    ? TreatyItemContainer
-    : TreatyItemContainerWithWarning;
+  const Container = treaty.inFocus
+    ? FocusedTreatyItemContainer
+    : UnfocusedTreatyItemContainer;
   return (
     <Container key={treaty.key} createdAt={treaty.createdAt}>
-      {/* <IH name={treaty.text} date={treaty.date} /> */}
-      <h3>
-        #{treaty.id}&nbsp;
-        {treaty.text}
-      </h3>
-      <h3>
-        Balance:&nbsp;
-        {treaty.balance}
-      </h3>
-      <p>
-        Created at:&nbsp;
-        {new Date(treaty.createdAt * 1000).toLocaleDateString()}
-      </p>
-      <p>
-        Lives at:&nbsp;
-        {treaty.address}
-      </p>
-      <SignerBlockieSetContainer>
-        Signers:&nbsp;
-        {treaty.signers.map((signer) => (
-          <div>
-            <SignerBlockie address={signer} />
-          </div>
-        ))}
-      </SignerBlockieSetContainer>
+      <TreatyListItemCommonHeader key={treaty.key} treaty={treaty} />
+      <TreatyListItemCommonSignatures key={treaty.key} treaty={treaty} />
       <TreatyTextContainer>
         {/* <OverlayTrigger
           trigger={["hover", "focus"]}
@@ -64,7 +41,7 @@ const ActiveTreatyListItem = ({
           overlay={developerInfoPopover(treaty)}
         > */}
         <UnsignedText>
-          {treaty.unsignedTreatyText.length === 0 ? null : <h3>Unsigned</h3>}
+          <h3>Unsigned</h3>
           {treaty.unsignedTreatyText.length > 0 &&
             treaty.unsignedTreatyText.map((text) => <p>{text}</p>)}
         </UnsignedText>
@@ -76,10 +53,7 @@ const ActiveTreatyListItem = ({
           overlay={developerInfoPopover(treaty)}
         > */}
         <SignedText>
-          {treaty.signedTreatyText.length === 0 ||
-          treaty.signedTreatyText[0] == "" ? null : (
-            <h3>Signed</h3>
-          )}
+          <h3>Signed</h3>
           {treaty.signedTreatyText.length > 0 &&
             treaty.signedTreatyText.map((text) => <p>{text}</p>)}
         </SignedText>
@@ -91,12 +65,7 @@ const ActiveTreatyListItem = ({
       />
       <div className="buttons-container">
         <SignButton onClick={() => onSignPressed(treaty)}>Sign</SignButton>
-        {/* <RemoveButton onClick={() => onRemovePressed(treaty)}>
-          Remove
-        </RemoveButton>
-        <RefreshTreatyButton onClick={() => onRefreshTreatyPressed(treaty)}>
-          Refresh
-        </RefreshTreatyButton> */}
+        <HideButton onClick={() => onHidePressed(treaty.id)}>Hide</HideButton>
       </div>
     </Container>
   );

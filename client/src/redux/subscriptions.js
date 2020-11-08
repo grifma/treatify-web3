@@ -23,8 +23,8 @@ export const subscribeToNewTreaties = () => async (dispatch, getState) => {
       function (error, result) {
         if (!error) {
           console.log("[subscribeToNewTreaties]", result);
-          console.log(`address is ${result.address}`);
-          // dispatch(loadOneTreatyByAddress(result.address));
+          console.log(`treaty address is ${result.returnValues[0]}`);
+          dispatch(loadOneTreatyByAddress(result.returnValues[0]));
           return;
         }
         console.error("[subscribeToNewTreaties]", error);
@@ -35,6 +35,9 @@ export const subscribeToNewTreaties = () => async (dispatch, getState) => {
     })
     .on("error", function (error) {
       console.error("[subscribeToNewTreaties]", error);
+    })
+    .on("end", function (end) {
+      console.info("CONNECTION ENDED", end);
     });
 };
 
@@ -59,32 +62,127 @@ export const subscribeToAllLogs = (web3) => async (dispatch, getState) => {
 
 export const subscribeToNewSignatures = () => async (dispatch, getState) => {
   console.info("SignedBy", getState());
-  const treatyIndexInstance = getState().contract.treatyIndexContract;
-  console.log("treatyIndexInstance", treatyIndexInstance);
-  treatyIndexInstance.events
-    .AddTreaty(
-      {
-        //filter: {myIndexedParam: [20,23], myOtherIndexedParam: '0x123456789...'},
-        // fromBlock: 0,
-      },
-      function (error, result) {
-        if (!error) {
-          console.log("[SignedBy]", result);
-          return;
+  const treaties = getState().treaties.data;
+  const treatyInstances = treaties.map((treaty) => treaty.contractInstance);
+  treatyInstances.map((treatyInstance) => {
+    console.log("treatyInstance", treatyInstance);
+    treatyInstance.events
+      .SignedBy(
+        {
+          //filter: {myIndexedParam: [20,23], myOtherIndexedParam: '0x123456789...'},
+          // fromBlock: 0,
+        },
+        function (error, result) {
+          if (!error) {
+            console.log("[SignedBy]", result);
+            dispatch(loadOneTreatyByAddress(result.address));
+            return;
+          }
+          console.error("[SignedBy]", error);
         }
+      )
+      .on("data", function (event) {
+        console.info("[SignedBy]", event);
+      })
+      .on("error", function (error) {
         console.error("[SignedBy]", error);
-      }
-    )
-    .on("data", function (event) {
-      console.info("[SignedBy]", event);
-    })
-    .on("error", function (error) {
-      console.error("[subscribeToNewTreaties]", error);
-    });
+      })
+      .on("end", function (end) {
+        console.info("CONNECTION ENDED", end);
+      });
+    treatyInstance.events
+      .SignHash(
+        {
+          //filter: {myIndexedParam: [20,23], myOtherIndexedParam: '0x123456789...'},
+          // fromBlock: 0,
+        },
+        function (error, result) {
+          if (!error) {
+            console.log("[SignHash]", result);
+            dispatch(loadOneTreatyByAddress(result.address));
+            return;
+          }
+          console.error("[SignHash]", error);
+        }
+      )
+      .on("data", function (event) {
+        console.info("[SignHash]", event);
+      })
+      .on("error", function (error) {
+        console.error("[SignHash]", error);
+      })
+      .on("end", function (end) {
+        console.info("CONNECTION ENDED", end);
+      });
+  });
 };
 
-export const subscribeSet = (web3) => async (dispatch) => {
-  window.ethereum.on("Set", async function (accounts) {
-    console.log("SUBSCRIBE--SET");
+export const subscribeToRegisterAsSigner = () => async (dispatch, getState) => {
+  console.info("subscribeToRegisterAsSigner", getState());
+  const treaties = getState().treaties.data;
+  const treatyInstances = treaties.map((treaty) => treaty.contractInstance);
+  treatyInstances.map((treatyInstance) => {
+    console.log("treatyInstance", treatyInstance);
+    treatyInstance.events
+      .RegisterAsSigner(
+        {
+          //filter: {myIndexedParam: [20,23], myOtherIndexedParam: '0x123456789...'},
+          // fromBlock: 0,
+        },
+        function (error, result) {
+          if (!error) {
+            console.log("[RegisterAsSigner]", result);
+            dispatch(loadOneTreatyByAddress(result.address));
+            return;
+          }
+          console.error("[RegisterAsSigner]", error);
+        }
+      )
+      .on("data", function (event) {
+        console.info("[RegisterAsSigner]", event);
+      })
+      .on("error", function (error) {
+        console.error("[RegisterAsSigner]", error);
+      })
+      .on("end", function (end) {
+        console.info("CONNECTION ENDED", end);
+      });
   });
+};
+
+export const subscribeToMakeActive = () => async (dispatch, getState) => {
+  console.info("subscribeToMakeActive", getState());
+  const treaties = getState().treaties.data;
+  const treatyInstances = treaties.map((treaty) => treaty.contractInstance);
+  treatyInstances.map((treatyInstance) => {
+    console.log("treatyInstance", treatyInstance);
+    treatyInstance.events
+      .MakeActive(
+        {
+          //filter: {myIndexedParam: [20,23], myOtherIndexedParam: '0x123456789...'},
+          // fromBlock: 0,
+        },
+        function (error, result) {
+          if (!error) {
+            console.log("[MakeActive]", result);
+            dispatch(loadOneTreatyByAddress(result.address));
+            return;
+          }
+          console.error("[MakeActive]", error);
+        }
+      )
+      .on("data", function (event) {
+        console.info("[MakeActive]", event);
+      })
+      .on("error", function (error) {
+        console.error("[MakeActive]", error);
+      })
+      .on("end", function (end) {
+        console.info("CONNECTION ENDED", end);
+      });
+  });
+};
+
+export const subscribeTo3boxChanges = () => async (dispatch, getState) => {
+  console.info("subscribeTo3boxChanges", getState());
 };
