@@ -11,6 +11,7 @@ Once signed, the agreement text is hashed, and the hash result is stored onchain
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/fdc86f98-d03b-4a79-abf2-fdd419e6cc44/deploy-status)](https://app.netlify.com/sites/treatify-staging/deploys)
 
+
 ## Installation
 
 1. Run the development console.
@@ -50,4 +51,3 @@ Once signed, the agreement text is hashed, and the hash result is stored onchain
    npm run build
    ```
 
-## FAQ
