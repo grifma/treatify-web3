@@ -1,0 +1,28 @@
+{
+  "name": "treatify-web3",
+  "version": "1.0.0",
+  "description": "Fully onchain version of Treatify, running on Ethereum, IPFS and 3box.",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grifma/treatify-web3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/grifma/treatify-web3/issues"
+  },
+  "homepage": "https://github.com/grifma/treatify-web3#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^2.5.1",
+    "formik": "^2.1.5",
+    "react": "^16.13.1",
+    "react-cookie": "^4.0.3"
+  }
+}

@@ -2,42 +2,40 @@ import React, { Component, useEffect } from "react";
 import { connect } from "react-redux";
 import "./TreatyWeb3.css";
 import {
-  loadWeb3DirectDispatch,
-  loadAccountDirectDispatch,
-  loadContractDirectDispatch,
-  loadTreatyIndexDirectDispatch,
-  loadTreatyIndexContractDirectDispatch,
   loadWeb3,
-  loadContract,
+  loadEthersProvider,
+  loadEthersSigner,
   loadAccount,
-  loadStoredData,
   loadTreatyIndex,
-  loadTreatyIndexContract,
+  loadTreatyIndexWeb3,
   loadTreatyContract,
+  loadTreatyIndexContract,
+  loadTreatyIndexContractWeb3,
+  loadStoredData,
   loadTreatiesWeb3,
-  load3boxRequest,
+  load3box,
 } from "./redux/interactions";
 import {
-  contractSelector,
   accountSelector,
-  valueSelector,
   treatyIndexContractSelector,
   treatyIndexSelector,
   treatyContractSelector,
   treatyContractsSelector,
   treatyIndex,
   web3Selector,
-  getState,
+  ethersProviderSelector,
+  ethersSignerSelector,
 } from "./redux/selectors";
 import {
   subscribeToAccountsChanging,
   subscribeToNewSignatures,
   subscribeToNewTreaties,
+  subscribeToMakeActive,
+  subscribeToRegisterAsSigner,
   subscribeToAllLogs,
 } from "./redux/subscriptions";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+
 import TreatyList from "./components/TreatyList";
-import Blockies from "react-blockies";
 import {
   Main,
   LSide,
@@ -46,13 +44,16 @@ import {
   Footer,
   Grid,
 } from "./components/treatifyStyled";
-import Nav from "./components/Nav";
-// import Chatbox from "./components/Chatbox";
+import { StyledPopover, StyledPopoverTitle } from "./components/treatifyStyled";
 import { Button, Popover, OverlayTrigger } from "react-bootstrap";
+import styled from "styled-components";
+import ProfileHover from "profile-hover";
+import ActiveTreatyListItem from "./components/ActiveTreatyListItem";
+import { withCookies } from "react-cookie";
+import { showAllTreaties } from "./redux/actions";
 
 const TreatyWeb3 = ({
   dispatch,
-  contract,
   account,
   value,
   treatyIndex,
@@ -61,7 +62,6 @@ const TreatyWeb3 = ({
   web3,
   startLoadWeb3,
   startLoadAccount,
-  startLoadContract,
   startLoadTreatyIndex,
   startLoadTreatyIndexContract,
   startSubscribeToAccountsChanging,
@@ -70,42 +70,59 @@ const TreatyWeb3 = ({
   startSubscribeToAllLogs,
   startSubscribeToNewTreaties,
   startSubscribeToNewSignatures,
+  startSubscribeToMakeActive,
+  startSubscribeToRegisterAsSigner,
   startLoad3box,
+  startLoadEthersProvider,
+  startLoadEthersSigner,
+  startShowAllTreaties,
   initiated,
+  cookies,
 }) => {
   useEffect(() => {
     async function initiate() {
+      //ethers
+      const provider = await startLoadEthersProvider(window.ethereum);
+      const signer = await startLoadEthersSigner(provider);
+      console.log("provider :>> ", provider);
+      console.log("signer :>> ", signer);
       const myWeb3 = await startLoadWeb3();
       const myAccount = await startLoadAccount(myWeb3);
       const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
       const treatyIndex = await startLoadTreatyIndex(treatyIndexContract);
-      const simpleStorageContract = await startLoadContract(myWeb3);
-      console.log("simpleStorageContract");
-      console.log(simpleStorageContract);
-      await startLoadStoredData(simpleStorageContract);
       startSubscribeToAccountsChanging(myWeb3);
-      const treaties = await startLoadTreatiesWeb3();
+      startShowAllTreaties();
+      const treaties = await startLoadTreatiesWeb3(myWeb3, treatyIndex);
+      console.log("treaties :>>> ", treaties);
       startSubscribeToAllLogs(web3);
       startSubscribeToNewTreaties();
       startSubscribeToNewSignatures();
+      startSubscribeToRegisterAsSigner();
+      startSubscribeToMakeActive();
 
       //3box
-      // startLoad3box(myAccount, window.ethereum);
-      console.log("effect done");
+      startLoad3box(myAccount, window.ethereum);
     }
     initiate();
   }, []);
 
   const connectBlockchain = async (e) => {
-    console.log("Deprecated - code removed");
+    //console.log("Deprecated - code removed");
+    //console.log("web3, treatyIndex", web3, treatyIndex);
+    const myWeb3 = await startLoadWeb3();
+    const myAccount = await startLoadAccount(myWeb3);
+    await startLoadTreatiesWeb3(myWeb3, treatyIndex);
+
+    //3box
+    startLoad3box(myAccount, window.ethereum);
+
     e.preventDefault();
-    // const myWeb3 = await startLoadWeb3();
-    // await startLoadAccount(myWeb3);
-    // const simpleStorageContract = await startLoadContract(myWeb3);
-    // const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
-    // await startLoadTreatyIndex(treatyIndexContract);
-    // await loadStoredData(simpleStorageContract);
-    // subscribeToAccountsChanging(myWeb3);
+  };
+
+  const refresh = async (e) => {
+    //console.log("Refresh");
+    startLoadTreatiesWeb3(web3, treatyIndex);
+    e.preventDefault();
   };
 
   const emptyComponent = () => <div>EMPTY</div>;
@@ -131,33 +148,40 @@ const TreatyWeb3 = ({
   );
 
   const treatyIndexPopover = (
-    <Popover id="treaty-index-popover">
-      <Popover.Title as="h3">
+    <StyledPopover id="treaty-index-popover" boundary="window">
+      <StyledPopoverTitle as="h3">
+        Project Board Address:{" "}
+        {treatyIndexContract && treatyIndexContract._address}
+      </StyledPopoverTitle>
+      <StyledPopover.Content>
+        <TreatyIndexTable />
+      </StyledPopover.Content>
+    </StyledPopover>
+  );
+
+  function renderTreatyIndexPopover(props) {
+    <StyledPopover id="treaty-index-popover" {...props}>
+      <StyledPopoverTitle as="h3">
         Treaty Index Address:{" "}
         {treatyIndexContract && treatyIndexContract._address}
-      </Popover.Title>
-      <Popover.Content>
+      </StyledPopoverTitle>
+      <StyledPopover.Content>
         <TreatyIndexTable />
-      </Popover.Content>
-    </Popover>
-  );
+      </StyledPopover.Content>
+    </StyledPopover>;
+  }
 
   const TreatyIndexComponent = () => (
     <OverlayTrigger
-      trigger="hover"
-      placement="right"
+      trigger={["hover", "focus"]}
+      placement={"right"}
+      delay={{ show: 250, hide: 2000 }}
       overlay={treatyIndexPopover}
     >
-      <div class="onDark">Treaty Index</div>
+      <a href="#" style={{ marginTop: "40px", color: "white" }}>
+        Show Project Wallet Board
+      </a>
     </OverlayTrigger>
-  );
-
-  const AccountBlockie = () => (
-    <div class="onDark">
-      <Blockies seed={account.toLowerCase()} size={10} scale={6} />
-      &nbsp;&nbsp;&nbsp;
-      <label>Account: {account}</label>
-    </div>
   );
 
   const ConnectForm = () => (
@@ -167,10 +191,26 @@ const TreatyWeb3 = ({
           <button
             type="submit"
             className={`w-100 btn text-truncate ${
-              contract !== null ? "disabled btn-success" : "btn-danger"
+              treatyIndexContract !== null
+                ? "disabled btn-success"
+                : "btn-danger"
             }`}
           >
-            {contract !== null ? "Blockchain Connected" : "Connect Blockchain"}
+            {treatyIndexContract !== null
+              ? "Blockchain Connected"
+              : "Connect Blockchain"}
+          </button>
+        </div>
+      </div>
+    </form>
+  );
+
+  const RefreshForm = () => (
+    <form onSubmit={refresh}>
+      <div className="form-group row">
+        <div className="col-12">
+          <button type="submit" className="w-100 btn">
+            Refresh
           </button>
         </div>
       </div>
@@ -181,28 +221,27 @@ const TreatyWeb3 = ({
   const isLoading = false;
   const content = (
     <Grid>
-      <Header>
-        <Nav />
-      </Header>
+      <Header>{/*<Nav />*/}</Header>
       <LSide>
         {account == null ? (
           <div>Account has not been loaded</div>
         ) : (
-          <AccountBlockie />
+          <div>
+            <ProfileHover address={account} />
+          </div>
         )}
         {treatyIndex == null ? (
-          <div>Treaty index has not been loaded</div>
+          <div>Project Wallet Board has not been loaded</div>
         ) : (
           <TreatyIndexComponent />
         )}
         <p></p>
-        {/* <Chatbox /> */}
       </LSide>
       <Main>
         {treatyIndex == null ? (
-          <div>Treaty index has not been loaded</div>
+          <div>Project Wallet Board has not been loaded</div>
         ) : (
-          <TreatyList web3={web3} />
+          <TreatyList web3={web3} pCookies={cookies} />
         )}
       </Main>
       <RSide>
@@ -216,36 +255,43 @@ const TreatyWeb3 = ({
 
 function mapStateToProps(state) {
   return {
-    contract: contractSelector(state),
+    web3: web3Selector(state),
     account: accountSelector(state),
-    value: valueSelector(state),
     treatyIndex: treatyIndexSelector(state),
     treatyIndexContract: treatyIndexContractSelector(state),
-    web3: web3Selector(state),
+    ethersProvider: ethersProviderSelector(state),
+    ethersSigner: ethersSignerSelector(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     onRefreshTreatiesPressed: (treatyIndexContract) =>
-      dispatch(loadTreatyIndexDirectDispatch(treatyIndexContract)),
-    startLoadWeb3: () => dispatch(loadWeb3DirectDispatch()),
-    startLoadAccount: (myWeb3) => dispatch(loadAccountDirectDispatch(myWeb3)),
-    startLoadContract: (myWeb3) => dispatch(loadContractDirectDispatch(myWeb3)),
+      dispatch(loadTreatyIndex(treatyIndexContract)),
+    startLoadWeb3: () => dispatch(loadWeb3()),
+    startLoadAccount: (myWeb3) => dispatch(loadAccount(myWeb3)),
     startLoadTreatyIndex: (treatyIndexContract) =>
-      dispatch(loadTreatyIndexDirectDispatch(treatyIndexContract)),
+      dispatch(loadTreatyIndexWeb3(treatyIndexContract)),
     startLoadTreatyIndexContract: (myWeb3) =>
-      dispatch(loadTreatyIndexContractDirectDispatch(myWeb3)),
+      dispatch(loadTreatyIndexContractWeb3(myWeb3)),
     startSubscribeToAccountsChanging: (web3) =>
       dispatch(subscribeToAccountsChanging(web3)),
-    startLoadStoredData: (contract) => dispatch(loadStoredData(contract)),
     startLoadTreatiesWeb3: (web3, treatyIndex) => dispatch(loadTreatiesWeb3()),
     startSubscribeToNewTreaties: () => dispatch(subscribeToNewTreaties()),
     startSubscribeToNewSignatures: () => dispatch(subscribeToNewSignatures()),
+    startSubscribeToRegisterAsSigner: () =>
+      dispatch(subscribeToRegisterAsSigner()),
+    startSubscribeToMakeActive: () => dispatch(subscribeToMakeActive()),
     startSubscribeToAllLogs: (web3) => dispatch(subscribeToAllLogs(web3)),
-    startLoad3box: (address, provider) =>
-      dispatch(load3boxRequest(address, provider)),
+    startLoad3box: (address, provider) => dispatch(load3box(address, provider)),
+    startLoadEthersSigner: (provider) => dispatch(loadEthersSigner(provider)),
+    startLoadEthersProvider: (ethereumProvider) =>
+      dispatch(loadEthersProvider(ethereumProvider)),
+    startShowAllTreaties: () => dispatch(showAllTreaties()),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TreatyWeb3);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withCookies(TreatyWeb3));

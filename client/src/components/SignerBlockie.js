@@ -1,12 +1,66 @@
 import React from "react";
 import styled from "styled-components";
 import Blockies from "react-blockies";
-import { SignerBlockieContainer } from "./treatifyStyled";
+import {
+  UnsignedSignerBlockieContainer,
+  SignedSignerBlockieContainer,
+  BrokenSignerBlockieContainer,
+  WithdrawnSignerBlockieContainer,
+} from "./treatifyStyled";
+import ProfileHover from "profile-hover";
 
-const SignerBlockie = ({ seed }) => (
-  <SignerBlockieContainer>
-    <Blockies seed={seed} size={8} scale={8} />
-  </SignerBlockieContainer>
-);
+const SignerBlockie = ({ address, signatureState }) => {
+  console.log("signatureState :>> ", signatureState);
+  if (
+    signatureState == undefined ||
+    signatureState == "Unsigned" ||
+    signatureState == "NotRegistered"
+  ) {
+    return (
+      <UnsignedSignerBlockieContainer>
+        <StyledProfileHover
+          address={address}
+          tileStyle={true}
+          orientation={"bottom"}
+        />
+      </UnsignedSignerBlockieContainer>
+    );
+  }
+  if (signatureState == "Signed") {
+    return (
+      <SignedSignerBlockieContainer>
+        <StyledProfileHover
+          address={address}
+          tileStyle={true}
+          orientation={"bottom"}
+        />
+      </SignedSignerBlockieContainer>
+    );
+  }
+  if (signatureState == "Broken") {
+    return (
+      <BrokenSignerBlockieContainer>
+        <StyledProfileHover
+          address={address}
+          tileStyle={true}
+          orientation={"bottom"}
+        />
+      </BrokenSignerBlockieContainer>
+    );
+  }
+  if (signatureState == "Withdrawn") {
+    return (
+      <WithdrawnSignerBlockieContainer>
+        <StyledProfileHover
+          address={address}
+          tileStyle={true}
+          orientation={"bottom"}
+        />
+      </WithdrawnSignerBlockieContainer>
+    );
+  }
+};
+
+const StyledProfileHover = styled(ProfileHover)``;
 
 export default SignerBlockie;

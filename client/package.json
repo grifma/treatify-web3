@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "private": true,
   "main": "index.js",
   "devDependencies": {
@@ -26,14 +26,14 @@
     "autoprefixer": "^9.8.0",
     "bootstrap": "^4.4.1",
     "chai": "^4.2.0",
-    "cycle": "^1.0.3",
+    "debug": "^4.1.1",
     "eslint-plugin-react": "^7.20.0",
+    "ethers": "^5.0.5",
     "jquery": "^3.5.1",
     "lodash": "^4.17.15",
     "mocha": "^7.1.2",
     "popper.js": "^1.16.1",
-    "postcss-loader": "^3.0.0",
-    "precss": "^4.0.0",
+    "profile-hover": "^1.1.2",
     "react": "16.11.0",
     "react-blockies": "^1.4.1",
     "react-bootstrap": "^1.0.0",
@@ -47,13 +47,13 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "sass-loader": "^8.0.2",
     "styled-components": "^5.1.1",
-    "web3": "1.2.2"
+    "web3": "1.2.11"
   },
   "scripts": {
     "dev": "npx webpack-dev-server --mode development",
     "build": "npx webpack --mode development",
+    "production": "npx webpack -p",
     "test": "mocha \"src/**/*.test.js\" --require @babel/register --recursive"
   },
   "eslintConfig": {
@@ -72,3 +72,4 @@
     ]
   }
 }
+

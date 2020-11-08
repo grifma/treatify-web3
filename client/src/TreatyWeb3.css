@@ -1,15 +1,12 @@
-div {
-  color: black;
-}
-
-p {
-  color: black;
-}
-
 .flexbox {
   display: flex;
 }
 
 .onDark {
   color: white;
+}
+
+a {
+  color: black;
+  text-decoration: none;
 }

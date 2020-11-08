@@ -1,19 +1,18 @@
 import React, { useEffect } from "react";
 import NewTreatyForm from "./NewTreatyForm";
-import TreatyListItem from "./TreatyListItem";
 import ActiveTreatyListItem from "./ActiveTreatyListItem";
 import DraftTreatyListItem from "./DraftTreatyListItem";
 import WithdrawnTreatyListItem from "./WithdrawnTreatyListItem";
 import {
-  loadTreaties,
-  removeTreatyRequest,
+  loadTreatiesWeb3,
+  hideTreatyRequest,
   markActiveRequest,
   signTreatyRequest,
   joinTreatyRequest,
+  refreshTreatyRequest,
 } from "../redux/interactions";
 import { connect } from "react-redux";
 import { removeTreaty, markActive } from "../redux/actions";
-import { displayAlert } from "../redux/interactions";
 import {
   getTreatiesLoading,
   getActiveTreaties,
@@ -22,21 +21,30 @@ import {
   getWithdrawnTreaties,
 } from "../redux/selectors";
 import { ListWrapper, StatusHeader } from "./treatifyStyled";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link,
+  useParams,
+} from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const TreatyList = ({
+  isLoading,
   activeTreaties,
   draftTreaties,
   bindingTreaties,
   withdrawnTreaties,
-  isLoading,
-  onRemovePressed,
-  onMarkActivePressed,
-  onDisplayAlertClicked,
+  web3,
   startLoadingTreaties,
+  onHidePressed,
+  onMarkActivePressed,
   onAddTreatyTextPressed,
   onSignPressed,
-  web3,
   onJoinPressed,
+  onRefreshTreatyPressed,
+  pCookies,
   // propTreaties,
 }) => {
   useEffect(() => {
@@ -47,73 +55,178 @@ const TreatyList = ({
   // if (activeTreaties == undefined) activeTreaties = [];
 
   const loadingMessage = <div>Loading treaties</div>;
+  console.log("[TreatyList] activeTreaties :>> ", activeTreaties);
+  console.log("[TreatyList] draftTreaties :>> ", draftTreaties);
   const content = (
+    <Router>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          children={
+            <MainTreatyList
+              activeTreaties={activeTreaties}
+              draftTreaties={draftTreaties}
+              onHidePressed={onHidePressed}
+              onMarkActivePressed={onMarkActivePressed}
+              onAddTreatyTextPressed={onAddTreatyTextPressed}
+              onSignPressed={onSignPressed}
+              onRefreshTreatyPressed={onRefreshTreatyPressed}
+              onJoinPressed={onJoinPressed}
+            />
+          }
+        />
+        <Route
+          exact
+          path="/focus/:id"
+          children={
+            <MainTreatyList
+              activeTreaties={activeTreaties}
+              draftTreaties={draftTreaties}
+              onHidePressed={onHidePressed}
+              onMarkActivePressed={onMarkActivePressed}
+              onAddTreatyTextPressed={onAddTreatyTextPressed}
+              onSignPressed={onSignPressed}
+              onRefreshTreatyPressed={onRefreshTreatyPressed}
+              onJoinPressed={onJoinPressed}
+            />
+          }
+        />
+        <Route
+          path="/id/:id"
+          children={
+            <OneTreaty
+              activeTreaties={activeTreaties}
+              draftTreaties={draftTreaties}
+              onHidePressed={onHidePressed}
+              onMarkActivePressed={onMarkActivePressed}
+              onAddTreatyTextPressed={onAddTreatyTextPressed}
+              onSignPressed={onSignPressed}
+              onRefreshTreatyPressed={onRefreshTreatyPressed}
+              onJoinPressed={onJoinPressed}
+            />
+          }
+        />
+      </Switch>
+    </Router>
+  );
+  return isLoading ? loadingMessage : content;
+};
+
+function applyFocus(elementList, focusId) {
+  console.log("applyFocus called with element list :>> ", elementList);
+  console.log("applyFocus called with focusId :>> ", focusId);
+  if (focusId == undefined) return elementList;
+  let focusedElementList = elementList.map((x) => {
+    if (x.id == focusId) {
+      return {
+        ...x,
+        inFocus: true,
+      };
+    } else {
+      return {
+        ...x,
+        inFocus: false,
+      };
+    }
+  });
+  console.log("focusedElementList :>> ", focusedElementList);
+  return focusedElementList;
+}
+
+const MainTreatyList = ({
+  draftTreaties,
+  activeTreaties,
+  onHidePressed,
+  onMarkActivePressed,
+  onSignPressed,
+  onJoinPressed,
+  onAddTreatyTextPressed,
+  onRefreshTreatyPressed,
+}) => {
+  let { id } = useParams();
+  console.log(`Focus id is ${id}`);
+  return (
     <ListWrapper>
       <NewTreatyForm />
       <h3 id="draft" className="h3">
-        <StatusHeader>Draft Treaties:</StatusHeader>
+        <StatusHeader>Draft Project Wallets:</StatusHeader>
       </h3>
-      {draftTreaties.map((treaty) => (
+      {applyFocus(draftTreaties, id).map((treaty) => (
         <DraftTreatyListItem
           key={treaty.id}
           treaty={treaty}
-          onRemovePressed={onRemovePressed}
+          onHidePressed={onHidePressed}
           onMarkActivePressed={onMarkActivePressed}
           onSignPressed={onSignPressed}
           onJoinPressed={onJoinPressed}
         />
       ))}
       <h3 id="active">
-        <StatusHeader>Active Treaties:</StatusHeader>
+        <StatusHeader>Active Project Wallets:</StatusHeader>
       </h3>
-      {activeTreaties.map((treaty) => (
+      {applyFocus(activeTreaties, id).map((treaty) => (
         <ActiveTreatyListItem
           key={treaty.id}
           treaty={treaty}
-          onRemovePressed={onRemovePressed}
+          onHidePressed={onHidePressed}
           onMarkActivePressed={onMarkActivePressed}
           onAddTreatyTextPressed={onAddTreatyTextPressed}
           onSignPressed={onSignPressed}
+          onRefreshTreatyPressed={onRefreshTreatyPressed}
+          onHidePressed={onHidePressed}
         />
       ))}
     </ListWrapper>
   );
-  return isLoading ? loadingMessage : content;
 };
 
-const mapStateToProps = (state) => ({
+const OneTreaty = ({
+  activeTreaties,
+  draftTreaties,
+  onHidePressed,
+  onMarkActivePressed,
+  onSignPressed,
+  onJoinPressed,
+  onAddTreatyTextPressed,
+  onRefreshTreatyPressed,
+}) => {
+  let { id } = useParams();
+  console.log(`Render one treaty. id is ${id}`);
+  // let content = <div>ONETREATY</div>;
+  console.log("activeTreaties :>> ", activeTreaties);
+  let selectedTreaty = activeTreaties.filter((treaty) => treaty.id == id);
+  console.log(`id: ${id}`, selectedTreaty);
+  let selectedContent = (
+    <ActiveTreatyListItem
+      key={selectedTreaty.id}
+      treaty={selectedTreaty}
+      onHidePressed={onHidePressed}
+      onMarkActivePressed={onMarkActivePressed}
+      onAddTreatyTextPressed={onAddTreatyTextPressed}
+      onSignPressed={onSignPressed}
+      onRefreshTreatyPressed={onRefreshTreatyPressed}
+      onHidePressed={onHidePressed}
+    />
+  );
+  return selectedContent;
+};
+
+const mapStateToProps = (state, ownProps) => ({
   isLoading: getTreatiesLoading(state),
   activeTreaties: getActiveTreaties(state),
   draftTreaties: getDraftTreaties(state),
+  cookies: ownProps.cookies,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  startLoadingTreaties: () => dispatch(loadTreaties()),
-  onRemovePressed: (treaty) => dispatch(removeTreatyRequest(treaty.id)),
+  startLoadingTreaties: () => dispatch(loadTreatiesWeb3()),
+  onHidePressed: (id) => dispatch(hideTreatyRequest(id)),
   onMarkActivePressed: (treaty) => dispatch(markActiveRequest(treaty)),
-  onDisplayAlertClicked: (id) => dispatch(displayAlert(id)),
   // onAddTreatyTextPressed: (id, text) => dispatch(addTreatyTextRequest(id, text)),
   onSignPressed: (treaty) => dispatch(signTreatyRequest(treaty)),
   onJoinPressed: (treaty) => dispatch(joinTreatyRequest(treaty)),
+  onRefreshTreatyPressed: (treaty) => dispatch(refreshTreatyRequest(treaty)),
 });
-
-// function mapStateToProps(state) {
-//   return {
-//     isLoading: getTreatiesLoading(state),
-//     activeTreaties: getActiveTreaties(state),
-//     draftTreaties: getDraftTreaties(state),
-//   };
-// }
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     startLoadingTreaties: () => dispatch(loadTreaties()),
-//     onRemovePressed: (treaty) => dispatch(removeTreatyRequest(treaty.id)),
-//     onMarkActivePressed: (treaty) => dispatch(markActiveRequest(treaty.id)),
-//     onDisplayAlertClicked: (id) => dispatch(displayAlert(id)),
-//     // onAddTreatyTextPressed: (id, text) => dispatch(addTreatyTextRequest(id, text)),
-//     onSignPressed: (id) => dispatch(signTreatyRequest(id)),
-//   };
-// }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TreatyList);

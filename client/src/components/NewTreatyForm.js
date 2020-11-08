@@ -37,7 +37,7 @@ const NewTreatyButton = styled.button`
   cursor: pointer;
   margin-left: 8px;
   width: 20%;
-  background-color: #9c65cc;
+  // background-color: #9c65cc;
   flex: 1 0 63px;
 `;
 const StatusHeader = styled.div`
@@ -50,12 +50,12 @@ const NewTreatyForm = ({ treaties, onCreatePressed }) => {
   return (
     <div>
       <h3>
-        <StatusHeader>Add New Treaty</StatusHeader>
+        <StatusHeader>Add New Project Wallet</StatusHeader>
       </h3>
       <FormContainer>
         <NewTreatyInput
           type="text"
-          placeholder="Type your new treaty here"
+          placeholder="Name your Project Wallet here"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
@@ -70,7 +70,7 @@ const NewTreatyForm = ({ treaties, onCreatePressed }) => {
             }
           }}
         >
-          Create Treaty
+          Create Project Wallet
         </NewTreatyButton>
       </FormContainer>
     </div>

@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import { cycle } from "cycle";
 import {
   LOAD_TREATIES_IN_PROGRESS,
   LOAD_TREATIES_SUCCESS,
@@ -9,40 +8,62 @@ import {
   MARK_ACTIVE,
   SIGN_TREATY,
   ADD_TEXT_TO_TREATY,
-  LOAD_ONE_TREATY,
-  LOAD_3BOX,
+  LOAD_ONE_TREATY_IN_PROGRESS,
+  LOAD_ONE_TREATY_SUCCESS,
+  LOAD_ONE_TREATY_FAILURE,
+  LOAD_3BOX_IN_PROGRESS,
+  LOAD_3BOX_SUCCESS,
+  LOAD_3BOX_FAILURE,
   OPEN_SPACE,
+  WEB3_LOADED,
+  ACCOUNT_LOADED,
+  ETHERS_SIGNER_LOADED,
+  ETHERS_PROVIDER_LOADED,
+  CONTRACT_LOADED,
+  TREATY_INDEX_CONTRACT_LOADED,
+  TREATY_CONTRACT_LOADED,
+  VALUE_LOADED,
+  TREATY_INDEX_LOADED,
+  HIDE_TREATIES,
+  SHOW_ALL_TREATIES,
 } from "../redux/actions";
 
 function web3(state = {}, action) {
   switch (action.type) {
-    case "WEB3_LOADED":
+    case WEB3_LOADED:
       return { ...state, connection: action.connection };
-    case "ACCOUNT_LOADED":
+    case ACCOUNT_LOADED:
       return { ...state, account: action.account };
     default:
       return state;
   }
 }
 
-function contract(state = {}, action) {
-  console.log("[contract reducer] state:");
-  console.log(state);
-  console.log("action type: " + action.type);
-  // console.log(JSON.decycle(action));
+function ethers(state = {}, action) {
   switch (action.type) {
-    case "CONTRACT_LOADED":
+    case ETHERS_SIGNER_LOADED:
+      return { ...state, signer: action.signer };
+    case ETHERS_PROVIDER_LOADED:
+      return { ...state, provider: action.provider };
+    default:
+      return state;
+  }
+}
+
+function contract(state = {}, action) {
+  switch (action.type) {
+    case CONTRACT_LOADED:
       return { ...state, contract: action.contract };
-    case "TREATY_INDEX_CONTRACT_LOADED":
+    case TREATY_INDEX_CONTRACT_LOADED:
       return { ...state, treatyIndexContract: action.treatyIndexContract };
-    case "TREATY_CONTRACT_LOADED":
+    case TREATY_CONTRACT_LOADED:
       return {
         ...state,
         treatyContracts: state.treatyContracts.concat(action.treatyContract),
       };
-    case "VALUE_LOADED":
+    case VALUE_LOADED:
       return { ...state, value: action.value };
-    case "TREATY_INDEX_LOADED":
+    case TREATY_INDEX_LOADED:
       return { ...state, treatyIndex: action.treatyIndex };
     default:
       return state;
@@ -68,15 +89,11 @@ export const treaties = (state = [], action) => {
       };
     }
     case MARK_ACTIVE: {
-      console.log("detected mark_active event");
       const { treaty: activeTreaty } = payload;
-      console.log("payload is " + payload);
-      console.log("deconstructed payload is " + activeTreaty);
       return {
         ...state,
         data: state.data.map((treaty) => {
           if (treaty.id === activeTreaty.id) {
-            // return { ...treaty, isActive: true, treaty. }
             return Object.assign(activeTreaty, { status: "Active" });
           }
           return treaty;
@@ -103,20 +120,15 @@ export const treaties = (state = [], action) => {
         data: state.data.map((treaty) => {
           if (treaty.id === updatedTreaty.id) {
             return updatedTreaty;
+          } else {
+            return treaty;
           }
-          return treaty;
         }),
       };
     }
 
     case LOAD_TREATIES_SUCCESS: {
-      console.log("success loading treaties");
-      console.log(
-        "we need to push to list of treaties. currently all treaties must be sent through in one go."
-      );
-
       const { treaties } = payload;
-      console.log(treaties);
       return {
         ...state,
         isLoading: false,
@@ -135,18 +147,66 @@ export const treaties = (state = [], action) => {
         isLoading: false,
       };
     }
-    case LOAD_ONE_TREATY: {
-      console.log("in reducer for load_one_treaty with payload ", payload);
+    case LOAD_ONE_TREATY_SUCCESS: {
       const { treaty: loadedTreaty } = payload;
+      const treatyIdExists = (id, treatyList) => {
+        return treatyList.filter((x) => x.id == id).length > 0;
+      };
+      console.log(`treatyIdExists? ${treatyIdExists}`);
       return {
         ...state,
-        data: state.data.map((treaty) => {
-          if (treaty.id == loadedTreaty.id) {
-            return loadedTreaty;
-          } else {
-            return treaty;
-          }
-        }),
+        isOneTreatyLoading: false,
+        data:
+          //If treaty already exists, update it. Otherwise add it.
+          (treatyIdExists(loadedTreaty.id, state.data) &&
+            state.data.map((treaty) => {
+              if (treaty.id == loadedTreaty.id) {
+                return loadedTreaty;
+              } else {
+                return treaty;
+              }
+            })) ||
+          state.data.concat(loadedTreaty),
+      };
+    }
+    case LOAD_ONE_TREATY_FAILURE: {
+      return {
+        ...state,
+        isOneTreatyLoading: false,
+      };
+    }
+    case LOAD_ONE_TREATY_IN_PROGRESS: {
+      return {
+        ...state,
+        isOneTreatyLoading: true,
+      };
+    }
+    default:
+      return state;
+  }
+};
+
+export const config = (state = [], action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case HIDE_TREATIES: {
+      console.log("HIDE_TREATIES");
+      console.log("state :>> ", state);
+      console.log("payload :>> ", payload);
+      console.log("ids :>> ", ids);
+      const { ids } = payload;
+      return {
+        ...state,
+        hiddenTreaties: state.hiddenTreaties.concat(ids),
+        // hiddenTreaties:
+        //   (state.config.hiddenTreaties == undefined && new Set(ids)) ||
+        //   state.config.hiddenTreaties.concat(ids),
+      };
+    }
+    case SHOW_ALL_TREATIES: {
+      return {
+        ...state,
+        hiddenTreaties: [],
       };
     }
     default:
@@ -156,20 +216,32 @@ export const treaties = (state = [], action) => {
 
 export const threebox = (state = [], action) => {
   const { type, payload } = action;
-  console.log("payload", payload);
   switch (type) {
-    case LOAD_3BOX: {
+    case LOAD_3BOX_IN_PROGRESS: {
+      return {
+        ...state,
+        is3boxLoading: true,
+      };
+    }
+    case LOAD_3BOX_SUCCESS: {
       const { box } = payload;
       return {
         ...state,
         threebox: threebox,
+        is3boxLoading: false,
+      };
+    }
+    case LOAD_3BOX_FAILURE: {
+      return {
+        ...state,
+        is3boxLoading: false,
       };
     }
     case OPEN_SPACE: {
       const { space } = payload;
       return {
         ...state,
-        spaces: state.spaces == null ? [space] : state.spaces.concat(space),
+        openSpace: space,
       };
     }
     default:
@@ -179,13 +251,11 @@ export const threebox = (state = [], action) => {
 
 const rootReducer = new combineReducers({
   web3,
+  ethers,
   contract,
   treaties,
   threebox,
+  config,
 });
 
 export default rootReducer;
-
-// treatyContracts == undefined
-//   ? action.treatyContracts
-//   : treatyContracts.push(action.treatyContracts),

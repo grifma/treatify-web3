@@ -1,15 +1,19 @@
 import getWeb3 from "../getWeb3";
 import {
-  web3Loaded,
-  contractLoaded,
   accountLoaded,
-  valueLoaded,
-  treatyIndexContractLoaded,
-  treatyContractLoaded,
+  web3Loaded,
   treatyIndexLoaded,
+  treatyContractLoaded,
+  treatyIndexContractLoaded,
   loadTreatiesInProgress,
   loadTreatiesFailure,
   loadTreatiesSuccess,
+  loadOneTreatySuccess,
+  loadOneTreatyFailure,
+  loadOneTreatyInProgress,
+  load3boxInProgress,
+  load3boxSuccess,
+  load3boxFailure,
   removeTreaty,
   createTreaty,
   markActive,
@@ -17,145 +21,96 @@ import {
   signTreaty,
   joinTreaty,
   addToTreatyIndex,
-  loadOneTreaty,
-  load3box,
   openSpace,
+  ethersProviderLoaded,
+  ethersSignerLoaded,
+  hideTreaties,
+  showAllTreaties,
 } from "../redux/actions";
 import {
   humanReadableTreatyStatus,
   humanReadableSignatureStatus,
   humanReadableTreatyType,
 } from "../utility/enumMappings";
-import SimpleStorageContract from "../contracts/SimpleStorage.json";
 import TreatyIndexContract from "../contracts/TreatyIndex.json";
 import TreatyContract from "../contracts/Treaty.json";
-// import TreatyContractBinary from "../contracts/TreatyContractBinary.js";
 import TreatyBin from "../contracts/TreatyBin.json";
 import Web3 from "web3";
 import { batch } from "react-redux";
 import Box from "3box";
+import { AssertionError } from "assert";
+import ethers from "ethers";
+import { PersistMode } from "./constants";
+import { getHiddenTreaties } from "./selectors";
+import { delay } from "../utility/helperFunctions";
+require("events").EventEmitter.defaultMaxListeners = 50;
 
-const treatyServer = "http://localhost:8081";
+async function pullTreaty(treatyInstance, threebox, openSpace, address) {
+  // console.info("[pullTreaty]", treatyInstance, threebox, openSpace);
+  const numUnsigned = await treatyInstance.methods.getNumUnsigned().call();
+  const numSigned = await treatyInstance.methods.getNumSigned().call();
+  const numSigners = await treatyInstance.methods.getNumSignatures().call();
+  const treatyId = Number(await treatyInstance.methods.id().call());
 
-export const loadWeb3DirectDispatch = () => async (dispatch) => {
-  const web3 = await getWeb3();
-  dispatch(web3Loaded(web3));
-  return web3;
-};
+  const signers = [];
+  var i;
+  for (i = 0; i < numSigners; i++) {
+    signers.push(await treatyInstance.methods.signatureList(i).call());
+    // console.log("[pullTreaty] signer pushed");
+  }
 
-export const loadAccountDirectDispatch = (web3) => async (dispatch) => {
-  console.log("web3", web3);
-  const accounts = await web3.eth.getAccounts();
-  const account = accounts[0];
-  dispatch(accountLoaded(account));
-  return account;
-};
-
-export const loadContractDirectDispatch = (web3) => async (dispatch) => {
-  const networkId = await web3.eth.net.getId();
-  const deployedNetwork = SimpleStorageContract.networks[networkId];
-  const instance = new web3.eth.Contract(
-    SimpleStorageContract.abi,
-    deployedNetwork && deployedNetwork.address
-  );
-  dispatch(contractLoaded(instance));
-  return instance;
-};
-
-export const loadWeb3 = async (dispatch) => {
-  alert("using deprecated function.");
-  console.log(dispatch);
-  const web3 = await getWeb3();
-  dispatch(web3Loaded(web3));
-  return web3;
-};
-
-export const loadAccount = async (web3) => {
-  alert("using deprecated function.");
-  console.log("web3", web3);
-  // console.log("web3.eth.getAccounts()", web3.eth.getAccounts);
-  const accounts = await web3.eth.getAccounts();
-  const account = accounts[0];
-  dispatch(accountLoaded(account));
-  return account;
-};
-
-export const loadContract = async (web3) => {
-  alert("using deprecated function.");
-  const networkId = await web3.eth.net.getId();
-  const deployedNetwork = SimpleStorageContract.networks[networkId];
-  const instance = new web3.eth.Contract(
-    SimpleStorageContract.abi,
-    deployedNetwork && deployedNetwork.address
-  );
-  dispatch(contractLoaded(instance));
-  return instance;
-};
-
-export const loadTreatyIndexContract = async (web3) => {
-  const networkId = await web3.eth.net.getId();
-  const deployedNetwork = TreatyIndexContract.networks[networkId];
-  const instance = new web3.eth.Contract(
-    TreatyIndexContract.abi,
-    deployedNetwork && deployedNetwork.address
-  );
-  dispatch(treatyIndexContractLoaded(instance));
-  return instance;
-};
-
-export const loadTreatyIndexContractDirectDispatch = (web3) => async (
-  dispatch
-) => {
-  const networkId = await web3.eth.net.getId();
-  const deployedNetwork = TreatyIndexContract.networks[networkId];
-  const instance = new web3.eth.Contract(
-    TreatyIndexContract.abi,
-    deployedNetwork && deployedNetwork.address
-  );
-  dispatch(treatyIndexContractLoaded(instance));
-  return instance;
-};
-
-export const loadTreatyContract = (web3) => async (dispatch) => {
-  const networkId = await web3.eth.net.getId();
-  const deployedNetwork = TreatyContract.networks[networkId];
-  const instance = new web3.eth.Contract(
-    TreatyContract.abi,
-    deployedNetwork && deployedNetwork.address
-  );
-  dispatch(treatyContractLoaded(instance));
-  return instance;
-};
-
-export const loadTreatyIndex = async (contract) => {
-  const treatyIndex = await contract.methods.getTreatyIndex().call();
-  dispatch(treatyIndexLoaded(treatyIndex));
-  return treatyIndex;
-};
-
-export const loadTreatyIndexDirectDispatch = (contract) => async (dispatch) => {
-  const treatyIndex = await contract.methods.getTreatyIndex().call();
-  dispatch(treatyIndexLoaded(treatyIndex));
-  return treatyIndex;
-};
-
-export const loadStoredData = (contract) => async (dispatch) => {
-  const value = await contract.methods.get().call();
-  dispatch(valueLoaded(value));
-  return value;
-};
+  // console.log("pullTreaty] signers: :>> ", signers);
+  const treaty = {
+    id: treatyId,
+    text: await treatyInstance.methods.name().call(),
+    isCompleted: (await treatyInstance.methods.treatyState().call()) == 1,
+    createdAt: await treatyInstance.methods.creationTime().call(),
+    signers: await getFor(numSigners, getSigner, treatyInstance),
+    signatureState:
+      signers &&
+      (await Promise.all(
+        signers.map(async (signer) => {
+          console.log("signatureStatus called for signer: ", signer);
+          const result = humanReadableSignatureStatus(
+            await treatyInstance.methods.signatureState(signer).call()
+          );
+          return result;
+        })
+      )),
+    status: humanReadableTreatyStatus(
+      await treatyInstance.methods.treatyState().call()
+    ),
+    unsignedTreatyText: await getUnsignedTreatyText(
+      threebox,
+      openSpace,
+      treatyId,
+      signers
+    ),
+    signedTreatyText: await getSignedTreatyText(
+      threebox,
+      openSpace,
+      treatyId,
+      signers,
+      address
+    ),
+    address: await treatyInstance._address,
+    contractInstance: treatyInstance,
+    developerInfo: await get3boxDeveloperInfo(treatyId, openSpace),
+    balance: 0,
+  };
+  console.log("treaty.signatureStatus :>> ", treaty.signatureStatus);
+  return treaty;
+}
 
 async function getUnsignedText(treatyInstance, i) {
-  const lineOfUnsignedText = await treatyInstance.methods
-    .unsignedTreatyText(i)
-    .call();
+  if (treatyInstance.unsignedTreatyText == undefined) return "";
+  const lineOfUnsignedText = await treatyInstance.unsignedTreatyText(i);
   return lineOfUnsignedText;
 }
 
 async function getSignedText(treatyInstance, i) {
-  const lineOfSignedText = await treatyInstance.methods
-    .signedTreatyText(i)
-    .call();
+  if (treatyInstance.signedTreatyText == undefined) return "";
+  const lineOfSignedText = await treatyInstance.signedTreatyText(i);
   return lineOfSignedText;
 }
 
@@ -169,108 +124,408 @@ async function getFor(n, lookupFunction, treatyInstance) {
   for (let i = 0; i < n; i++) {
     result.push(await lookupFunction(treatyInstance, i));
   }
-  console.log("getFor returning: ", result);
   return result;
 }
 
-async function parseTreaty(treatyInstance) {
-  console.info("parseTreaty", treatyInstance);
-  const numUnsigned = await treatyInstance.methods.getNumUnsigned().call();
-  const numSigned = await treatyInstance.methods.getNumSigned().call();
-  const numSigners = await treatyInstance.methods.getNumSignatures().call();
-  const treaty = {
-    id: await treatyInstance.methods.id().call(),
-    text: await treatyInstance.methods.name().call(),
-    isCompleted: (await treatyInstance.methods.treatyState().call()) == 1,
-    createdAt: await treatyInstance.methods.creationTime().call(),
-    signers: await getFor(numSigners, getSigner, treatyInstance),
-    // signatureStatus: signers && signers.map((signer) => async ( humanReadableSignatureStatus(await treatyInstance.methods.signatureState(signer).call()) )),
-    status: humanReadableTreatyStatus(
-      await treatyInstance.methods.treatyState().call()
-    ),
-    unsignedTreatyText: await getFor(
-      numUnsigned,
-      getUnsignedText,
-      treatyInstance
-    ),
-    signedTreatyText: await getFor(numSigned, getSignedText, treatyInstance),
-    address: await treatyInstance._address,
-    contractInstance: treatyInstance,
-  };
-  return treaty;
+async function getUnsignedTreatyText(threebox, openSpace, treatyId, signers) {
+  // console.log(`Treaty id is ${treatyId}`);
+  // console.log("threadName: ", `unsigned-treaty-text-${treatyId}`);
+  // console.log("signers :>> ", signers);
+  try {
+    if (openSpace != undefined) {
+      // console.info(`#${treatyId}Logged in, using joinThread()`);
+      const thread = await openSpace.joinThread(
+        `unsigned-treaty-text-${treatyId}`
+      );
+
+      const posts = await thread.getPosts({
+        limit: process.env.THREEBOX_POST_LIMIT,
+      });
+      return posts.map((x) => x.message);
+    } else {
+      if (process.env.PRELOAD_BEFORE_LOGIN == false) return ["Loading..."];
+      const postsBySigner = await Promise.all(
+        signers.map(async (signer) => {
+          return await Box.getThread(
+            "treatify",
+            `unsigned-treaty-text-${treatyId}`,
+            signer,
+            false
+          );
+        })
+      );
+      const postsUndefined = postsBySigner.filter((x) => x.length == 0);
+      var posts;
+
+      if (postsUndefined.length == postsBySigner.length) {
+        return [];
+      } else {
+        const postsBySignerEmptyFiltered = postsBySigner.filter(
+          (x) => x.length > 0
+        );
+        posts = postsBySignerEmptyFiltered[0];
+        // const posts = postsBySigner.filter((x) => x.length > 0)[0];
+        if (postsBySignerEmptyFiltered > 0) {
+          console.error(
+            "There should only be one filter match. Only one signer is the first moderator.",
+            posts
+          );
+        }
+      }
+
+      if (posts == postsUndefined) {
+        return [];
+      }
+      return posts.map((post) => {
+        return post.message;
+      });
+    }
+  } catch (e) {
+    console.error("Error loading from 3box");
+    console.error(e);
+    return ["Error loading from 3box, see console.log"];
+  } finally {
+  }
 }
 
-export const loadOneTreatyRequest = (treatyInstance) => async (dispatch) => {
-  logTimeInMs("[loadOneTreatyRequest] ", treatyInstance);
-  const treaty = await parseTreaty(treatyInstance);
-  logTimeInMs("[about to dispatch action with treaty: ] ", treaty);
-  dispatch(loadOneTreaty(treaty));
+async function profileInfo(treatyId, address, thread) {
+  const profile = await Box.getProfile(address);
+  try {
+    const moderators = await thread.listModerators();
+    if (moderators.length == 1 && moderators[0] == profile.address) {
+      // console.log("This user is the moderator");
+    }
+  } catch (e) {
+    console.error("Failed to list moderators ", e);
+  }
+}
+
+async function getSignedTreatyText(
+  threebox,
+  openSpace,
+  treatyId,
+  signers,
+  address
+) {
+  try {
+    if (openSpace != undefined) {
+      console.info(`#${treatyId}Logged in, using joinThread()`);
+      const thread = await openSpace.joinThread(
+        `signed-treaty-text-${treatyId}`
+      );
+      profileInfo(treatyId, address, thread);
+
+      const posts = await thread.getPosts({
+        limit: process.env.THREEBOX_POST_LIMIT,
+      });
+      return posts.map((x) => x.message);
+    } else {
+      if (process.env.PRELOAD_BEFORE_LOGIN == false) return ["Loading..."];
+      console.info(`#${treatyId} Not logged in, using getThread()`);
+      const postsBySigner = await Promise.all(
+        signers.map(async (signer) => {
+          return await Box.getThread(
+            "treatify",
+            `unsigned-treaty-text-${treatyId}`,
+            signer,
+            false
+          );
+        })
+      );
+      const undefined = postsBySigner.filter((x) => x == undefined);
+
+      const allUndefined = undefined.length == postsBySigner.length;
+
+      var posts;
+
+      if (allUndefined) {
+        return [];
+      } else {
+        const postsBySignerEmptyFiltered = postsBySigner.filter(
+          (x) => x.length > 0
+        );
+        posts = postsBySignerEmptyFiltered[0];
+
+        if (postsBySignerEmptyFiltered > 0) {
+          console.error(
+            "There should only be one filter match. Only one signer is the first moderator.",
+            posts
+          );
+        }
+      }
+      if (posts == undefined) {
+        // console.log(
+        //   `treaty #${treatyId}, posts are undefined. Returning empty list.`
+        // );
+        return [];
+      }
+      // console.log(`Treaty id  ${treatyId} has ${posts.length} posts`);
+
+      return posts.map((post) => {
+        return post.message;
+      });
+    }
+  } catch (e) {
+    console.error("Error loading from 3box");
+    console.error(e);
+    return ["Error loading from 3box, see console.log"];
+  } finally {
+  }
+}
+
+async function get3boxDeveloperInfo(treatyId, openSpace) {
+  var returnValue = {
+    "Without auth": {
+      // "UnsignedText Moderators": await openSpace
+      //   .joinThread(`unsigned-treaty-text-${treatyId}`)
+      //   .listModerators(),
+      // "SignedText Moderators": await openSpace
+      //   .joinThread(`signed-treaty-text-${treatyId}`)
+      //   .listModerators(),
+    },
+  };
+
+  if (openSpace != undefined) {
+    const unsignedThread = await openSpace.joinThread(
+      `unsigned-treaty-text-${treatyId}`
+    );
+    const signedThread = await openSpace.joinThread(
+      `signed-treaty-text-${treatyId}`
+    );
+    returnValue["With auth"] = {
+      "UnsignedText Moderators": await unsignedThread.listModerators(),
+      "SignedText Moderators": await signedThread.listModerators(),
+    };
+  }
+  return [JSON.stringify(returnValue)];
+}
+
+////////////////////
+// Load functions
+////////////////////
+
+export const loadEthersProvider = (ethereumProvider) => async (dispatch) => {
+  const provider = new ethers.providers.Web3Provider(ethereumProvider);
+  dispatch(ethersProviderLoaded(provider));
+  return provider;
 };
 
-export const loadTreatiesWeb3 = (/*web3, treatyIndex*/) => async (
-  dispatch,
-  getState
-) => {
+export const loadEthersSigner = (provider) => async (dispatch) => {
+  const signer = provider.getSigner(0);
+  console.info("signer", signer);
+  dispatch(ethersSignerLoaded(signer));
+  return signer;
+};
+
+export const loadWeb3 = () => async (dispatch) => {
+  const web3 = await getWeb3();
+  dispatch(web3Loaded(web3));
+  return web3;
+};
+
+export const loadAccount = (web3) => async (dispatch) => {
+  const accounts = await web3.eth.getAccounts();
+  const account = accounts[0];
+  dispatch(accountLoaded(account));
+  return account;
+};
+
+export const loadTreatyIndexContractWeb3 = (web3) => async (dispatch) => {
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = TreatyIndexContract.networks[networkId];
+  const instance = new web3.eth.Contract(
+    TreatyIndexContract.abi,
+    deployedNetwork && deployedNetwork.address
+  );
+  console.log("LOAD TREATY INDEX");
+  console.log("instance :>> ", instance);
+  console.log("networkId :>> ", networkId);
+  console.log("web3 :>> ", web3);
+  dispatch(treatyIndexContractLoaded(instance));
+  return instance;
+};
+
+export const loadTreatyContractWeb3 = (web3) => async (dispatch) => {
+  console.log("[loadTreatyContractWeb3]");
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = TreatyContract.networks[networkId];
+  const provider = getState().ethers.provider;
+  const instance = new web3.eth.Contract(
+    TreatyContract.abi,
+    deployedNetwork && deployedNetwork.address
+  );
+  dispatch(treatyContractLoaded(instance));
+  return instance;
+};
+
+export const loadTreatyContract = (web3) => async (dispatch) => {
+  console.log("[loadTreatyContract]");
+  const networkId = await web3.eth.net.getId();
+  const deployedNetwork = TreatyContract.networks[networkId];
+  const provider = getState().ethers.provider;
+  const ethersInstance = new ethers.Contract(
+    deployedNetwork.address,
+    TreatyContract.abi,
+    provider.getSigner(0)
+  );
+  dispatch(treatyContractLoaded(ethersInstance));
+  return ethersInstance;
+};
+
+export const loadTreatyIndex = (contract) => async (dispatch, getState) => {
+  console.log("etherscontract", contract);
+  const treatyIndex = await contract.getTreatyIndex();
+  console.log(`there are ${await contract.getNumTreaties()} treaties`);
+  console.log("treatyIndex :>> ", treatyIndex);
+  dispatch(treatyIndexLoaded(treatyIndex));
+  return treatyIndex;
+};
+
+export const loadTreatyIndexWeb3 = (contract) => async (dispatch) => {
+  console.log("etherscontract", contract);
+  const treatyIndex = await contract.methods.getTreatyIndex().call();
+  console.log(
+    `there are ${await contract.methods.getNumTreaties().call()} treaties`
+  );
+  console.log("treatyIndex :>> ", treatyIndex);
+  dispatch(treatyIndexLoaded(treatyIndex));
+  return treatyIndex;
+};
+
+export const loadStoredData = (contract) => async (dispatch) => {
+  const value = await contract.methods.get().call();
+  dispatch(valueLoaded(value));
+  return value;
+};
+
+export const hideTreatyRequest = (ids) => async (dispatch, getState) => {
+  console.log("[hideTreatyRequest] with ids " + ids);
+  if (typeof ids == "number") {
+    dispatch(hideTreaties([ids]));
+  } else {
+    dispatch(hideTreaties(ids));
+  }
+};
+
+export const loadTreatiesWeb3 = () => async (dispatch, getState) => {
   try {
-    console.log("start loadTreatiesWeb3");
     const web3 = getState().web3.connection;
-    console.log("web3", web3);
+    const threebox = getState().threebox.threebox;
+    const openSpace = getState().threebox.openSpace;
+    const address = getState().web3.account;
 
     const treatyIndex = getState().contract.treatyIndex;
-    console.log("treatyIndex", treatyIndex);
-
-    console.log("STATE");
-    console.log(getState());
 
     dispatch(loadTreatiesInProgress());
     const networkId = await web3.eth.net.getId();
     const deployedNetwork = TreatyContract.networks[networkId];
-
+    const provider = getState().ethers.provider;
+    const signer = getState().ethers.signer;
+    console.log("treatyIndex :>> ", treatyIndex);
     const treatyInstances = treatyIndex.map((treatyAddress) => {
       return new web3.eth.Contract(TreatyContract.abi, treatyAddress);
     });
-
+    console.log("treatyInstances :>> ", treatyInstances);
     const treaties = await Promise.all(
       treatyInstances.map(async (treatyInstance) => {
-        console.log("treatyInstance");
-        console.log(treatyInstance);
-        const numUnsigned = await treatyInstance.methods
-          .getNumUnsigned()
-          .call();
-        const numSigned = await treatyInstance.methods.getNumSigned().call();
-        const numSigners = await treatyInstance.methods
-          .getNumSignatures()
-          .call();
-        console.log(
-          `there are ${numSigned} signed, and ${numUnsigned} unsigned`
+        const numUnsigned = await treatyInstance.methods.getNumUnsigned();
+        const numSigned = await treatyInstance.methods.getNumSigned();
+        const numSigners = await treatyInstance.methods.getNumSignatures();
+        const treaty = await pullTreaty(
+          treatyInstance,
+          threebox,
+          openSpace,
+          address
         );
-        return parseTreaty(treatyInstance);
+        return treaty;
       })
     );
+    console.log("treaties :>> ", treaties);
     dispatch(loadTreatiesSuccess(treaties));
+    console.log("about to enrich from loadTreatiesWeb3");
+    dispatch(enrichTreatyWith3boxData(threebox, openSpace, treaties));
   } catch (e) {
-    console.log("Exception in loadTreatiesWeb3");
-    console.log(e);
+    console.error("Failure during loadTreatiesWeb3");
     dispatch(loadTreatiesFailure());
-    dispatch(displayAlert(e));
+    dispatch(alert(e));
   }
 };
 
-export const loadTreaties = () => async (getState) => {
+export const loadOneTreatyByAddress = (address) => async (
+  dispatch,
+  getState
+) => {
+  const web3 = getState().web3.connection;
+  console.log("Load treaty for address", address);
+  const instance = await new web3.eth.Contract(TreatyContract.abi, address);
+  console.log("LoadOneTreaty for instance", instance);
+  dispatch(loadOneTreaty(instance));
+};
+
+export const loadOneTreaty = (treatyInstance) => async (dispatch, getState) => {
+  console.log("[loadOneTreaty] ", treatyInstance);
   try {
-    dispatch(loadTreatiesInProgress());
-    const response = await fetch(`${treatyServer}/treaties`);
-    const treaties = await response.json();
-    dispatch(loadTreatiesSuccess(treaties));
+    dispatch(loadOneTreatyInProgress());
+    const threebox = getState().threebox.threebox;
+    const openSpace = getState().threebox.openSpace;
+    const address = getState().threebox.account;
+    console.log(
+      "[loadOneTreaty] Parse treaty with ",
+      treatyInstance,
+      threebox,
+      openSpace
+    );
+    const treaty = await pullTreaty(
+      treatyInstance,
+      threebox,
+      openSpace,
+      address
+    );
+    console.log(
+      "[loadOneTreaty] about to dispatch success action with parsed treaty: ",
+      treaty
+    );
+    dispatch(loadOneTreatySuccess(treaty));
   } catch (e) {
-    dispatch(loadTreatiesFailure());
-    dispatch(displayAlert(e));
+    console.error("[loadOneTreaty] Exception: ", e);
+    dispatch(loadOneTreatyFailure());
   }
 };
 
-export const displayAlert = (text) => () => {
-  alert(text);
+export const load3box = (address, provider) => async (dispatch, getState) => {
+  if (typeof address != "string") {
+    address = valueOf(address);
+  }
+  try {
+    dispatch(load3boxInProgress());
+    const box = await Box.openBox(address, provider, {});
+    console.info("successful load of 3box", box);
+    await box.syncDone;
+    console.log("syncdone", box.syncDone);
+    const treatifySpace = await box.openSpace("treatify");
+    console.info("opened space ", treatifySpace);
+    await dispatch(openSpace(treatifySpace));
+    await dispatch(load3boxSuccess(box));
+    console.log("about to enrich from load3box");
+    if ((await getState().treaties.data) != undefined) {
+      dispatch(
+        enrichTreatyWith3boxData(
+          box,
+          treatifySpace,
+          await getState().treaties.data
+        )
+      );
+    }
+  } catch (e) {
+    console.error("Exception in load3box ", e);
+    dispatch(alert(e));
+  } finally {
+  }
 };
+
+////////////////////
+//Request functions
+////////////////////
 
 export const markActiveRequest = (treaty) => async (dispatch, getState) => {
   const { id, address, contractInstance } = treaty;
@@ -280,195 +535,110 @@ export const markActiveRequest = (treaty) => async (dispatch, getState) => {
     const tx = await contractInstance.methods
       .makeActive()
       .send({ from: currentAccount });
-    console.log("tx");
-    console.log(tx);
     await dispatch(markActive(treaty));
-    dispatch(loadOneTreatyRequest(contractInstance));
-    // dispatch(markActive(activeTreaty));
+    const openSpace = getState().threebox.openSpace;
+    const thread = await openSpace.joinThread(
+      `unsigned-treaty-text-${treaty.id}`
+    );
+    console.log("created thread with id ", `unsigned-treaty-text-${treaty.id}`);
 
-    // const response = await fetch(`${treatyServer}/treaties/${id}/active`, {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   method: "post",
-    //   body: "",
-    // });
-    // const activeTreaty = await response.json();
-    // console.log("active treaty is " + activeTreaty);
-    // dispatch(markActive(activeTreaty));
+    treaty.signers.map(async (x) => {
+      await thread.addModerator(x);
+      console.log(`added ${x} as thread moderator`);
+    });
+    dispatch(loadOneTreaty(contractInstance));
   } catch (e) {
-    dispatch(displayAlert(e));
+    dispatch(alert(e));
   } finally {
   }
 };
 
 export const joinTreatyRequest = (treaty) => async (dispatch, getState) => {
-  console.log("joinRequest for: ", treaty);
+  console.info("[joinTreatyRequest] for: ", treaty);
   const { id, address, contractInstance } = treaty;
+  console.info("contractInstance", contractInstance);
   const currentAccount = getState().web3.account;
   const web3 = getState().web3.connection;
-  console.log("contractInstance", contractInstance);
-  console.log("currentAccount", currentAccount);
-  console.log("web3", web3);
   try {
     const tx = await contractInstance.methods
       .registerAsSigner()
       .send({ from: currentAccount });
-
+    console.log("tx", tx);
     dispatch(joinTreaty(treaty));
-    dispatch(loadOneTreatyRequest(web3, contractInstance));
-    // const response = await fetch(`${treatyServer}/treaties/${id}/active`, {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   method: "post",
-    //   body: "",
-    // });
-    // const activeTreaty = await response.json();
-    // console.log("active treaty is " + activeTreaty);
-    // dispatch(markActive(activeTreaty));
+    dispatch(loadOneTreaty(contractInstance));
   } catch (e) {
-    dispatch(displayAlert(e));
+    console.error(e);
+    dispatch(alert(e));
   } finally {
   }
 };
 
 export const addTreatyRequest = (text) => async (dispatch, getState) => {
   try {
-    var freshWeb3 = new Web3(Web3.givenProvider);
-
-    const treatyContract1 = web3.eth.contract(TreatyContract.abi);
-    console.log(treatyContract1);
-
+    console.info("[addTreatyRequest]");
     const currentAccount = getState("web3").web3.account;
     const contractCode = "0x" + TreatyBin.bin;
-    const id = Math.floor(Math.random() * 10 ** 6);
-    const name = text;
-    const initialText = text;
-
     const parameters = TreatyContract.abi;
-    console.log(`[method3] About to deploy  ${text} . . .`);
-
-    //method 4
-
-    var _id = Math.floor(Math.random() * 10 ** 3);
+    var _id = Math.floor(Math.random() * 10 ** process.env.ID_SIZE);
     var _name = text;
     var _initialText = "Initial text for " + text;
-
-    const deployedTreaty = await treatyContract1.new(
-      _id,
-      _name,
-      _initialText,
-      {
-        from: currentAccount,
-        data: "0x" + TreatyBin.bin,
-        gas: "4700000",
-      },
-      function (e, contract) {
-        console.log(e, contract);
-        if (typeof contract.address !== "undefined") {
-          console.log(
-            "Contract mined! address: " +
-              contract.address +
-              " transactionHash: " +
-              contract.transactionHash
-          );
-          dispatch(addToTreatyIndexRequest(contract, contract.address));
-          dispatch(loadOneTreatyRequest(contract));
-          dispatch(createTreaty(contract));
-        }
-      }
+    console.log(
+      `[addTreatyRequest] About to deploy with ethers.js  ${text} . . .`
     );
+    console.log("getState() :>> ", getState());
+    const provider = getState().ethers.provider;
+    console.log("provider :>> ", provider);
+    const signer = getState().ethers.signer;
+    console.log("signer :>> ", signer);
 
-    // //at this point the contract is not mined yet, so values will not be defined
-    // console.log("deployedTreaty");
-    // console.log(deployedTreaty);
-    // console.log("await deployedTreaty");
-    // console.log(await deployedTreaty);
-    // console.log("address: " + (await deployedTreaty.address));
-    // console.log("transactionHash: " + (await deployedTreaty.address));
-
-    // const dummyTreaty = { x: "hello" };
-    // //now add it to the treaty index
-    // // console.log("addToTreatyIndexRequest");
-    // // console.log(addToTreatyIndexRequest(dummyTreaty));
-    // console.log("dispatch(addToTreatyIndexRequest");
-    // console.log(
-    //   dispatch(addToTreatyIndexRequest(dummyTreaty, deployedTreaty.address))
-    // );
-
-    //now refresh the whole thing.
-    //(or ideally, just add the contract)
-
-    // console.log("Preparing to deploy the contract");
-    // const web3Connection = getState("web3").web3.connection;
-    // console.log("web3Connection");
-    // console.log(web3Connection);
-    // const x = getState("contract");
-    // console.log("contract from state");
-    // console.log(x);
-    // const contracts = getState("contract").contract;
-    // console.log("contract.contract from state");
-    // console.log(contracts);
-    // // console.log("contracts");
-    // // console.log(contracts);
-    // console.log("web3.account");
-    // console.log(web3.account);
-    // // const abi = JSON.parse(TreatyContract.abi);
-    // const abi = TreatyContract.abi;
-    // console.log(abi);
-    // const contractCode = "0x" + TreatyBin.bin;
-    // console.log("Contract code is");
-    // console.log(contractCode);
-
-    // // const initialisedTreatyContract = web3Connection.eth.new(abi);
-    // // console.log(initialisedTreatyContract);
-
-    // const addedTreaty = await response.json();
-    // console.log("response.json");
-    // console.log(addedTreaty);
-    // dispatch(loadTreatiesWeb3());
-    // dispatch(createTreaty(treaty));
+    const ContractFactory = ethers.ContractFactory;
+    const factory = new ContractFactory(
+      TreatyContract.abi,
+      TreatyBin.bin,
+      signer
+    );
+    console.log("factory :>> ", factory);
+    const contract = await factory.deploy(_id, _name, _initialText);
+    console.log("Contract waiting to deploy at :>> ", contract.address);
+    console.log("Deploy transaction: " + contract.deployTransaction);
+    await contract.deployTransaction.wait();
+    console.log("Contract is now ready");
+    console.log("contract :>> ", contract);
+    dispatch(addToTreatyIndexRequest(contract));
+    dispatch(loadOneTreatyByAddress(contract.address));
   } catch (e) {
     console.log("[addTreatyRequest] ERROR", e);
-    dispatch(displayAlert(e));
+    dispatch(alert(e));
   } finally {
   }
 };
 
-export const addToTreatyIndexRequest = (treatyInstance, address) => async (
+export const addToTreatyIndexRequest = (treatyInstance) => async (
   dispatch,
   getState
 ) => {
   try {
-    console.log("called addToTreatyIndexRequest for address ", address);
+    console.log("[addToTreatyIndexRequest] ", treatyInstance);
     console.log(getState());
     const currentAccount = getState().web3.account;
     const web3 = getState().web3;
     const treatyIndexInstance = getState().contract.treatyIndexContract;
-    console.log("treatyIndexInstance", treatyIndexInstance);
-    console.log("currentAccount", currentAccount);
-
-    const tx = await treatyIndexInstance.methods.addTreaty(address).send({
-      from: currentAccount,
-    });
-    console.log("tx", tx);
-    dispatch(loadOneTreaty(web3, treatyInstance));
+    const tx = await treatyIndexInstance.methods
+      .addTreaty(treatyInstance.address)
+      .send({
+        from: currentAccount,
+      });
+    console.log(
+      "[addToTreatyIndexRequest] Treaty added to treaty index in tx: ",
+      tx
+    );
     dispatch(addToTreatyIndex(treatyInstance));
   } catch (e) {
-    console.log("[addToTreatyIndexRequest] ERROR");
-    console.log(e);
-    dispatch(displayAlert(e));
+    console.error("[addToTreatyIndexRequest] Exception ", e);
+    //console.log(e);
+    dispatch(alert(e));
   }
 };
-
-function timeInMs() {
-  return new Date().getTime();
-}
-
-function logTimeInMs(text, ...args) {
-  console.log(`[TIME:${timeInMs()}] ${text}`, args);
-}
 
 export const addTreatyTextRequest = (treaty, text) => async (
   dispatch,
@@ -480,91 +650,176 @@ export const addTreatyTextRequest = (treaty, text) => async (
     const { contractInstance } = treaty;
     const currentAccount = getState().web3.account;
 
-    logTimeInMs("about to do tx");
     const tx = await contractInstance.methods
       .writeToTreaty(text)
       .send({ from: currentAccount });
-    logTimeInMs("done tx", tx);
+
+    const threebox = getState().threebox.threebox;
+    const openSpace = getState().threebox.openSpace;
+
+    if (openSpace == null) throw "Space is not open";
+
+    const unsignedTreatyTextThread = await openSpace.joinThread(
+      `unsigned-treaty-text-${treaty.id}`
+    );
+    console.log("joined thread with id ", `unsigned-treaty-text-${treaty.id}`);
+
+    const unsignedTreatyText = await unsignedTreatyTextThread.getPosts({
+      limit: process.env.THREEBOX_POST_LIMIT,
+    });
+
+    const postResult = await unsignedTreatyTextThread.post(text);
+    console.log("posted: ", text);
+    console.log(`postResult: ${postResult}`);
+
+    try {
+      console.log(`moderators: ${unsignedTreatyTextThread.listModerators()}`);
+    } catch (e) {
+      console.error("Error listing modertors ", e);
+    }
+    console.log(`posts: `);
+    console.log(unsignedTreatyTextThread.getPosts());
 
     dispatch(addTextToTreaty(treaty, text));
 
-    logTimeInMs("done tx", tx);
-    dispatch(loadOneTreatyRequest(contractInstance)).then((r) => {
-      logTimeInMs("dispatch loadOneTreatyRequest done now. Return value:", r);
-    });
-    // const response = await fetch(`${treatyServer}/treaties/${id}/text`, {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ text }),
-    //   method: "post",
-    // });
-    // const updatedTreaty = await response.json();
-    // console.log(updatedTreaty);
-    // dispatch(addTextToTreaty(updatedTreaty));
+    dispatch(loadOneTreaty(contractInstance));
   } catch (e) {
-    dispatch(displayAlert(e));
-  }
-};
-
-export const removeTreatyRequest = (id) => async (dispatch) => {
-  try {
-    alert(`Not implemented: Remove treaty with id ${id}`);
-    // console.log("remove treaty request");
-    // console.log(id);
-    // const response = await fetch(`http://localhost:8081/treaties/${id}`, {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: "",
-    //   method: "delete",
-    // });
-    // const removedTreaty = await response.json();
-    // console.log(removedTreaty);
-    // dispatch(removeTreaty(removedTreaty));
-  } catch (e) {
-    dispatch(displayAlert(e));
-  } finally {
+    dispatch(alert(e));
   }
 };
 
 export const signTreatyRequest = (treaty) => async (dispatch, getState) => {
-  console.log("signRequest for");
-  console.log(treaty);
   const { id, address, contractInstance } = treaty;
   const currentAccount = getState().web3.account;
   try {
-    const tx = await contractInstance.methods
-      .signTreaty()
-      .send({ from: currentAccount });
-    console.log("tx");
-    console.log(tx);
+    let tx;
+    const threebox = getState().threebox.threebox;
+    const openSpace = getState().threebox.openSpace;
+    console.log("threebox :>> ", threebox);
+    console.log("openSpace :>> ", openSpace);
+    console.log("id :>> ", id);
+    const contentBeingSigned = await getUnsignedTreatyText(
+      threebox,
+      openSpace,
+      id
+    );
+    console.log("contentBeingSigned :>> ", contentBeingSigned);
+    const verify = confirm(
+      `Sign content?\n${JSON.stringify(contentBeingSigned)}`
+    );
+    if (!verify) throw "User did not sign";
 
+    // hash the content, and store the result onchain
+    const hash = Web3.utils.keccak256(contentBeingSigned);
+    console.log("hash :>> ", hash);
+    tx = await contractInstance.methods
+      .signHash(hash)
+      .send({ from: currentAccount });
+    console.log("sign tx", tx);
+
+    if (tx.events.SignedByAll != undefined) {
+      console.log(
+        `Signed by all in block ${tx.blockNumber}. Signature: ${tx.events.SignedByAll.signature}`
+      );
+
+      //todo: Replace with code that waits until openSpace is added to state
+      console.log("About to wait 2 seconds");
+      await delay(2000, "done");
+      const openSpace = getState().threebox.openSpace;
+      const {
+        signedTreatyTextThread,
+        unsignedTreatyTextThread,
+      } = await sign3boxTreatyText(treaty, openSpace, currentAccount);
+
+      console.log(
+        "Signed text is now ",
+        await signedTreatyTextThread.getPosts()
+      );
+      console.log(
+        "Unsigned text is now ",
+        await unsignedTreatyTextThread.getPosts()
+      );
+    }
     dispatch(signTreaty(treaty));
-    dispatch(loadOneTreatyRequest(contractInstance));
+    dispatch(loadOneTreaty(contractInstance));
   } catch (e) {
-    dispatch(displayAlert(e));
+    dispatch(alert(e));
   } finally {
   }
 };
 
-// 3box
-export const load3boxRequest = (address, provider) => async (
-  dispatch,
-  getState
-) => {
-  console.log("load 3box for ", address, provider);
-  try {
-    const box = await Box.openBox(address, provider, {});
-    console.log("successful load of 3box", box);
-    await box.syncDone;
-    console.log("syncdone", box.syncDone);
-    dispatch(load3box(box));
-    const treatifySpace = await box.openSpace("treatify");
-    console.log("opened space ", treatifySpace);
-    dispatch(openSpace(treatifySpace));
-  } catch (e) {
-    dispatch(displayAlert(e));
-  } finally {
+export const refreshTreatyRequest = (treaty) => async (dispatch) => {
+  console.info("[refreshTreatyRequest] ", treaty);
+  loadOneTreaty(treaty.contractInstance);
+};
+
+////////////////////
+//Sub functions
+////////////////////
+
+async function sign3boxTreatyText(treaty, openSpace, myAddress) {
+  console.log("openSpace :>> ", openSpace);
+  const treatyId = treaty.id;
+  const unsignedTreatyTextThread = await openSpace.joinThread(
+    `unsigned-treaty-text-${treatyId}`
+  );
+
+  console.log(`moderators ${unsignedTreatyTextThread.listModerators()}`);
+  const unsignedTreatyText = await unsignedTreatyTextThread.getPosts({
+    limit: process.env.THREEBOX_POST_LIMIT,
+  });
+  const signedTreatyTextThread = await openSpace.joinThread(
+    `signed-treaty-text-${treatyId}`
+  );
+  const existingSignedTreatyText = await signedTreatyTextThread.getPosts({
+    limit: process.env.THREEBOX_POST_LIMIT,
+  });
+  console.log("unsignedTreatyText:", unsignedTreatyText);
+  for (var i in unsignedTreatyText) {
+    console.log("index# " + i + " lineOfText:", unsignedTreatyText[i]);
+    const postResult = await signedTreatyTextThread.post(
+      unsignedTreatyText[i].message
+    );
+    const idToDelete = unsignedTreatyText[i].postId;
+    console.log("delete: ", idToDelete);
+
+    const deleteResult = await unsignedTreatyTextThread.deletePost(idToDelete);
+    console.log("postResult: ", postResult);
+    console.log("deleteResult: ", deleteResult);
   }
+  return { signedTreatyTextThread, unsignedTreatyTextThread };
+}
+
+export const enrichTreatyWith3boxData = (
+  threebox,
+  openSpace,
+  treaties
+) => async (dispatch, getState) => {
+  if (treaties == undefined) {
+    console.info("treaties undefined");
+    dispatch(loadTreatiesSuccess([]));
+  }
+  const address = getState().web3.account;
+  console.log("enrich treaty with auth'd 3box data. treaties: ", treaties);
+  const enrichedTreaties = await treaties.map(async (treaty) => {
+    return {
+      ...treaty,
+      unsignedTreatyText: await getUnsignedTreatyText(
+        threebox,
+        openSpace,
+        treaty.id,
+        treaty.signers
+      ),
+      signedTreatyText: await getSignedTreatyText(
+        threebox,
+        openSpace,
+        treaty.id,
+        treaty.signers,
+        address
+      ),
+      enrichedWithAuthenticated3box: true,
+    };
+  });
+  console.log("enriched treaties: ", await Promise.all(enrichedTreaties));
+  dispatch(loadTreatiesSuccess(await Promise.all(enrichedTreaties)));
 };

@@ -1,10 +1,10 @@
-var SimpleStorage = artifacts.require("./SimpleStorage.sol");
 var TreatyIndex = artifacts.require("./TreatyIndex.sol");
 var Treaty = artifacts.require("./Treaty.sol");
+// var StringUtils = artifacts.require("./StringUtils.sol");
 
-module.exports = function (deployer) {
-  deployer.deploy(SimpleStorage);
-
+module.exports = async function (deployer) {
+  // await deployer.deploy(StringUtils);
+  deployer.deploy(Treaty, 123, "Test Treaty", "Details of Test Treaty");
   deployer.deploy(TreatyIndex, "A treaty index").then(() => {
     TreatyIndex.deployed().then((treatyIndex) => {
       deployer

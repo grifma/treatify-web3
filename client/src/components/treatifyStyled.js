@@ -1,5 +1,9 @@
 import React from "react";
+import { Popover, OverlayTrigger } from "react-bootstrap";
 import styled from "styled-components";
+// import { MDBBtn } from "mdbreact";
+
+// export const MButton = styled(MDBBtn)``;
 
 export const TreatyItemContainer = styled.div`
   background: #fff;
@@ -10,9 +14,58 @@ export const TreatyItemContainer = styled.div`
   box-shadow: 0 4px 8px grey;
   background: white;
   color: black;
+  overflow: visible;
+  padding: 10px;
+`;
+
+export const FocusedTreatyItemContainer = styled.div`
+  background: #fff;
+  border-radius: 8px;
+  margin-top: 8px;
+  padding: 16px;
+  position: relative;
+  box-shadow: 0 4px 8px grey;
+  color: black;
   overflow: hidden;
   padding: 10px;
 `;
+export const UnfocusedTreatyItemContainer = styled.div`
+  background: #fff;
+  border-radius: 8px;
+  margin-top: 8px;
+  padding: 16px;
+  position: relative;
+  box-shadow: 0 4px 8px grey;
+  color: black;
+  overflow: hidden;
+  padding: 10px;
+`;
+
+export const ShadowOverlay = styled.div`
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  margin-top: 8px;
+  padding: 16px;
+  position: relative;
+  box-shadow: 0 4px 8px grey;
+  color: black;
+  overflow: hidden;
+  padding: 10px;
+  z-index: 2;
+`;
+
+// export const UnfocusedTreatyItemContainer = styled.div`
+//   background-color: rgba(0, 0, 0, 0.5);
+//   border-radius: 8px;
+//   margin-top: 8px;
+//   padding: 16px;
+//   position: relative;
+//   box-shadow: 0 4px 8px grey;
+//   color: black;
+//   overflow: hidden;
+//   padding: 10px;
+//   z-index: 2;
+// `;
 
 export const TreatyItemContainerWithWarning = styled(TreatyItemContainer)`
   border-bottom: ${(props) =>
@@ -32,31 +85,48 @@ export const Button = styled.button`
 
 export const ActiveButton = styled(Button)`
   display: inline-block;
-  background-color: #57a657;
+  // background-color: #57a657;
 `;
 
 export const RemoveButton = styled(Button)`
   display: inline-block;
-  background-color: #c75757;
+  // background-color: #c75757;
+  margin-left: 8px;
+`;
+
+export const HideButton = styled(Button)`
+  display: inline-block;
+  // background-color: #c75757;
   margin-left: 8px;
 `;
 
 export const SignButton = styled(Button)`
   display: inline-block;
-  background-color: #b9c967;
+  // background-color: #b9c967;
   margin-left: 8px;
 `;
 
 export const AddTextButton = styled(Button)`
   display: inline-block;
-  background-color: #3cb8d9;
+  // background-color: #3cb8d9;
   margin-left: 8px;
 `;
 
 export const JoinButton = styled(Button)`
   display: inline-block;
-  background-color: #3cb8d9;
+  // background-color: #3cb8d9;
   margin-left: 8px;
+`;
+
+export const RefreshTreatyButton = styled(Button)`
+  display: inline-block;
+  // background-color: #0df2c8;
+  margin-left: 8px;
+`;
+
+export const ShowBoardButton = styled.input`
+  font-size: 16px;
+  color: white;
 `;
 
 export const ActiveTreatyInput = styled.input`
@@ -85,14 +155,12 @@ export const UnsignedText = styled.div`
   border: 1px solid black;
   flex: 1 0 150px;
   padding: 10px;
-  background: white;
   color: black;
 `;
 export const SignedText = styled.div`
   border: 1px solid black;
   flex: 1 0 150px;
   padding: 10px;
-  background: white;
   color: black;
 `;
 
@@ -143,7 +211,7 @@ export const AddTreatyTextButton = styled.button`
   cursor: pointer;
   margin-left: 8px;
   width: 20%;
-  background-color: #9c65cc;
+  // background-color: #9c65cc;
   flex: 1 0 60px;
 `;
 
@@ -173,6 +241,8 @@ export const Header = styled(GridItem)`
 `;
 
 export const LSide = styled(GridItem)`
+  display: flex;
+  flex-flow: column;
   padding: 10px;
   @media only screen and (min-width: 769px) {
     grid-column: span 2;
@@ -213,8 +283,50 @@ export const Footer = styled(GridItem)`
 export const SignerBlockieSetContainer = styled.div`
   display: flex;
   flex-direction: row;
+  margin: 4px;
+  padding: 12px;
 `;
 
-export const SignerBlockieContainer = styled.div`
+export const UnsignedSignerBlockieContainer = styled.div`
   padding: 2px;
+  display: flex;
+`;
+export const SignedSignerBlockieContainer = styled.div`
+  padding: 2px;
+  background: hsl(115, 98%, 80%);
+  display: flex;
+`;
+export const BrokenSignerBlockieContainer = styled.div`
+  padding: 2px;
+  background: hsl(1, 94%, 51%);
+  display: flex;
+`;
+export const WithdrawnSignerBlockieContainer = styled.div`
+  padding: 2px;
+  background: #e46967;
+  display: flex;
+`;
+
+export const StyledPopover = styled(Popover)`
+  min-width: 450px;
+  background: #343a40;
+  color: white;
+  padding: 16px;
+`;
+
+export const StyledPopoverTitle = styled(Popover.Title)`
+  min-width: 450px;
+  background: #343a40;
+  color: white;
+  padding: 16px;
+`;
+
+export const TreatyListItemCommonHeaderContainer = styled.div`
+  display: flex;
+  flex-flow: column wrap;
+  align-content: space-between;
+  height: 22px;
+  padding: 22px;
+  font-size: 22px;
+  font-weight: bold;
 `;
