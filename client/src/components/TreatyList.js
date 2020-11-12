@@ -6,6 +6,7 @@ import {
   loadTreatiesWeb3,
   hideTreatyRequest,
   markActiveRequest,
+  markActivePrivateRequest,
   signTreatyRequest,
   joinTreatyRequest,
   refreshTreatyRequest,
@@ -37,12 +38,13 @@ const TreatyList = ({
   startLoadingTreaties,
   onHidePressed,
   onMarkActivePressed,
+  onMarkActivePrivatePressed,
   onAddTreatyTextPressed,
   onSignPressed,
   onJoinPressed,
   onRefreshTreatyPressed,
 }) => {
-  const loadingMessage = <div>Loading treaties</div>;
+  const loadingMessage = <div>Loading Project Wallets</div>;
   console.log("[TreatyList] activeTreaties :>> ", activeTreaties);
   console.log("[TreatyList] draftTreaties :>> ", draftTreaties);
   const content = (
@@ -57,6 +59,7 @@ const TreatyList = ({
               draftTreaties={draftTreaties}
               onHidePressed={onHidePressed}
               onMarkActivePressed={onMarkActivePressed}
+              onMarkActivePrivatePressed={onMarkActivePrivatePressed}
               onAddTreatyTextPressed={onAddTreatyTextPressed}
               onSignPressed={onSignPressed}
               onRefreshTreatyPressed={onRefreshTreatyPressed}
@@ -73,6 +76,7 @@ const TreatyList = ({
               draftTreaties={draftTreaties}
               onHidePressed={onHidePressed}
               onMarkActivePressed={onMarkActivePressed}
+              onMarkActivePrivatePressed={onMarkActivePrivatePressed}
               onAddTreatyTextPressed={onAddTreatyTextPressed}
               onSignPressed={onSignPressed}
               onRefreshTreatyPressed={onRefreshTreatyPressed}
@@ -88,6 +92,7 @@ const TreatyList = ({
               draftTreaties={draftTreaties}
               onHidePressed={onHidePressed}
               onMarkActivePressed={onMarkActivePressed}
+              onMarkActivePrivatePressed={onMarkActivePrivatePressed}
               onAddTreatyTextPressed={onAddTreatyTextPressed}
               onSignPressed={onSignPressed}
               onRefreshTreatyPressed={onRefreshTreatyPressed}
@@ -127,6 +132,7 @@ const MainTreatyList = ({
   activeTreaties,
   onHidePressed,
   onMarkActivePressed,
+  onMarkActivePrivatePressed,
   onSignPressed,
   onJoinPressed,
   onAddTreatyTextPressed,
@@ -146,6 +152,7 @@ const MainTreatyList = ({
           treaty={treaty}
           onHidePressed={onHidePressed}
           onMarkActivePressed={onMarkActivePressed}
+          onMarkActivePrivatePressed={onMarkActivePrivatePressed}
           onSignPressed={onSignPressed}
           onJoinPressed={onJoinPressed}
         />
@@ -181,7 +188,6 @@ const OneTreaty = ({
 }) => {
   let { id } = useParams();
   console.log(`Render one treaty. id is ${id}`);
-  // let content = <div>ONETREATY</div>;
   console.log("activeTreaties :>> ", activeTreaties);
   let selectedTreaty = activeTreaties.filter((treaty) => treaty.id == id);
   console.log(`id: ${id}`, selectedTreaty);
@@ -210,6 +216,7 @@ const mapDispatchToProps = (dispatch) => ({
   startLoadingTreaties: () => dispatch(loadTreatiesWeb3()),
   onHidePressed: (id) => dispatch(hideTreatyRequest(id)),
   onMarkActivePressed: (treaty) => dispatch(markActiveRequest(treaty)),
+  onMarkActivePrivatePressed: (treaty) => dispatch(markActivePrivateRequest(treaty)),
   onSignPressed: (treaty) => dispatch(signTreatyRequest(treaty)),
   onJoinPressed: (treaty) => dispatch(joinTreatyRequest(treaty)),
   onRefreshTreatyPressed: (treaty) => dispatch(refreshTreatyRequest(treaty)),

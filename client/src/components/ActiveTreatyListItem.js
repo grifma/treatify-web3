@@ -29,35 +29,36 @@ const ActiveTreatyListItem = ({
   const Container = treaty.inFocus
     ? FocusedTreatyItemContainer
     : UnfocusedTreatyItemContainer;
+  if (treaty.hidden) return null;
   return (
-    <Container key={treaty.key} createdAt={treaty.createdAt}>
-      <TreatyListItemCommonHeader key={treaty.key} treaty={treaty} />
-      <TreatyListItemCommonSignatures key={treaty.key} treaty={treaty} />
+    <Container key={`c${treaty.key}`} createdAt={treaty.createdAt}>
+      <TreatyListItemCommonHeader key={`h${treaty.key}`} treaty={treaty} />
+      <TreatyListItemCommonSignatures key={`s${treaty.key}`} treaty={treaty} />
       <TreatyTextContainer>
-        {/* <OverlayTrigger
+        <OverlayTrigger
           trigger={["hover", "focus"]}
           placement="right"
           delay={{ show: 250, hide: 700 }}
-          overlay={developerInfoPopover(treaty)}
-        > */}
+          overlay={infoPopover(treaty)}
+        >
         <UnsignedText>
           <h3>Unsigned</h3>
           {treaty.unsignedTreatyText.length > 0 &&
-            treaty.unsignedTreatyText.map((text) => <p>{text}</p>)}
+            treaty.unsignedTreatyText.map((text, i) => <p key={i}>{text}</p>)}
         </UnsignedText>
-        {/* </OverlayTrigger> */}
-        {/* <OverlayTrigger
+        </OverlayTrigger>
+        <OverlayTrigger
           trigger={["hover", "focus"]}
           placement="right"
           delay={{ show: 250, hide: 700 }}
-          overlay={developerInfoPopover(treaty)}
-        > */}
+          overlay={infoPopover(treaty)}
+        >
         <SignedText>
           <h3>Signed</h3>
           {treaty.signedTreatyText.length > 0 &&
-            treaty.signedTreatyText.map((text) => <p>{text}</p>)}
+            treaty.signedTreatyText.map((text, i) => <p key={i}>{text}</p>)}
         </SignedText>
-        {/* </OverlayTrigger> */}
+        </OverlayTrigger>
       </TreatyTextContainer>
       <AddTreatyTextForm
         treaty={treaty}
@@ -77,7 +78,17 @@ const developerInfoPopover = (treaty) => (
     <StyledPopover.Content>
       <div id={`developer-info-${treaty.id}`} className="onDark">
         {treaty.developerInfo}
-        {/* {treaty.developerInfo.map((x) => x)} */}
+      </div>
+    </StyledPopover.Content>
+  </StyledPopover>
+);
+
+const infoPopover = (treaty) => (
+  <StyledPopover id={`unsignedtext-popover-${treaty.id}`}>
+    <StyledPopoverTitle as="h3">Info:</StyledPopoverTitle>
+    <StyledPopover.Content>
+      <div id={`info-${treaty.id}`} className="onDark">
+        {treaty.developerInfo}
       </div>
     </StyledPopover.Content>
   </StyledPopover>

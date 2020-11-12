@@ -21,7 +21,6 @@ import {
   treatyIndexSelector,
   treatyContractSelector,
   treatyContractsSelector,
-  treatyIndex,
   web3Selector,
   ethersProviderSelector,
   ethersSignerSelector,
@@ -36,6 +35,7 @@ import {
 } from "./redux/subscriptions";
 
 import TreatyList from "./components/TreatyList";
+import TreatyIndexView from "./components/TreatyIndexView";
 import {
   Main,
   LSide,
@@ -44,12 +44,11 @@ import {
   Footer,
   Grid,
 } from "./components/treatifyStyled";
-import { StyledPopover, StyledPopoverTitle } from "./components/treatifyStyled";
 import { Button, Popover, OverlayTrigger } from "react-bootstrap";
 import styled from "styled-components";
 import ProfileHover from "profile-hover";
 import ActiveTreatyListItem from "./components/ActiveTreatyListItem";
-import { showAllTreaties } from "./redux/actions";
+import DisplayControls from "./components/DisplayControls";
 
 const TreatyWeb3 = ({
   dispatch,
@@ -74,7 +73,6 @@ const TreatyWeb3 = ({
   startLoad3box,
   startLoadEthersProvider,
   startLoadEthersSigner,
-  startShowAllTreaties,
   initiated,
 }) => {
   useEffect(() => {
@@ -89,7 +87,6 @@ const TreatyWeb3 = ({
       const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
       const treatyIndex = await startLoadTreatyIndex(treatyIndexContract);
       startSubscribeToAccountsChanging(myWeb3);
-      startShowAllTreaties();
       const treaties = await startLoadTreatiesWeb3(myWeb3, treatyIndex);
       console.log("treaties :>>> ", treaties);
       startSubscribeToAllLogs(web3);
@@ -105,8 +102,6 @@ const TreatyWeb3 = ({
   }, []);
 
   const connectBlockchain = async (e) => {
-    //console.log("Deprecated - code removed");
-    //console.log("web3, treatyIndex", web3, treatyIndex);
     const myWeb3 = await startLoadWeb3();
     const myAccount = await startLoadAccount(myWeb3);
     await startLoadTreatiesWeb3(myWeb3, treatyIndex);
@@ -118,104 +113,11 @@ const TreatyWeb3 = ({
   };
 
   const refresh = async (e) => {
-    //console.log("Refresh");
     startLoadTreatiesWeb3(web3, treatyIndex);
     e.preventDefault();
   };
 
-  const emptyComponent = () => <div>EMPTY</div>;
-
-  const TreatyIndexTable = () => (
-    <table className="table table-dark">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Contract Address</th>
-        </tr>
-      </thead>
-      <tbody>
-        {treatyIndex &&
-          treatyIndex.map((treatyAddress, i) => (
-            <tr key={i}>
-              <td>{i}</td>
-              <td>{treatyAddress}</td>
-            </tr>
-          ))}
-      </tbody>
-    </table>
-  );
-
-  const treatyIndexPopover = (
-    <StyledPopover id="treaty-index-popover" boundary="window">
-      <StyledPopoverTitle as="h3">
-        Project Board Address:{" "}
-        {treatyIndexContract && treatyIndexContract._address}
-      </StyledPopoverTitle>
-      <StyledPopover.Content>
-        <TreatyIndexTable />
-      </StyledPopover.Content>
-    </StyledPopover>
-  );
-
-  function renderTreatyIndexPopover(props) {
-    <StyledPopover id="treaty-index-popover" {...props}>
-      <StyledPopoverTitle as="h3">
-        Treaty Index Address:{" "}
-        {treatyIndexContract && treatyIndexContract._address}
-      </StyledPopoverTitle>
-      <StyledPopover.Content>
-        <TreatyIndexTable />
-      </StyledPopover.Content>
-    </StyledPopover>;
-  }
-
-  const TreatyIndexComponent = () => (
-    <OverlayTrigger
-      trigger={["hover", "focus"]}
-      placement={"right"}
-      delay={{ show: 250, hide: 2000 }}
-      overlay={treatyIndexPopover}
-    >
-      <a href="#" style={{ marginTop: "40px", color: "white" }}>
-        Show Project Wallet Board
-      </a>
-    </OverlayTrigger>
-  );
-
-  const ConnectForm = () => (
-    <form onSubmit={connectBlockchain}>
-      <div className="form-group row">
-        <div className="col-12">
-          <button
-            type="submit"
-            className={`w-100 btn text-truncate ${
-              treatyIndexContract !== null
-                ? "disabled btn-success"
-                : "btn-danger"
-            }`}
-          >
-            {treatyIndexContract !== null
-              ? "Blockchain Connected"
-              : "Connect Blockchain"}
-          </button>
-        </div>
-      </div>
-    </form>
-  );
-
-  const RefreshForm = () => (
-    <form onSubmit={refresh}>
-      <div className="form-group row">
-        <div className="col-12">
-          <button type="submit" className="w-100 btn">
-            Refresh
-          </button>
-        </div>
-      </div>
-    </form>
-  );
-
-  const loadingMessage = <div>Loading treaties</div>;
+  const loadingMessage = <div>Loading Project Wallets</div>;
   const isLoading = false;
   const content = (
     <Grid>
@@ -231,7 +133,8 @@ const TreatyWeb3 = ({
         {treatyIndex == null ? (
           <div>Project Wallet Board has not been loaded</div>
         ) : (
-          <TreatyIndexComponent />
+          // <TreatyIndexComponent />
+          <TreatyIndexView />
         )}
         <p></p>
       </LSide>
@@ -243,7 +146,6 @@ const TreatyWeb3 = ({
         )}
       </Main>
       <RSide>
-        <ConnectForm />
       </RSide>
       <Footer></Footer>
     </Grid>
@@ -285,7 +187,6 @@ function mapDispatchToProps(dispatch) {
     startLoadEthersSigner: (provider) => dispatch(loadEthersSigner(provider)),
     startLoadEthersProvider: (ethereumProvider) =>
       dispatch(loadEthersProvider(ethereumProvider)),
-    startShowAllTreaties: () => dispatch(showAllTreaties()),
   };
 }
 

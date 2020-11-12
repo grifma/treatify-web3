@@ -1,6 +1,6 @@
 import React from "react";
 import { OverlayTrigger } from "react-bootstrap";
-import { SignerBlockieSetContainer } from "./treatifyStyled";
+import { SignerBlockieSetContainer, SignatureWhitespace } from "./treatifyStyled";
 import SignerBlockie from "./SignerBlockie";
 
 const TreatyListItemCommonSignatures = ({ treaty }) => {
@@ -9,13 +9,15 @@ const TreatyListItemCommonSignatures = ({ treaty }) => {
       <SignerBlockieSetContainer>
         Signers:&nbsp;
         {treaty.signers.map((signer, i) => (
-          <div>
+          <div key={i}>
             <SignerBlockie
               address={signer}
               signatureState={treaty.signatureState[i]}
             />
           </div>
         ))}
+        {(treaty.numSigners == 0) && (<SignatureWhitespace />)}
+        <p></p>
       </SignerBlockieSetContainer>
     </div>
   );

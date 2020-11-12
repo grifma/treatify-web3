@@ -26,6 +26,7 @@ import {
   ethersSignerLoaded,
   hideTreaties,
   showAllTreaties,
+  loadUserConfig,
 } from "../redux/actions";
 import {
   humanReadableTreatyStatus,
@@ -97,6 +98,7 @@ async function pullTreaty(treatyInstance, threebox, openSpace, address) {
     contractInstance: treatyInstance,
     developerInfo: await get3boxDeveloperInfo(treatyId, openSpace),
     balance: 0,
+    hidden: false,
   };
   console.log("treaty.signatureStatus :>> ", treaty.signatureStatus);
   return treaty;
@@ -273,31 +275,46 @@ async function getSignedTreatyText(
   }
 }
 
-async function get3boxDeveloperInfo(treatyId, openSpace) {
-  var returnValue = {
-    "Without auth": {
-      // "UnsignedText Moderators": await openSpace
-      //   .joinThread(`unsigned-treaty-text-${treatyId}`)
-      //   .listModerators(),
-      // "SignedText Moderators": await openSpace
-      //   .joinThread(`signed-treaty-text-${treatyId}`)
-      //   .listModerators(),
-    },
-  };
+// async function get3boxModeratorsWithAuth(treatyId, openSpace){
+//   if (openSpace == undefined) return null;
+//   const unsignedThread = await openSpace.joinThread(
+//     `unsigned-treaty-text-${treatyId}`
+//   );
+//   const signedThread = await openSpace.joinThread(
+//     `signed-treaty-text-${treatyId}`
+//     );
+//   return (
+//     {
+//       "UnsignedText": await unsignedThread.listModerators(),
+//       "SignedText": await signedThread.listModerators(),
+//     }
+//   )
+// }
 
-  if (openSpace != undefined) {
-    const unsignedThread = await openSpace.joinThread(
-      `unsigned-treaty-text-${treatyId}`
-    );
-    const signedThread = await openSpace.joinThread(
-      `signed-treaty-text-${treatyId}`
-    );
-    returnValue["With auth"] = {
-      "UnsignedText Moderators": await unsignedThread.listModerators(),
-      "SignedText Moderators": await signedThread.listModerators(),
-    };
-  }
-  return [JSON.stringify(returnValue)];
+// async function get3boxModeratorsNoAuth(treatyId, openSpace){
+//   return (
+//     {
+//       "UnsignedText": await openSpace
+//         .joinThread(`unsigned-treaty-text-${treatyId}`)
+//         .listModerators(),
+//         "SignedText": await openSpace
+//         .joinThread(`signed-treaty-text-${treatyId}`)
+//         .listModerators(),
+//     }
+//   )
+// }
+
+async function get3boxDeveloperInfo(treatyId, openSpace) {
+  // var returnValue = {
+  //   "Without auth": {
+  //     "Moderators": get3boxModeratorsNoAuth(treatyId, openSpace)
+  //   },
+  //   "With auth": {
+  //       "Moderators": get3boxModeratorsWithAuth(treatyId, openSpace)
+  //   }
+  // }
+  // return [JSON.stringify(returnValue)];
+  return ["Data stored on IPFS"];
 }
 
 ////////////////////
@@ -400,6 +417,11 @@ export const loadStoredData = (contract) => async (dispatch) => {
 
 export const hideTreatyRequest = (ids) => async (dispatch, getState) => {
   console.log("[hideTreatyRequest] with ids " + ids);
+  const openSpace = getState().threebox.openSpace;
+  const hiddenTreaties = getState().config.hiddenTreaties || [];
+  if (openSpace != undefined) {
+    await openSpace.private.set("hiddenTreaties", hiddenTreaties.concat(ids));
+  }
   if (typeof ids == "number") {
     dispatch(hideTreaties([ids]));
   } else {
@@ -441,6 +463,7 @@ export const loadTreatiesWeb3 = () => async (dispatch, getState) => {
       })
     );
     console.log("treaties :>> ", treaties);
+    console.log('getState().config.hiddenTreaties :>> ', getState().config.hiddenTreaties);
     dispatch(loadTreatiesSuccess(treaties));
     console.log("about to enrich from loadTreatiesWeb3");
     dispatch(enrichTreatyWith3boxData(threebox, openSpace, treaties));
@@ -504,6 +527,12 @@ export const load3box = (address, provider) => async (dispatch, getState) => {
     console.log("syncdone", box.syncDone);
     const treatifySpace = await box.openSpace("treatify");
     console.info("opened space ", treatifySpace);
+    const userConfig = await treatifySpace.private.all();
+    console.log('userConfig :>> ', userConfig);
+    await treatifySpace.private.set("name", "Frederico");
+    console.log('treatifySpace.private.all() :>> ', await treatifySpace.private.all());
+    console.log('treatifySpace.private.get("name") :>> ', await treatifySpace.private.get("name"));
+    await dispatch(loadUserConfig(userConfig));
     await dispatch(openSpace(treatifySpace));
     await dispatch(load3boxSuccess(box));
     console.log("about to enrich from load3box");
@@ -546,6 +575,44 @@ export const markActiveRequest = (treaty) => async (dispatch, getState) => {
       await thread.addModerator(x);
       console.log(`added ${x} as thread moderator`);
     });
+    dispatch(loadOneTreaty(contractInstance));
+  } catch (e) {
+    dispatch(alert(e));
+  } finally {
+  }
+};
+
+export const markActivePrivateRequest = (treaty) => async (dispatch, getState) => {
+  console.log('markActivePrivateRequest :>> ', markActivePrivateRequest);
+  const { id, address, contractInstance } = treaty;
+  const web3 = getState().web3.connection;
+  const currentAccount = getState().web3.account;
+  try {
+    const tx = await contractInstance.methods
+      .makeActive()
+      .send({ from: currentAccount });
+    await dispatch(markActive(treaty));
+    const openSpace = getState().threebox.openSpace;
+    const unsignedThread = await openSpace.createConfidentialThread(
+      `unsigned-treaty-text-${treaty.id}`
+    );
+    console.log("created private thread with id ", `unsigned-treaty-text-${treaty.id}`);
+
+    // All participants need to be a moderator of the unsigned thread, so that adjustments can be made before signing
+    treaty.signers.map(async (x) => {
+      await unsignedThread.addModerator(x);
+      console.log(`added ${x} as thread moderator`);
+    });
+
+    const signedThread = await openSpace.createConfidentialThread(
+      `signed-treaty-text-${treaty.id}`
+    );
+    console.log("created private thread with id ", `signed-treaty-text-${treaty.id}`);
+    treaty.signers.map(async (x) => {
+      await signedThread.addMember(x);
+      console.log(`added ${x} as thread member`);
+    });
+
     dispatch(loadOneTreaty(contractInstance));
   } catch (e) {
     dispatch(alert(e));
@@ -823,3 +890,16 @@ export const enrichTreatyWith3boxData = (
   console.log("enriched treaties: ", await Promise.all(enrichedTreaties));
   dispatch(loadTreatiesSuccess(await Promise.all(enrichedTreaties)));
 };
+
+export const showAllTreatiesRequest = () => async(dispatch, getState) => {
+  const openSpace = getState().threebox.openSpace;
+  try {
+    console.log('Previously hidden treaties :>> ', await openSpace.private.get("hiddenTreaties"));
+    await openSpace.private.set("hiddenTreaties", []);
+  } catch (e) {
+    console.error("[showAllTreatiesRequest] Error interacting with 3box", e);    
+  }
+  dispatch(showAllTreaties());
+  dispatch(loadTreatiesWeb3());
+}
+
