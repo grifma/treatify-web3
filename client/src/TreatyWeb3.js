@@ -49,7 +49,6 @@ import { Button, Popover, OverlayTrigger } from "react-bootstrap";
 import styled from "styled-components";
 import ProfileHover from "profile-hover";
 import ActiveTreatyListItem from "./components/ActiveTreatyListItem";
-import { withCookies } from "react-cookie";
 import { showAllTreaties } from "./redux/actions";
 
 const TreatyWeb3 = ({
@@ -77,7 +76,6 @@ const TreatyWeb3 = ({
   startLoadEthersSigner,
   startShowAllTreaties,
   initiated,
-  cookies,
 }) => {
   useEffect(() => {
     async function initiate() {
@@ -241,7 +239,7 @@ const TreatyWeb3 = ({
         {treatyIndex == null ? (
           <div>Project Wallet Board has not been loaded</div>
         ) : (
-          <TreatyList web3={web3} pCookies={cookies} />
+          <TreatyList web3={web3} />
         )}
       </Main>
       <RSide>
@@ -294,4 +292,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withCookies(TreatyWeb3));
+)(TreatyWeb3);

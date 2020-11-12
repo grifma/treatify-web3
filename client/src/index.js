@@ -9,19 +9,17 @@ import App from "./App";
 // import "@fortawesome/fontawesome-free/css/all.min.css";
 // import "bootstrap-css-only/css/bootstrap.min.css";
 // import "mdbreact/dist/css/mdb.css";
-import { CookiesProvider } from "react-cookie";
 import { BrowserRouter } from "react-router-dom";
 
 const store = configureStore();
 
 ReactDOM.render(
-  <CookiesProvider>
     <BrowserRouter>
       <Provider store={store}>
         <App />
       </Provider>
     </BrowserRouter>
-  </CookiesProvider>,
+  ,
   document.getElementById("root")
 );
 

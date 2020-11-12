@@ -27,14 +27,12 @@ import {
   Link,
   useParams,
 } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 const TreatyList = ({
   isLoading,
   activeTreaties,
   draftTreaties,
   bindingTreaties,
-  withdrawnTreaties,
   web3,
   startLoadingTreaties,
   onHidePressed,
@@ -43,16 +41,7 @@ const TreatyList = ({
   onSignPressed,
   onJoinPressed,
   onRefreshTreatyPressed,
-  pCookies,
-  // propTreaties,
 }) => {
-  useEffect(() => {
-    // startLoadingTreaties();
-  }, []);
-
-  // if (draftTreaties == undefined) draftTreaties = [];
-  // if (activeTreaties == undefined) activeTreaties = [];
-
   const loadingMessage = <div>Loading treaties</div>;
   console.log("[TreatyList] activeTreaties :>> ", activeTreaties);
   console.log("[TreatyList] draftTreaties :>> ", draftTreaties);
@@ -215,14 +204,12 @@ const mapStateToProps = (state, ownProps) => ({
   isLoading: getTreatiesLoading(state),
   activeTreaties: getActiveTreaties(state),
   draftTreaties: getDraftTreaties(state),
-  cookies: ownProps.cookies,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   startLoadingTreaties: () => dispatch(loadTreatiesWeb3()),
   onHidePressed: (id) => dispatch(hideTreatyRequest(id)),
   onMarkActivePressed: (treaty) => dispatch(markActiveRequest(treaty)),
-  // onAddTreatyTextPressed: (id, text) => dispatch(addTreatyTextRequest(id, text)),
   onSignPressed: (treaty) => dispatch(signTreatyRequest(treaty)),
   onJoinPressed: (treaty) => dispatch(joinTreatyRequest(treaty)),
   onRefreshTreatyPressed: (treaty) => dispatch(refreshTreatyRequest(treaty)),
