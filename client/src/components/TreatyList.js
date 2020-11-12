@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import NewTreatyForm from "./NewTreatyForm";
 import ActiveTreatyListItem from "./ActiveTreatyListItem";
 import DraftTreatyListItem from "./DraftTreatyListItem";
-import WithdrawnTreatyListItem from "./WithdrawnTreatyListItem";
 import {
   loadTreatiesWeb3,
   hideTreatyRequest,
