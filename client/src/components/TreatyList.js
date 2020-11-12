@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import NewTreatyForm from "./NewTreatyForm";
 import ActiveTreatyListItem from "./ActiveTreatyListItem";
 import DraftTreatyListItem from "./DraftTreatyListItem";
-import WithdrawnTreatyListItem from "./WithdrawnTreatyListItem";
 import {
   loadTreatiesWeb3,
   hideTreatyRequest,
   markActiveRequest,
+  markActivePrivateRequest,
   signTreatyRequest,
   joinTreatyRequest,
   refreshTreatyRequest,
@@ -28,33 +28,23 @@ import {
   Link,
   useParams,
 } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 const TreatyList = ({
   isLoading,
   activeTreaties,
   draftTreaties,
   bindingTreaties,
-  withdrawnTreaties,
   web3,
   startLoadingTreaties,
   onHidePressed,
   onMarkActivePressed,
+  onMarkActivePrivatePressed,
   onAddTreatyTextPressed,
   onSignPressed,
   onJoinPressed,
   onRefreshTreatyPressed,
-  pCookies,
-  // propTreaties,
 }) => {
-  useEffect(() => {
-    // startLoadingTreaties();
-  }, []);
-
-  // if (draftTreaties == undefined) draftTreaties = [];
-  // if (activeTreaties == undefined) activeTreaties = [];
-
-  const loadingMessage = <div>Loading treaties</div>;
+  const loadingMessage = <div>Loading Project Wallets</div>;
   console.log("[TreatyList] activeTreaties :>> ", activeTreaties);
   console.log("[TreatyList] draftTreaties :>> ", draftTreaties);
   const content = (
@@ -69,6 +59,7 @@ const TreatyList = ({
               draftTreaties={draftTreaties}
               onHidePressed={onHidePressed}
               onMarkActivePressed={onMarkActivePressed}
+              onMarkActivePrivatePressed={onMarkActivePrivatePressed}
               onAddTreatyTextPressed={onAddTreatyTextPressed}
               onSignPressed={onSignPressed}
               onRefreshTreatyPressed={onRefreshTreatyPressed}
@@ -85,6 +76,7 @@ const TreatyList = ({
               draftTreaties={draftTreaties}
               onHidePressed={onHidePressed}
               onMarkActivePressed={onMarkActivePressed}
+              onMarkActivePrivatePressed={onMarkActivePrivatePressed}
               onAddTreatyTextPressed={onAddTreatyTextPressed}
               onSignPressed={onSignPressed}
               onRefreshTreatyPressed={onRefreshTreatyPressed}
@@ -100,6 +92,7 @@ const TreatyList = ({
               draftTreaties={draftTreaties}
               onHidePressed={onHidePressed}
               onMarkActivePressed={onMarkActivePressed}
+              onMarkActivePrivatePressed={onMarkActivePrivatePressed}
               onAddTreatyTextPressed={onAddTreatyTextPressed}
               onSignPressed={onSignPressed}
               onRefreshTreatyPressed={onRefreshTreatyPressed}
@@ -139,6 +132,7 @@ const MainTreatyList = ({
   activeTreaties,
   onHidePressed,
   onMarkActivePressed,
+  onMarkActivePrivatePressed,
   onSignPressed,
   onJoinPressed,
   onAddTreatyTextPressed,
@@ -158,6 +152,7 @@ const MainTreatyList = ({
           treaty={treaty}
           onHidePressed={onHidePressed}
           onMarkActivePressed={onMarkActivePressed}
+          onMarkActivePrivatePressed={onMarkActivePrivatePressed}
           onSignPressed={onSignPressed}
           onJoinPressed={onJoinPressed}
         />
@@ -193,7 +188,6 @@ const OneTreaty = ({
 }) => {
   let { id } = useParams();
   console.log(`Render one treaty. id is ${id}`);
-  // let content = <div>ONETREATY</div>;
   console.log("activeTreaties :>> ", activeTreaties);
   let selectedTreaty = activeTreaties.filter((treaty) => treaty.id == id);
   console.log(`id: ${id}`, selectedTreaty);
@@ -216,14 +210,13 @@ const mapStateToProps = (state, ownProps) => ({
   isLoading: getTreatiesLoading(state),
   activeTreaties: getActiveTreaties(state),
   draftTreaties: getDraftTreaties(state),
-  cookies: ownProps.cookies,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   startLoadingTreaties: () => dispatch(loadTreatiesWeb3()),
   onHidePressed: (id) => dispatch(hideTreatyRequest(id)),
   onMarkActivePressed: (treaty) => dispatch(markActiveRequest(treaty)),
-  // onAddTreatyTextPressed: (id, text) => dispatch(addTreatyTextRequest(id, text)),
+  onMarkActivePrivatePressed: (treaty) => dispatch(markActivePrivateRequest(treaty)),
   onSignPressed: (treaty) => dispatch(signTreatyRequest(treaty)),
   onJoinPressed: (treaty) => dispatch(joinTreatyRequest(treaty)),
   onRefreshTreatyPressed: (treaty) => dispatch(refreshTreatyRequest(treaty)),

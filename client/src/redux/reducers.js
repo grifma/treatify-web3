@@ -26,6 +26,7 @@ import {
   TREATY_INDEX_LOADED,
   HIDE_TREATIES,
   SHOW_ALL_TREATIES,
+  LOAD_USER_CONFIG,
 } from "../redux/actions";
 
 function web3(state = {}, action) {
@@ -181,6 +182,26 @@ export const treaties = (state = [], action) => {
         isOneTreatyLoading: true,
       };
     }
+    case HIDE_TREATIES: {
+      console.log("[treaties reducer] HIDE_TREATIES");
+      console.log("state :>> ", state);
+      console.log("payload :>> ", payload);
+      const { ids } = payload;
+      console.log("ids :>> ", ids);
+      return {
+        ...state,
+        data: state.data.map(treaty => {
+          if (ids.indexOf(treaty.id) == -1) {
+            return treaty;
+          } else {
+            return {
+              ...treaty,
+              hidden: true,
+            }
+          }
+        })
+      };
+    }
     default:
       return state;
   }
@@ -189,15 +210,25 @@ export const treaties = (state = [], action) => {
 export const config = (state = [], action) => {
   const { type, payload } = action;
   switch (type) {
+    case LOAD_USER_CONFIG: {
+      console.log('LOAD_USER_CONFIG with payload :>> ', payload);
+      console.log('payload.hiddenTreaties :>> ', payload.hiddenTreaties);
+      console.log('payload.hiddenTreaties  || []:>> ', payload.hiddenTreaties || []);
+      return {
+        ...state,
+        hiddenTreaties: payload.hiddenTreaties || []
+      }
+    }
     case HIDE_TREATIES: {
       console.log("HIDE_TREATIES");
       console.log("state :>> ", state);
       console.log("payload :>> ", payload);
       console.log("ids :>> ", ids);
       const { ids } = payload;
+      const prevHiddenTreaties = state.hiddenTreaties || [];
       return {
         ...state,
-        hiddenTreaties: state.hiddenTreaties.concat(ids),
+        hiddenTreaties: prevHiddenTreaties.concat(ids),
         // hiddenTreaties:
         //   (state.config.hiddenTreaties == undefined && new Set(ids)) ||
         //   state.config.hiddenTreaties.concat(ids),

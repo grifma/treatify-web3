@@ -161,6 +161,12 @@ export const showAllTreaties = () => ({
   type: SHOW_ALL_TREATIES,
 });
 
+export const LOAD_USER_CONFIG = "LOAD_USER_CONFIG";
+export const loadUserConfig = (config) => ({
+  type: LOAD_USER_CONFIG,
+  payload: { config }
+});
+
 export const WEB3_LOADED = "WEB3_LOADED";
 export const ACCOUNT_LOADED = "ACCOUNT_LOADED";
 export const ETHERS_SIGNER_LOADED = "ETHERS_SIGNER_LOADED";

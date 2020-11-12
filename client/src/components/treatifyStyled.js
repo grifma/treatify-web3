@@ -77,6 +77,7 @@ export const TreatyItemContainerWithWarning = styled(TreatyItemContainer)`
 export const Button = styled.button`
   font-size: 16px;
   padding: 8px;
+  margin: 2px;
   border: none;
   border-radius: 8px;
   outline: none;
@@ -88,6 +89,11 @@ export const ActiveButton = styled(Button)`
   // background-color: #57a657;
 `;
 
+export const ActivePrivateButton = styled(Button)`
+  display: inline-block;
+  // background-color: #57a657;
+`;
+
 export const RemoveButton = styled(Button)`
   display: inline-block;
   // background-color: #c75757;
@@ -95,6 +101,12 @@ export const RemoveButton = styled(Button)`
 `;
 
 export const HideButton = styled(Button)`
+  display: inline-block;
+  // background-color: #c75757;
+  margin-left: 8px;
+`;
+
+export const ShowAllButton = styled(Button)`
   display: inline-block;
   // background-color: #c75757;
   margin-left: 8px;
@@ -330,3 +342,13 @@ export const TreatyListItemCommonHeaderContainer = styled.div`
   font-size: 22px;
   font-weight: bold;
 `;
+
+export const SignatureWhitespace = styled.div`
+  display: flex;
+  height: 40px;
+`
+
+export const HeaderDate = styled.div`
+  margin: 8px;
+  color: gray;
+`

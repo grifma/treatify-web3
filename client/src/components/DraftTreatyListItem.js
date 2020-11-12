@@ -3,6 +3,7 @@ import {
   TreatyItemContainer,
   TreatyItemContainerWithWarning,
   ActiveButton,
+  ActivePrivateButton,
   SignButton,
   HideButton,
   JoinButton,
@@ -14,6 +15,7 @@ const DraftTreatyListItem = ({
   treaty,
   onHidePressed,
   onMarkActivePressed,
+  onMarkActivePrivatePressed,
   onJoinPressed,
 }) => {
   const Container = treaty.isActive
@@ -25,10 +27,13 @@ const DraftTreatyListItem = ({
       <TreatyListItemCommonSignatures treaty={treaty} />
       <div className="buttons-container">
         <ActiveButton onClick={() => onMarkActivePressed(treaty)}>
-          Make Active
+          Public
         </ActiveButton>
+        <ActivePrivateButton onClick={() => onMarkActivePrivatePressed(treaty)}>
+          Confidential
+        </ActivePrivateButton>
         <JoinButton onClick={() => onJoinPressed(treaty)}>Join</JoinButton>
-        <HideButton onClick={() => onHidePressed(treaty)}>Hide</HideButton>
+        <HideButton onClick={() => onHidePressed(treaty.id)}>Hide</HideButton>
       </div>
     </Container>
   );
