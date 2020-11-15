@@ -77,6 +77,7 @@ const TreatyWeb3 = ({
 }) => {
   useEffect(() => {
     async function initiate() {
+      console.log('Initiate TreatyWeb3');
       //ethers
       const provider = await startLoadEthersProvider(window.ethereum);
       const signer = await startLoadEthersSigner(provider);
@@ -124,16 +125,15 @@ const TreatyWeb3 = ({
       <Header>{/*<Nav />*/}</Header>
       <LSide>
         {account == null ? (
-          <div>Account has not been loaded</div>
+          <div><p>Account has not been loaded. Please ensure Metamask is connected to the correct network.</p></div>
         ) : (
           <div>
             <ProfileHover address={account} />
           </div>
         )}
         {treatyIndex == null ? (
-          <div>Project Wallet Board has not been loaded</div>
+          <div><p>Project Wallet Board has not been loaded. Please ensure Metamask is connected to the correct network.</p></div>
         ) : (
-          // <TreatyIndexComponent />
           <TreatyIndexView />
         )}
         <p></p>

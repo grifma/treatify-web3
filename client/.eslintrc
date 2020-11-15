@@ -1,5 +1,5 @@
 "rules": {
-    "extends": "airbnb",
+    "extends": ["airbnb"],
     "indent": "off",
     "react/jsx-indent": "off",
     "react/jsx-indent-props": "off",

@@ -21,6 +21,48 @@ import {
 import TreatyList from "./TreatyList";
 import DisplayControls from "./DisplayControls";
 
+const TreatyIndexView = ({
+  dispatch,
+  treatyIndex,
+  treatyIndexContract,
+  startLoadWeb3,
+  startLoadAccount,
+  startLoadTreatyIndex,
+  startLoadTreatyIndexContract,
+  onShowAllPressed,
+}) => {
+   useEffect(() => {
+    async function initiate() {
+      console.log("Start of initiate function in TreatyIndexView");
+      const myWeb3 = await startLoadWeb3();
+      console.log('myWeb3 :>> ', myWeb3);
+      const myAccount = await startLoadAccount(myWeb3);
+      console.log('myAccount :>> ', myAccount);
+      const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
+      console.log('treatyIndexContract :>> ', treatyIndexContract);
+      const treatyIndex = await startLoadTreatyIndex(treatyIndexContract);
+      console.log('treatyIndex :>> ', treatyIndex);
+    }
+    console.log("About to initiate TreatyIndexView");
+    initiate();
+    console.log("Done initiating TreatyIndexView");
+  }, []);
+
+  const loadingMessage = <div>Loading Treaty Index</div>;
+  const isLoading = false;
+  console.log('treatyIndex before context render:>> ', treatyIndex);
+  const content = (
+    <div>
+      <TreatyIndexComponent 
+        treatyIndexContract={treatyIndexContract}
+        treatyIndex={treatyIndex}
+      />
+      <DisplayControls/>
+    </div>
+  );
+  return isLoading ? loadingMessage : content;
+};
+
 const TreatyIndexComponent = ({treatyIndexContract, treatyIndex}) => (
       <OverlayTrigger
       trigger={["hover", "focus"]}
@@ -67,50 +109,6 @@ const treatyIndexPopover = (treatyIndexContract, treatyIndex) => {
       </tbody>
     </table>
   );
-
-const TreatyIndexView = ({
-  dispatch,
-  treatyIndex,
-  treatyIndexContract,
-  startLoadWeb3,
-  startLoadAccount,
-  startLoadTreatyIndex,
-  startLoadTreatyIndexContract,
-  onShowAllPressed,
-}) => {
-   useEffect(() => {
-    async function initiate() {
-      console.log("Start of initiate function");
-      const myWeb3 = await startLoadWeb3();
-      console.log('myWeb3 :>> ', myWeb3);
-      const myAccount = await startLoadAccount(myWeb3);
-      console.log('myAccount :>> ', myAccount);
-      const treatyIndexContract = await startLoadTreatyIndexContract(myWeb3);
-      console.log('treatyIndexContract :>> ', treatyIndexContract);
-      const treatyIndex = await startLoadTreatyIndex(treatyIndexContract);
-      console.log('treatyIndex :>> ', treatyIndex);
-    }
-    console.log("About to initiate TreatyIndexView");
-    initiate();
-    console.log("Done initiating TreatyIndexView");
-  }, []);
-
-  const loadingMessage = <div>Loading Treaty Index</div>;
-  const isLoading = false;
-  console.log('treatyIndex before context render:>> ', treatyIndex);
-  const content = (
-    <div>
-      {/* <EmptyComponent/> */}
-      <TreatyIndexComponent 
-        treatyIndexContract={treatyIndexContract}
-        treatyIndex={treatyIndex}
-      />
-      <DisplayControls/>
-      {/* <ShowAllButton onClick={() => onShowAllPressed()}>Show All</ShowAllButton> */}
-    </div>
-  );
-  return isLoading ? loadingMessage : content;
-};
   
 function mapStateToProps(state) {
   return {

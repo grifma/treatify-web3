@@ -3586,7 +3586,7 @@
     "version": "0.5.17+commit.d19bba13.Emscripten.clang"
   },
   "networks": {
-    "1599186668645": {
+    "42": {
       "events": {
         "0x3d161e346251d835e0a657f8873cd7a7d010932c2a3f43a4ee721b9bd8ffa01c": {
           "anonymous": false,
@@ -3635,112 +3635,8 @@
         }
       },
       "links": {},
-      "address": "0xbdD9DDdD61fECBA2a2afFF8385A307d045cf67f3",
-      "transactionHash": "0x931eba3a98969ae7c32272500bffb90c3233b372a60e3e3a5bdfe176a251d17e"
-    },
-    "1599791487249": {
-      "events": {
-        "0x3d161e346251d835e0a657f8873cd7a7d010932c2a3f43a4ee721b9bd8ffa01c": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "_treatyAddress",
-              "type": "address"
-            }
-          ],
-          "name": "AddTreaty",
-          "type": "event"
-        },
-        "0x5ba83b406531a80fa1a80c009cffc5d3ce820b2293bc446251e4913f256f344e": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "_treatyAddress",
-              "type": "address"
-            }
-          ],
-          "name": "DeleteTreaty",
-          "type": "event"
-        },
-        "0x9dcbf7ea77f2a51cdccb1567c20a197cd7fa3e55e0c35b571ec2178fb0773e15": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "string",
-              "name": "_oldName",
-              "type": "string"
-            },
-            {
-              "indexed": true,
-              "internalType": "string",
-              "name": "_newName",
-              "type": "string"
-            }
-          ],
-          "name": "Rename",
-          "type": "event"
-        }
-      },
-      "links": {},
-      "address": "0xDADfdC4Bfe0011583bE6149E3bdd2AD7A6E6bb31",
-      "transactionHash": "0x381f0d7a36a180f876e024378dc474b74e0c15430eab90ca9b444f24a3510cb7"
-    },
-    "1600828301781": {
-      "events": {
-        "0x3d161e346251d835e0a657f8873cd7a7d010932c2a3f43a4ee721b9bd8ffa01c": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "_treatyAddress",
-              "type": "address"
-            }
-          ],
-          "name": "AddTreaty",
-          "type": "event"
-        },
-        "0x5ba83b406531a80fa1a80c009cffc5d3ce820b2293bc446251e4913f256f344e": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "_treatyAddress",
-              "type": "address"
-            }
-          ],
-          "name": "DeleteTreaty",
-          "type": "event"
-        },
-        "0x9dcbf7ea77f2a51cdccb1567c20a197cd7fa3e55e0c35b571ec2178fb0773e15": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "string",
-              "name": "_oldName",
-              "type": "string"
-            },
-            {
-              "indexed": true,
-              "internalType": "string",
-              "name": "_newName",
-              "type": "string"
-            }
-          ],
-          "name": "Rename",
-          "type": "event"
-        }
-      },
-      "links": {},
-      "address": "0x09d13D0fEF574805C88DdB2f6f26329884eC668f",
-      "transactionHash": "0x53c0fb08fc85b26bf0458f684d692637f3e4bd7a424181014072c600983393a7"
+      "address": "0x47736250204315aAAf25B02B978F04CCBDE3fcF8",
+      "transactionHash": "0xb6b69e2fce4697db5bd399c6464db5a921346771e0eaf96619caed623c0c8bd9"
     },
     "1603420288995": {
       "events": {
@@ -3791,12 +3687,12 @@
         }
       },
       "links": {},
-      "address": "0x10ABcd9108FfC4F50184FcdbC157Bd2b11A90E46",
-      "transactionHash": "0xf00a97dd89b600640e1580c4f2ba3ee05ab89dcb6188e18d405e9a024f01baa2"
+      "address": "0x4443D205d91846c7c7ACEd7296c2B8e716826279",
+      "transactionHash": "0xc7be654179d2ce03df6c0f6f6ad1cc16343621371b53ecc9c62c4d41199bc4b1"
     }
   },
   "schemaVersion": "3.2.3",
-  "updatedAt": "2020-11-08T19:10:26.662Z",
+  "updatedAt": "2020-11-15T14:57:41.997Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}
