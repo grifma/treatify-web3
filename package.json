@@ -20,9 +20,6 @@
   },
   "homepage": "https://github.com/grifma/treatify-web3#readme",
   "dependencies": {
-    "@openzeppelin/contracts": "^2.5.1",
-    "formik": "^2.1.5",
-    "react": "^16.13.1",
-    "react-cookie": "^4.0.3"
+    "@openzeppelin/contracts": "^2.5.1"
   }
 }

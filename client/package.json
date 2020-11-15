@@ -12,6 +12,7 @@
     "@hot-loader/react-dom": "^16.13.0",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.5.3",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "react-hot-loader": "^4.12.21",
     "style-loader": "^1.2.1",
     "webpack": "^4.41.5",
@@ -54,7 +55,8 @@
     "dev": "npx webpack-dev-server --mode development",
     "build": "npx webpack --mode development",
     "production": "npx webpack -p",
-    "test": "mocha \"src/**/*.test.js\" --require @babel/register --recursive"
+    "test": "mocha \"src/**/*.test.js\" --require @babel/register --recursive",
+    "deploy": "aws s3 sync dist/ s3://treatify"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -72,4 +74,3 @@
     ]
   }
 }
-
