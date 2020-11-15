@@ -19,4 +19,4 @@ jobs:
       - name: Build Treatify
         run: cd client && npm install && npm run production
       - name: Deploy app build to S3 bucket
-        run: aws s3 sync ./dist/ s3://treatify --delete
+        run: aws s3 sync client/dist/ s3://treatify --delete
