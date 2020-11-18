@@ -7,7 +7,6 @@ const TreatyListItemCommonHeader = ({ treaty }) => {
     <TreatyListItemCommonHeaderContainer>
       <div>
         <a href={"/focus/" + treaty.id}>
-          #{treaty.id}&nbsp;
           {treaty.text}
         </a>
       </div>
