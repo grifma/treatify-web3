@@ -1,9 +1,6 @@
 import React from "react";
 import { Popover, OverlayTrigger } from "react-bootstrap";
 import styled from "styled-components";
-// import { MDBBtn } from "mdbreact";
-
-// export const MButton = styled(MDBBtn)``;
 
 export const TreatyItemContainer = styled.div`
   background: #fff;
@@ -240,6 +237,7 @@ export const Grid = styled.div`
 
 export const GridItem = styled.div`
   color: white;
+  overflow: visible;
 `;
 
 export const Header = styled(GridItem)`
@@ -258,7 +256,7 @@ export const LSide = styled(GridItem)`
   padding: 10px;
   @media only screen and (min-width: 769px) {
     grid-column: span 2;
-    overflow: hidden;
+    overflow: visible;
   }
   @media only screen and (max-width: 768px) {
     grid-column: span 12;
