@@ -4,6 +4,7 @@ import "./AccessRestriction.sol";
 import "./StringUtils.sol";
 
 contract Treaty is AccessRestriction {
+    
   /// Constants ///
   States constant INITIAL_STATE = States.Draft;
 
@@ -82,7 +83,8 @@ contract Treaty is AccessRestriction {
     uint256 _id,
     string memory _name,
     string memory _initialText
-  ) public {
+  ) 
+    public {
     id = _id;
     name = _name;
     unsignedTreatyText.push(_initialText);
@@ -114,7 +116,7 @@ contract Treaty is AccessRestriction {
     return keccak256(_bytes);
   }
 
-  function signTreaty() public inState(States.Active) stateChange() {
+  function signTreaty() public inState(States.Active) stateChange() returns (bool) {
     require(
       signatureState[msg.sender] == SignatureState.Unsigned,
       "Unexpected signature"
@@ -124,10 +126,12 @@ contract Treaty is AccessRestriction {
 
     if (allSignaturesInState(SignatureState.Signed)) {
       confirmTreatyText();
+      return true;
     }
+    return false;
   }
 
-  function signHash(bytes32 _hash) public inState(States.Active) stateChange() {
+  function signHash(bytes32 _hash) public inState(States.Active) stateChange() returns (bool) {
     require(
       signatureState[msg.sender] == SignatureState.Unsigned,
       "Unexpected signature"
@@ -140,9 +144,11 @@ contract Treaty is AccessRestriction {
     emit SignHash(msg.sender, _hash);
     if (allSignaturesInState(SignatureState.Signed)) {
       confirmTreatyText();
+      return true;
     }
-  }
-
+    return false;
+  }  
+  
   function makeBinding() public onlyBy(lawyerAddress) stateChange() {
     require(
       unsignedTreatyText.length == 0,
@@ -324,7 +330,7 @@ contract Treaty is AccessRestriction {
       return "No unsigned text";
     }
     return unsignedTreatyText[unsignedTreatyText.length - 1];
-  }
+  }  
 
   function getLastSignedText() public view returns (string memory) {
     if (signedTreatyText.length == 0) {

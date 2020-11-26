@@ -13,7 +13,7 @@ pragma solidity ^0.5.16;
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract Distribute {
+contract DistributeEmbedded {
     using SafeMath for uint256;
     bool mutex = false;
     mapping(address => uint256) public split;
@@ -21,8 +21,7 @@ contract Distribute {
     mapping(address => uint256) public ethAllocations;
     address[] public accounts;
     uint256 constant splitDecimals = 2;
-    address public hostAgreement;
-    
+
     event SetSplit(uint[] _split);
     event Allocated(uint _index, address _account, uint _amount);
     event AllocatedToken(address _tokenAddress, uint _index, address _account, uint _amount);
@@ -39,26 +38,9 @@ contract Distribute {
         }
     }
     
-    modifier requiresAgreement() {
-        require(msg.sender == hostAgreement, "Can only be called by the host agreement");
-        _;
-    }
-    
-    constructor(address _hostAgreement) public {
-        if (_hostAgreement == address(0)){
-            hostAgreement = msg.sender;
-        } else {
-            hostAgreement = _hostAgreement;
-        }
-    }
-    
-    // constructor() public {
-    //     hostAgreement = msg.sender;
-    // }
-    
     /// Add a new account for distribution of incoming funds
     
-    function addAccount(address _account) public requiresAgreement returns (uint256) {
+    function addAccount(address _account) internal returns (uint256) {
         accounts.push(_account);
         emit AddAccount(_account);
         return accounts.length;
