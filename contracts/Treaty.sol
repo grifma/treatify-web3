@@ -1,24 +1,22 @@
 pragma solidity ^0.5.16;
 
-import "./AccessRestriction.sol";
+import "./TreatyStateMachine.sol";
 import "./StringUtils.sol";
+import "./Lockable.sol";
 
-contract Treaty is AccessRestriction {
+contract Treaty is TreatyStateMachine, Lockable {
     
-  /// Constants ///
-  States constant INITIAL_STATE = States.Draft;
-
   /// Treaty info ///
   uint256 public id;
   string public name;
 
-  /// Treaty state ///
-  States public treatyState = INITIAL_STATE;
+  /// Signature state ///
   mapping(address => SignatureState) public signatureState;
 
   /// Agreement text (plain text) ///
   string[] public unsignedTreatyText;
   string[] public signedTreatyText;
+  
   /// Agreement text (bytes32 hash) ///
   bytes32[] public unsignedHash;
   bytes32[] public signedHash;
@@ -27,21 +25,11 @@ contract Treaty is AccessRestriction {
   address[] public signatureList;
   address public lawyerAddress;
 
-  /// Locking ///
-  uint256 public creationTime = now;
-  uint256 public lockAt = now;
-  uint256 public releaseAt = now;
-  bool public locked = false;
-  uint256 public lastStateChange = now;
-
   /// Enums ///
-  enum States { Draft, Active, Binding, Broken, MutuallyWithdrawn }
   enum SignatureState { NotRegistered, Unsigned, Signed, Withdrawn, Broken }
-  enum TreatyType { ProjectToFounder, ProjectToMentor, Volunteer }
 
   /// Events ///
-  event Locked(uint256 _lockTime);
-  event UnLocked();
+
   event SignedBy(address indexed _signer);
   event SignHash(address indexed _signer, bytes32 indexed _hash);
   event SignedByAll(address indexed _treatyAddress);
@@ -53,31 +41,6 @@ contract Treaty is AccessRestriction {
   event WriteToTreaty(string indexed _text);
   event MakeActive(address indexed _treatyAddress);
   event RegisterAsSigner(address _signer);
-
-  event LogBytes32(bytes32 _b);
-  // event LogString(string memory _s);
-  event LogOK();
-  event LogNotOK();
-
-  /// Modifiers ///
-  modifier inState(States _state) {
-    require(treatyState == _state, "Treaty is not in expected state");
-    _;
-  }
-
-  modifier inEitherState(States _state1, States _state2) {
-    require(
-      treatyState == _state1 || treatyState == _state2,
-      "Treaty is not in expected state"
-    );
-    _;
-  }
-
-  modifier stateChange() {
-    require(getLocked() == false, "Treaty must be unlocked");
-    _;
-    lastStateChange = now;
-  }
 
   constructor(
     uint256 _id,
@@ -110,10 +73,6 @@ contract Treaty is AccessRestriction {
     unsignedTreatyText.push(_text);
     resetSignatures();
     emit WriteToTreaty(_text);
-  }
-
-  function calcSHA3(bytes memory _bytes) public pure returns (bytes32) {
-    return keccak256(_bytes);
   }
 
   function signTreaty() public inState(States.Active) stateChange() returns (bool) {
@@ -188,6 +147,10 @@ contract Treaty is AccessRestriction {
       treatyState = States.MutuallyWithdrawn;
     }
   }
+  
+  function calcSHA3(bytes memory _bytes) public pure returns (bytes32) {
+    return keccak256(_bytes);
+  }
 
   /////////////////
   // Getters
@@ -237,39 +200,6 @@ contract Treaty is AccessRestriction {
     return signedTreatyText.length;
   }
 
-  //////////////
-  // Locking
-  //////////////
-
-  function okToUnlock() public view returns (bool ok) {
-    if (now >= releaseAt) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  function lockFor(uint256 _lockTime) public stateChange {
-    locked = true;
-    lockAt = now;
-    releaseAt = now + _lockTime;
-    emit Locked(_lockTime);
-  }
-
-  function lockForMonths(uint256 _months) public stateChange {
-    lockForDays(_months * 30);
-  }
-
-  function lockForDays(uint256 _days) public stateChange onlyBy(owner) {
-    lockFor(_days * 24 * 60 * 60);
-  }
-
-  function getLocked() public returns (bool) {
-    if (locked && okToUnlock()) {
-      locked = false;
-    }
-    return locked;
-  }
 
   /////////////
   // Internal Functions

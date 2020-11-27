@@ -1,18 +1,10 @@
 pragma solidity ^0.5.16;
 
 contract AccessRestriction {
-  // These will be assigned at the construction
-  // phase, where `msg.sender` is the account
-  // creating this contract.
+
   address public owner = msg.sender;
   uint256 public creationTime = now;
 
-  // Modifiers can be used to change
-  // the body of a function.
-  // If this modifier is used, it will
-  // prepend a check that only passes
-  // if the function is called from
-  // a certain address.
   modifier onlyBy(address _account) {
     require(msg.sender == _account, "Sender not authorized.");
     _;
@@ -26,8 +18,6 @@ contract AccessRestriction {
     _;
   }
 
-  /// Make `_newOwner` the new owner of this
-  /// contract.
   function changeOwner(address _newOwner) public onlyBy(owner) {
     owner = _newOwner;
   }
@@ -37,22 +27,16 @@ contract AccessRestriction {
     _;
   }
 
-  /// Erase ownership information.
-  /// May only be called 6 weeks after
-  /// the contract has been created.
-  function disown() public onlyBy(owner) onlyAfter(creationTime + 6 weeks) {
+  function disown() public onlyBy(owner) {
     delete owner;
   }
 
-  // This modifier requires a certain
-  // fee being associated with a function call.
-  // If the caller sent too much, he or she is
-  // refunded, but only after the function body.
-  // This was dangerous before Solidity version 0.4.0,
-  // where it was possible to skip the part after `_;`.
   modifier costs(uint256 _amount) {
     require(msg.value >= _amount, "Not enough Ether provided.");
     _;
     if (msg.value > _amount) msg.sender.transfer(msg.value - _amount);
   }
 }
+
+// Example of delay restriction:
+// function someFunction() public onlyBy(owner) onlyAfter(creationTime + 6 weeks) {}
